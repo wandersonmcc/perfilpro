@@ -414,10 +414,10 @@ body{font-family:'Inter',sans-serif;background:#f3f4f6;color:var(--n700);min-hei
       <div class="field-hint">
         <strong>Como obter a URL correta:</strong>
         <ol>
-          <li>Pesquise o nome do negócio no Google</li>
-          <li>Clique em <strong>Maps</strong> nos resultados</li>
-          <li>Clique na ficha do negócio que deseja avaliar</li>
-          <li>Copie a URL completa da barra do navegador</li>
+          <li>No Google, pesquise o nome do negócio, o segmento ou o endereço (ex: <em>pizzaria centro Niterói</em>)</li>
+          <li>Nos resultados, clique em <strong>Maps</strong> ou acesse diretamente <strong>maps.google.com</strong></li>
+          <li>Localize o perfil desejado na lista e clique sobre ele para abrir a ficha</li>
+          <li>Copie a URL completa da barra do navegador e cole aqui</li>
         </ol>
       </div>
       <input type="text" id="gmb-url" class="field-input"
@@ -549,7 +549,7 @@ JSON ESPERADO:
           "status": "ok|warn|fail",
           "descricao": "o que foi encontrado, de forma objetiva e específica",
           "acao": "ação concreta (obrigatório se warn ou fail, null se ok)",
-          "como_fazer": "passo a passo real e detalhado de como executar esta ação no Google Business Profile. Use apenas caminhos que realmente existem em business.google.com. Exemplos reais: para adicionar FAQ acesse business.google.com, selecione o perfil, vá em Perguntas e respostas, clique em Fazer uma pergunta, escreva a pergunta estratégica e responda você mesmo como proprietário. Para adicionar fotos: business.google.com, selecione o perfil, clique em Fotos, clique em Adicionar fotos. Para responder avaliações: business.google.com, selecione o perfil, clique em Avaliações, localize a avaliação e clique em Responder. Seja específico. null se status for ok."
+          "como_fazer": "passo a passo real de como executar no Google Business Profile (business.google.com). REGRA CRÍTICA: nunca use aspas duplas dentro deste campo, use somente aspas simples se necessário. Exemplos: Para FAQ: acesse business.google.com, selecione o perfil, vá em Perguntas e respostas, clique em Fazer uma pergunta, escreva e responda você mesmo. Para fotos: acesse business.google.com, selecione o perfil, clique em Fotos, clique em Adicionar fotos. Para avaliações: acesse business.google.com, selecione o perfil, clique em Avaliações, localize e clique em Responder. Use somente caminhos reais. null se status for ok."
         }
       ]
     }
@@ -578,7 +578,20 @@ async function callAPI(prompt){
   else if(d.content&&typeof d.content==='string')t=d.content;
   else if(typeof d==='string')t=d;
   else throw new Error('Resposta inesperada da API.');
-  return JSON.parse(t.replace(/```json|```/g,'').trim());
+  // Limpa markdown e tenta parsear
+  let clean = t.replace(/```json|```/g,'').trim();
+  // Remove BOM e caracteres invisíveis
+  clean = clean.replace(/^\uFEFF/, '').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'');
+  try {
+    return JSON.parse(clean);
+  } catch(e1) {
+    // Tenta extrair só o bloco JSON entre chaves
+    const match = clean.match(/\{[\s\S]*\}/);
+    if(match) {
+      try { return JSON.parse(match[0]); } catch(e2) {}
+    }
+    throw new Error('JSON inválido: ' + e1.message);
+  }
 }
 
 function sc(s){return s<40?'cr':s<60?'cy':s<80?'cg':'cb';}
