@@ -41,7 +41,7 @@
   --shadow-lg: 0 20px 48px rgba(0,0,0,0.12),0 8px 16px rgba(0,0,0,0.06);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Inter',sans-serif;background:#f3f4f6;color:var(--n800);min-height:100vh;-webkit-font-smoothing:antialiased;font-size:14px;}
+body{font-family:'Inter',sans-serif;background:#f3f4f6;color:var(--n700);min-height:100vh;-webkit-font-smoothing:antialiased;font-size:15px;}
 
 /* ── LOCK ── */
 #lock-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#eef2ff 0%,#f9fafb 50%,#f0fdf4 100%);padding:24px;}
@@ -138,7 +138,7 @@ body{font-family:'Inter',sans-serif;background:#f3f4f6;color:var(--n800);min-hei
 .score-track{fill:none;stroke:var(--n100);stroke-width:8;}
 .score-fill{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1);stroke-dasharray:353;stroke-dashoffset:353;}
 .score-number{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
-.score-val{font-family:'Sora',sans-serif;font-size:38px;font-weight:800;line-height:1;letter-spacing:-0.03em;}
+.score-val{font-family:'Sora',sans-serif;font-size:36px;font-weight:800;line-height:1;letter-spacing:-0.03em;display:flex;align-items:baseline;gap:2px;justify-content:center;}
 .score-lbl{font-size:11px;color:var(--n400);font-weight:500;margin-top:1px;}
 .score-info{flex:1;min-width:220px;}
 .score-badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:4px;font-size:10.5px;font-weight:700;margin-bottom:10px;letter-spacing:0.04em;text-transform:uppercase;}
@@ -148,7 +148,7 @@ body{font-family:'Inter',sans-serif;background:#f3f4f6;color:var(--n800);min-hei
 .score-badge.otimo{background:var(--brand-light);color:var(--brand);}
 .score-business{font-family:'Sora',sans-serif;font-size:24px;font-weight:700;color:var(--n900);margin-bottom:3px;letter-spacing:-0.02em;line-height:1.2;}
 .score-segment{font-size:12.5px;color:var(--n400);margin-bottom:14px;font-weight:500;}
-.diag-text{font-size:13.5px;line-height:1.75;color:var(--n600);border-left:2px solid var(--n200);padding-left:14px;margin-bottom:18px;}
+.diag-text{font-size:15px;line-height:1.8;color:var(--n700);border-left:2px solid var(--n200);padding-left:14px;margin-bottom:18px;}
 .pdf-actions{display:flex;gap:8px;flex-wrap:wrap;}
 .pdf-btn{padding:10px 18px;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:6px;border:none;}
 .pdf-btn-full{background:var(--n900);color:white;}
@@ -190,7 +190,12 @@ body{font-family:'Inter',sans-serif;background:#f3f4f6;color:var(--n800);min-hei
 .sec-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
 .sec-title-wrap{flex:1;}
 .sec-title{font-weight:600;font-size:13.5px;color:var(--n900);margin-bottom:1px;}
-.sec-sub{font-size:11px;color:var(--n400);}
+.sec-sub{font-size:11.5px;display:flex;gap:8px;align-items:center;}
+.sec-count{font-size:11px;font-weight:600;padding:1px 7px;border-radius:3px;}
+.sec-count-ok{background:var(--success-light);color:var(--success);}
+.sec-count-ok-zero{background:var(--n100);color:var(--n400);}
+.sec-count-warn{background:var(--warning-light);color:var(--warning);}
+.sec-count-fail{background:var(--danger-light);color:var(--danger);}
 .sec-score-wrap{display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .sec-bar{width:60px;height:4px;background:var(--n100);border-radius:100px;overflow:hidden;}
 .sec-bar-fill{height:100%;border-radius:100px;transition:width 1.2s ease;width:0%;}
@@ -199,7 +204,7 @@ body{font-family:'Inter',sans-serif;background:#f3f4f6;color:var(--n800);min-hei
 .sec-card.open .sec-chevron{transform:rotate(180deg);}
 .sec-body{max-height:0;overflow:hidden;transition:max-height 0.35s ease;}
 .sec-card.open .sec-body{max-height:3000px;padding:0 20px 20px;}
-.sec-diag{font-size:13px;line-height:1.7;color:var(--n600);margin-bottom:16px;padding:13px 16px;background:var(--n50);border-radius:var(--radius-xs);border-left:2px solid var(--brand);}
+.sec-diag{font-size:14.5px;line-height:1.75;color:var(--n700);margin-bottom:16px;padding:13px 16px;background:var(--n50);border-radius:var(--radius-xs);border-left:2px solid var(--brand);}
 .crit-list{display:flex;flex-direction:column;gap:5px;}
 .crit-item{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:11px 13px;border-radius:var(--radius-sm);background:var(--n50);border:1px solid transparent;transition:border-color 0.1s;}
 .crit-item:hover{border-color:var(--n200);}
@@ -208,12 +213,16 @@ body{font-family:'Inter',sans-serif;background:#f3f4f6;color:var(--n800);min-hei
 .crit-icon.warn{background:var(--warning-light);color:var(--warning);}
 .crit-icon.fail{background:var(--danger-light);color:var(--danger);}
 .crit-body{flex:1;}
-.crit-name{font-weight:600;font-size:12.5px;color:var(--n800);margin-bottom:2px;}
-.crit-desc{font-size:12px;color:var(--n500);line-height:1.5;}
+.crit-name{font-weight:600;font-size:14px;color:var(--n900);margin-bottom:2px;}
+.crit-desc{font-size:13.5px;color:var(--n600);line-height:1.5;}
 .crit-tag{font-size:10.5px;font-weight:700;margin-top:1px;}
 .crit-tag.ok{color:var(--success);}
 .crit-tag.warn{color:var(--warning);}
 .crit-tag.fail{color:var(--danger);}
+.crit-acao{font-size:13.5px;color:var(--n700);line-height:1.5;margin-top:6px;font-weight:500;}
+.crit-acao strong{color:var(--n900);}
+.crit-como{font-size:13px;color:var(--n600);line-height:1.65;margin-top:7px;padding:9px 13px;background:var(--brand-light);border-radius:var(--radius-xs);border-left:2px solid var(--brand);}
+.crit-como strong{color:var(--brand-dark);}
 
 /* Comparativo */
 .cmp-card{background:var(--n0);border-radius:var(--radius);padding:22px 26px;box-shadow:var(--shadow-sm);margin-bottom:12px;border:1px solid var(--n200);}
@@ -405,10 +414,10 @@ body{font-family:'Inter',sans-serif;background:#f3f4f6;color:var(--n800);min-hei
       <div class="field-hint">
         <strong>Como obter a URL correta:</strong>
         <ol>
-          <li>Pesquise o nome do negócio no Google</li>
-          <li>Clique em <strong>Maps</strong> nos resultados</li>
-          <li>Clique na ficha do negócio que deseja avaliar</li>
-          <li>Copie a URL completa da barra do navegador</li>
+          <li>No Google, pesquise o nome do negócio, o segmento ou o endereço (ex: <em>pizzaria centro Niterói</em>)</li>
+          <li>Nos resultados, clique em <strong>Maps</strong> ou acesse diretamente <strong>maps.google.com</strong></li>
+          <li>Localize o perfil desejado na lista e clique sobre ele para abrir a ficha</li>
+          <li>Copie a URL completa da barra do navegador e cole aqui</li>
         </ol>
       </div>
       <input type="text" id="gmb-url" class="field-input"
@@ -451,6 +460,38 @@ body{font-family:'Inter',sans-serif;background:#f3f4f6;color:var(--n800);min-hei
 
 <script>
 const SENHA='plugue2024',WHATSAPP='5521990715689',AGENCIA='Agência Plugue';
+
+const COMO_FAZER={
+  'categoria principal':'Acesse business.google.com, selecione o perfil, clique em Editar perfil e vá em Informações comerciais. Clique em Categoria e altere para a que melhor representa o negócio.',
+  'categorias secundárias':'Acesse business.google.com, selecione o perfil, clique em Editar perfil e vá em Informações comerciais. Clique em Categoria e abaixo da principal adicione as categorias secundárias relevantes.',
+  'categoria secundária':'Acesse business.google.com, selecione o perfil, clique em Editar perfil e vá em Informações comerciais. Clique em Categoria e adicione as categorias secundárias que faltam.',
+  'descrição':'Acesse business.google.com, selecione o perfil, clique em Editar perfil e vá em Informações comerciais. Clique em Descrição e escreva até 750 caracteres incluindo palavras-chave do segmento e o diferencial do negócio.',
+  'telefone':'Acesse business.google.com, selecione o perfil, clique em Editar perfil e vá em Informações de contato. Clique em Telefone e adicione o número principal com DDD.',
+  'site':'Acesse business.google.com, selecione o perfil, clique em Editar perfil e vá em Informações de contato. Clique em Site e insira a URL completa com https://',
+  'endereço':'Acesse business.google.com, selecione o perfil, clique em Editar perfil e vá em Localização. Atualize o endereço completo com rua, número, bairro, cidade e CEP.',
+  'horário':'Acesse business.google.com, selecione o perfil, clique em Editar perfil e vá em Horário de funcionamento. Configure os horários para cada dia da semana. Para feriados use a opção Horários especiais.',
+  'verificação':'Acesse business.google.com e siga o processo de verificação disponível. As opções mais comuns são verificação por cartão postal, por telefone ou por vídeo. Siga as instruções que aparecem na tela.',
+  'foto de capa':'Acesse business.google.com, selecione o perfil e clique em Editar perfil. Vá em Fotos e clique em Foto da capa. Envie uma imagem horizontal de alta qualidade (recomendado 1080x608 pixels).',
+  'foto de perfil':'Acesse business.google.com, selecione o perfil e clique em Editar perfil. Vá em Fotos e clique em Logotipo. Envie a logo em formato quadrado com boa resolução.',
+  'foto':'Acesse business.google.com, selecione o perfil e clique em Adicionar fotos. Envie fotos reais do ambiente, equipe, produtos e serviços. Meta mínima: 10 fotos de qualidade.',
+  'avaliação':'Para solicitar avaliações: acesse business.google.com, selecione o perfil e clique em Pedir avaliações. Copie o link gerado e envie para clientes por WhatsApp pedindo uma avaliação honesta.',
+  'resposta':'Acesse business.google.com, selecione o perfil e clique em Avaliações. Para cada avaliação sem resposta clique em Responder. Nas positivas agradeça. Nas negativas reconheça o problema e ofereça solução.',
+  'post':'Acesse business.google.com, selecione o perfil e clique em Adicionar atualização. Escolha entre Atualização, Oferta ou Evento. Adicione foto e texto com chamada para ação. Publique ao menos uma vez por semana.',
+  'atributo':'Acesse business.google.com, selecione o perfil, clique em Editar perfil e vá em Mais. Marque todos os atributos que se aplicam ao negócio como acessibilidade, Wi-Fi, estacionamento e formas de pagamento.',
+  'serviço':'Acesse business.google.com, selecione o perfil, clique em Editar perfil e vá em Serviços. Adicione cada serviço com nome, descrição e preço se aplicável.',
+  'produto':'Acesse business.google.com, selecione o perfil, clique em Editar perfil e vá em Produtos. Adicione cada produto com foto, nome, descrição e preço.',
+  'faq':'Acesse business.google.com, selecione o perfil e clique em Ver perfil no Google. Na página do perfil role até Perguntas e respostas e clique em Fazer uma pergunta. Escreva uma pergunta estratégica e responda você mesmo como proprietário.',
+  'pergunta':'Acesse business.google.com, selecione o perfil e clique em Ver perfil no Google. Role até Perguntas e respostas, clique em Fazer uma pergunta, escreva a pergunta e responda como proprietário.',
+  'palavra-chave':'Edite a descrição do perfil em business.google.com incluindo naturalmente as palavras que seus clientes usam ao buscar o serviço. Inclua também nos nomes dos serviços cadastrados.',
+  'geolocalização':'Ao fotografar o estabelecimento mantenha o GPS ativado no celular para que as fotos sejam salvas com localização nos metadados. Isso reforça o sinal de localização para o Google.',
+};
+
+function getComoFazer(nome){
+  if(!nome) return null;
+  const l=nome.toLowerCase();
+  for(const[k,v]of Object.entries(COMO_FAZER)){if(l.includes(k))return v;}
+  return null;
+}
 const AGENCIA_TAGLINE='Presença digital estratégica para negócios locais';
 const AGENCIA_SITE='agenciaplugue.com.br',WA_DISPLAY='(21) 99071-5689';
 let dadosRelatorio=null;
@@ -538,8 +579,9 @@ JSON ESPERADO:
         {
           "nome": "string",
           "status": "ok|warn|fail",
-          "descricao": "o que foi encontrado, de forma objetiva",
-          "acao": "ação concreta e específica (obrigatório se warn ou fail, null se ok)"
+          "descricao": "o que foi encontrado, de forma objetiva e específica",
+          "acao": "ação concreta (obrigatório se warn ou fail, null se ok)",
+          "como_fazer": null
         }
       ]
     }
@@ -548,14 +590,14 @@ JSON ESPERADO:
 }
 
 SEÇÕES OBRIGATÓRIAS em ordem: informacoes, fotos, avaliacoes, atividade, categorias, engajamento.
-Para "informacoes": nome, categoria principal (correta?), categorias secundárias faltando, descrição (usa os 750 caracteres? tem palavras-chave?), telefone, site, endereço, horário, verificação.
-Para "fotos": quantidade, capa, perfil, ambiente, equipe, recência (últimos 90 dias).
-Para "avaliacoes": quantidade total de avaliações, nota média (escala de 0 a 5 estrelas do Google, NÃO use essa nota como score da seção), taxa de resposta do proprietário, frequência de novas avaliações. O score desta seção (0 a 100) deve refletir a saúde geral das avaliações, não a nota média em si.
-Para "atividade": frequência de posts, qualidade, CTAs, data do último post.
-Para "categorias": principal correta, secundárias sugeridas, palavras-chave na descrição, atributos, serviços.
-Para "engajamento": FAQs criadas, respostas a perguntas, perguntas estratégicas.
+Para "informacoes": nome, categoria principal (correta para o segmento?), categorias secundárias faltando com sugestões específicas, descrição (usa os 750 caracteres? tem palavras-chave do segmento?), telefone, site, endereço, horário, verificação.
+Para "fotos": quantidade total, foto de capa, foto de perfil, fotos de ambiente, fotos de equipe ou produtos, recência (últimas fotos em menos de 90 dias?).
+Para "avaliacoes": quantidade total, nota média em estrelas (0 a 5, não confunda com score da seção), taxa de resposta do proprietário a avaliações positivas e negativas, frequência de novas avaliações por mês. Score da seção (0 a 100) reflete saúde geral, não a nota.
+Para "atividade": data e frequência de posts, qualidade visual e textual, uso de CTAs nos posts.
+Para "categorias": categoria principal está correta, quais categorias secundárias estão faltando com nomes específicos, palavras-chave na descrição, atributos preenchidos, serviços ou produtos cadastrados.
+Para "engajamento": FAQs criadas pelo proprietário, respostas a perguntas de clientes, perguntas estratégicas cadastradas.
 
-Plano de ação: 6 a 8 itens do mais crítico ao menos urgente.
+Plano de ação: 6 a 8 itens ordenados do mais crítico ao menos urgente, cada um com ação imperativa e específica.
 Retorne SOMENTE o JSON, sem nenhum texto antes ou depois.`;
 }
 
@@ -568,7 +610,20 @@ async function callAPI(prompt){
   else if(d.content&&typeof d.content==='string')t=d.content;
   else if(typeof d==='string')t=d;
   else throw new Error('Resposta inesperada da API.');
-  return JSON.parse(t.replace(/```json|```/g,'').trim());
+  // Limpa markdown e tenta parsear
+  let clean = t.replace(/```json|```/g,'').trim();
+  // Remove BOM e caracteres invisíveis
+  clean = clean.replace(/^\uFEFF/, '').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'');
+  try {
+    return JSON.parse(clean);
+  } catch(e1) {
+    // Tenta extrair só o bloco JSON entre chaves
+    const match = clean.match(/\{[\s\S]*\}/);
+    if(match) {
+      try { return JSON.parse(match[0]); } catch(e2) {}
+    }
+    throw new Error('JSON inválido: ' + e1.message);
+  }
 }
 
 function sc(s){return s<40?'cr':s<60?'cy':s<80?'cg':'cb';}
@@ -609,8 +664,7 @@ function renderReport(data){
             <circle class="score-fill ${FILL_CLASS[data.classificacao]}" cx="65" cy="65" r="56" id="score-fill" style="stroke-dashoffset:${circ}"/>
           </svg>
           <div class="score-number">
-            <div class="score-val ${sc(data.score_geral)}" id="score-num">0</div>
-            <div class="score-lbl">de 100</div>
+            <div class="score-val ${sc(data.score_geral)}" id="score-num">0<span style="font-size:18px;font-weight:600;opacity:0.5">/100</span></div>
           </div>
         </div>
         <div class="score-info">
@@ -638,7 +692,6 @@ function renderReport(data){
         <div class="af-name">${AGENCIA}</div>
         <div class="af-tag">${AGENCIA_TAGLINE} · ${AGENCIA_SITE}</div>
       </div>
-      <a href="https://wa.me/${WHATSAPP}?text=Olá! Analisei um perfil no Google com o PerfilPro e quero conversar sobre como melhorar o ranqueamento." class="af-cta" target="_blank">Falar com um especialista</a>
     </div>`;
 
   setTimeout(()=>{
@@ -646,19 +699,22 @@ function renderReport(data){
     animNum('score-num',0,data.score_geral,1500);
     document.querySelectorAll('.sec-bar-fill,.bd-bar').forEach(el=>{el.style.width=el.dataset.width+'%';});
   },120);
-  setTimeout(()=>{const f=document.querySelector('.sec-card');if(f)f.classList.add('open');},650);
+  setTimeout(()=>{document.querySelectorAll('.sec-card').forEach(el=>el.classList.add('open'));},650);
 }
 
 function renderSection(s){
   const ok=s.criterios.filter(c=>c.status==='ok').length;
   const wn=s.criterios.filter(c=>c.status==='warn').length;
   const fl=s.criterios.filter(c=>c.status==='fail').length;
+  const okClass=ok>0?'sec-count-ok':'sec-count-ok-zero';
   const critHtml=s.criterios.map(c=>`
     <div class="crit-item">
       <div class="crit-icon ${c.status}">${c.status==='ok'?'✓':c.status==='warn'?'!':'✗'}</div>
       <div class="crit-body">
         <div class="crit-name">${c.nome}</div>
-        <div class="crit-desc">${c.descricao}${c.acao?`<br><strong style="color:#374151">Ação: </strong>${c.acao}`:''}</div>
+        <div class="crit-desc">${c.descricao}</div>
+        ${c.acao?`<div class="crit-acao"><strong>Ação:</strong> ${c.acao}</div>`:''}
+        ${(c.status!=='ok'&&getComoFazer(c.nome))?`<div class="crit-como"><strong>Como fazer:</strong> ${getComoFazer(c.nome)}</div>`:''}
       </div>
       <div class="crit-tag ${c.status}">${c.status==='ok'?'OK':c.status==='warn'?'Atenção':'Crítico'}</div>
     </div>`).join('');
@@ -669,7 +725,11 @@ function renderSection(s){
         <div class="sec-icon ${ICON_CLASS[s.classificacao]}">${s.emoji}</div>
         <div class="sec-title-wrap">
           <div class="sec-title">${s.nome}</div>
-          <div class="sec-sub">${ok} ok · ${wn} atenção · ${fl} crítico</div>
+          <div class="sec-sub">
+            <span class="sec-count ${okClass}">${ok} ok</span>
+            <span class="sec-count sec-count-warn">${wn} atenção</span>
+            <span class="sec-count sec-count-fail">${fl} crítico</span>
+          </div>
         </div>
         <div class="sec-score-wrap">
           <div class="sec-bar"><div class="sec-bar-fill ${FILL_CLASS[s.classificacao]}" data-width="${s.score}" style="width:0%"></div></div>
@@ -712,7 +772,13 @@ function novaAnalise(){
 function animNum(id,from,to,dur){
   const el=document.getElementById(id);if(!el)return;
   const start=performance.now();
-  const up=(now)=>{const p=Math.min((now-start)/dur,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(from+(to-from)*e);if(p<1)requestAnimationFrame(up);};
+  const suffix='<span style="font-size:18px;font-weight:600;opacity:0.5">/100</span>';
+  const up=(now)=>{
+    const p=Math.min((now-start)/dur,1),e=1-Math.pow(1-p,3);
+    const val=Math.round(from+(to-from)*e);
+    el.innerHTML=val+suffix;
+    if(p<1)requestAnimationFrame(up);
+  };
   requestAnimationFrame(up);
 }
 
@@ -730,22 +796,24 @@ async function gerarPDF(paraCliente){
     const hoje=data.data_analise||new Date().toLocaleDateString('pt-BR');
     const tipoDoc=paraCliente?'Versão para Prospecção':'Versão Interna Completa';
     const {jsPDF}=window.jspdf;
-    const pdf=new jsPDF({orientation:'portrait',unit:'px',format:[794,1123],hotfixes:['px_scaling']});
+    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
     const tmpl=document.getElementById('pdf-template');
 
     async function renderPage(html){
       tmpl.innerHTML=html;tmpl.style.display='block';
-      await new Promise(r=>setTimeout(r,280));
-      const canvas=await html2canvas(tmpl,{scale:2,useCORS:true,logging:false,backgroundColor:'#ffffff',width:794,windowWidth:794});
+      // Garante que as fontes estão carregadas antes de renderizar
+      await document.fonts.ready;
+      await new Promise(r=>setTimeout(r,350));
+      const canvas=await html2canvas(tmpl,{scale:2,useCORS:true,logging:false,backgroundColor:'#ffffff',width:794,windowWidth:794,allowTaint:false,foreignObjectRendering:false});
       tmpl.style.display='none';return canvas;
     }
 
     let isFirst=true;
     function addPage(canvas){
       const img=canvas.toDataURL('image/jpeg',0.95);
-      const pW=pdf.internal.pageSize.getWidth(),pH=pdf.internal.pageSize.getHeight();
+      // A4 em mm: 210x297
       if(!isFirst)pdf.addPage();
-      pdf.addImage(img,'JPEG',0,0,pW,pH,'','FAST');
+      pdf.addImage(img,'JPEG',0,0,210,297,'','FAST');
       isFirst=false;
     }
 
@@ -754,13 +822,13 @@ async function gerarPDF(paraCliente){
         const cc=c.status==='ok'?'#059669':c.status==='warn'?'#d97706':'#dc2626';
         const ccBg=c.status==='ok'?'#ecfdf5':c.status==='warn'?'#fffbeb':'#fef2f2';
         const ic=c.status==='ok'?'V':c.status==='warn'?'!':'X';
-        const st=c.status==='ok'?'OK':c.status==='warn'?'ATENCAO':'CRITICO';
+        const st=c.status==='ok'?'OK':c.status==='warn'?'ATENÇÃO':'CRÍTICO';
         return `<div class="pdf-crit">
           <div class="pdf-crit-badge" style="background:${ccBg};color:${cc}">${ic}</div>
           <div class="pdf-crit-body">
             <div class="pdf-crit-name">${c.nome}</div>
             <div class="pdf-crit-desc">${c.descricao}</div>
-            ${c.acao&&c.status!=='ok'?`<div class="pdf-crit-acao"><strong style="color:${cc}">Acao:</strong> ${c.acao}</div>`:''}
+            ${c.acao&&c.status!=='ok'?`<div class="pdf-crit-acao"><strong style="color:${cc}">Ação:</strong> ${c.acao}</div>`:''}
           </div>
           <div class="pdf-crit-status" style="color:${cc}">${st}</div>
         </div>`;
@@ -773,19 +841,18 @@ async function gerarPDF(paraCliente){
         <div class="pdf-hdr">
           <div class="pdf-hdr-top">
             <div>
-              <div class="pdf-hdr-brand">PerfilPro · Diagnostico de Visibilidade Local</div>
+              <div class="pdf-hdr-brand">PerfilPro · Diagnóstico de Visibilidade Local</div>
               <div class="pdf-hdr-biz">${data.nome_negocio}</div>
               <div class="pdf-hdr-seg">${data.segmento}</div>
               <div class="pdf-hdr-badge" style="background:${corBg};color:${cor}">${BADGE[data.classificacao]||''}</div>
             </div>
             <div class="pdf-hdr-score">
-              <div class="pdf-hdr-score-num" style="color:${cor}">${data.score_geral}</div>
-              <div class="pdf-hdr-score-lbl">pontuacao geral / 100</div>
+              <div class="pdf-hdr-score-num" style="color:${cor}">${data.score_geral}<span style="font-size:22px;font-weight:600;opacity:0.45">/100</span></div>
             </div>
           </div>
           <div class="pdf-hdr-meta">
             <div class="pdf-hdr-meta-item"><div class="pdf-hdr-meta-lbl">Elaborado por</div><div class="pdf-hdr-meta-val">${AGENCIA}</div></div>
-            <div class="pdf-hdr-meta-item"><div class="pdf-hdr-meta-lbl">Data da analise</div><div class="pdf-hdr-meta-val">${hoje}</div></div>
+            <div class="pdf-hdr-meta-item"><div class="pdf-hdr-meta-lbl">Data da análise</div><div class="pdf-hdr-meta-val">${hoje}</div></div>
             <div class="pdf-hdr-meta-item"><div class="pdf-hdr-meta-lbl">Tipo</div><div class="pdf-hdr-meta-val">${tipoDoc}</div></div>
             <div class="pdf-hdr-meta-item"><div class="pdf-hdr-meta-lbl">Contato</div><div class="pdf-hdr-meta-val">${WA_DISPLAY}</div></div>
           </div>
@@ -795,7 +862,7 @@ async function gerarPDF(paraCliente){
     function ftrHtml(pg){
       return `<div class="pdf-ftr">
         <div><div class="pdf-ftr-brand">${AGENCIA}</div><div class="pdf-ftr-tag">${AGENCIA_TAGLINE}</div></div>
-        <div class="pdf-ftr-right"><div class="pdf-ftr-phone">${WA_DISPLAY}</div><div class="pdf-ftr-site">${AGENCIA_SITE}</div><div class="pdf-ftr-pg">Pagina ${pg}</div></div>
+        <div class="pdf-ftr-right"><div class="pdf-ftr-phone">${WA_DISPLAY}</div><div class="pdf-ftr-site">${AGENCIA_SITE}</div><div class="pdf-ftr-pg">Página ${pg}</div></div>
       </div>`;
     }
 
@@ -822,14 +889,14 @@ async function gerarPDF(paraCliente){
     const pg1=`<div class="pdf-page">
       ${hdrHtml()}
       <div class="pdf-body">
-        <div class="pdf-sec-lbl"><span>Diagnostico Geral</span>${tipoDoc}</div>
+        <div class="pdf-sec-lbl"><span>Diagnóstico Geral</span>${tipoDoc}</div>
         <div class="pdf-diag" style="border-color:${cor}"><div class="pdf-diag-text">${data.diagnostico_geral}</div></div>
-        <div class="pdf-sec-lbl"><span>Score por Secao</span></div>
+        <div class="pdf-sec-lbl"><span>Score por Seção</span></div>
         <div class="pdf-score-big-wrap">
-          <div class="pdf-score-big"><div class="pdf-score-big-num" style="color:${cor}">${data.score_geral}</div><div class="pdf-score-big-lbl">pontuacao geral</div></div>
+          <div class="pdf-score-big"><div class="pdf-score-big-num" style="color:${cor}">${data.score_geral}<span style="font-size:20px;font-weight:600;opacity:0.45">/100</span></div><div class="pdf-score-big-lbl">pontuação geral</div></div>
           <div class="pdf-score-bars">${scoreRowsHtml}</div>
         </div>
-        ${planHtml?`<div class="pdf-sec-lbl"><span>Plano de Acao Prioritario</span></div>${planHtml}`:''}
+        ${planHtml?`<div class="pdf-sec-lbl"><span>Plano de Ação Prioritário</span></div>${planHtml}`:''}
       </div>
       ${ftrHtml(1)}
     </div>`;
@@ -844,16 +911,31 @@ async function gerarPDF(paraCliente){
       let corpo='';
 
       if(paraCliente&&s.tem_problema){
-        // Prospecção: blur com cadeado
-        corpo=`<div class="pdf-blur-wrap">
-          <div class="pdf-blur-inner"><div>${critHtml(s.criterios)}</div></div>
-          <div class="pdf-lock-overlay">
-            <div class="pdf-lock-card">
-              <div class="pdf-lock-icon">&#128274;</div>
-              <div class="pdf-lock-title">Diagnostico completo disponivel</div>
-              <div class="pdf-lock-desc">Esta secao apresenta pontos criticos que impactam diretamente o ranqueamento. O plano de acao detalhado esta disponivel com a ${AGENCIA}.</div>
-              <div class="pdf-lock-btn">${WA_DISPLAY}</div>
+        // Prospecção: layout dois colunas. Esquerda: blur com cadeado. Direita: lista de status visível
+        const statusListHtml=s.criterios.map(c=>{
+          const cc=c.status==='ok'?'#059669':c.status==='warn'?'#d97706':'#dc2626';
+          const ccBg=c.status==='ok'?'#ecfdf5':c.status==='warn'?'#fffbeb':'#fef2f2';
+          const st=c.status==='ok'?'OK':c.status==='warn'?'ATENÇÃO':'CRÍTICO';
+          return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f3f4f6;">
+            <div style="width:60px;padding:2px 6px;background:${ccBg};color:${cc};font-size:8px;font-weight:800;border-radius:3px;text-align:center;flex-shrink:0;">${st}</div>
+            <div style="font-size:10.5px;color:#374151;font-weight:500;line-height:1.3;">${c.nome}</div>
+          </div>`;
+        }).join('');
+        corpo=`<div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="flex:1;position:relative;min-height:220px;">
+            <div style="filter:blur(4px);opacity:0.5;user-select:none;pointer-events:none;">
+              ${critHtml(s.criterios)}
             </div>
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:white;border-radius:10px;padding:18px 22px;box-shadow:0 8px 32px rgba(0,0,0,0.15);text-align:center;width:260px;border:1px solid #e5e7eb;">
+              <div style="font-size:22px;margin-bottom:9px;">&#128274;</div>
+              <div style="font-family:'Sora',sans-serif;font-size:12.5px;font-weight:700;color:#111827;margin-bottom:6px;">Diagnóstico completo disponível</div>
+              <div style="font-size:10.5px;color:#6b7280;line-height:1.6;margin-bottom:13px;">O plano de ação detalhado desta seção está disponível com a ${AGENCIA}.</div>
+              <div style="background:#16a34a;color:white;padding:9px 14px;border-radius:7px;font-size:11px;font-weight:700;">${WA_DISPLAY}</div>
+            </div>
+          </div>
+          <div style="width:180px;flex-shrink:0;background:#f9fafb;border-radius:8px;padding:12px;border:1px solid #e5e7eb;">
+            <div style="font-size:8.5px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#9ca3af;margin-bottom:8px;">Pontos identificados</div>
+            ${statusListHtml}
           </div>
         </div>`;
       } else if(!paraCliente&&s.tem_problema){
@@ -862,15 +944,19 @@ async function gerarPDF(paraCliente){
         const acoesHtml=acoes.map(c=>{
           const cc=c.status==='warn'?'#d97706':'#dc2626';
           const ccBg=c.status==='warn'?'#fffbeb':'#fef2f2';
-          const st=c.status==='warn'?'ATENCAO':'CRITICO';
-          return `<div class="pdf-interno-action-item">
-            <div class="pdf-interno-action-prio ${c.status}" style="background:${ccBg};color:${cc}">${st}</div>
-            <div class="pdf-interno-action-text"><strong>${c.nome}:</strong> ${c.acao}</div>
+          const st=c.status==='warn'?'ATENÇÃO':'CRÍTICO';
+          const cfz=getComoFazer(c.nome);const comoFazerHtml=(c.status!=='ok'&&cfz)?`<div style="font-size:10px;color:#4b5563;line-height:1.6;margin-top:5px;padding:6px 10px;background:#eff4ff;border-left:2px solid #1a56db;border-radius:0 4px 4px 0;"><strong style="color:#1240a8">Como fazer:</strong> ${cfz}</div>`:'';
+          return `<div class="pdf-interno-action-item" style="flex-direction:column;gap:6px;">
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <div class="pdf-interno-action-prio ${c.status}" style="background:${ccBg};color:${cc}">${st}</div>
+              <div class="pdf-interno-action-text"><strong>${c.nome}:</strong> ${c.acao}</div>
+            </div>
+            ${comoFazerHtml}
           </div>`;
         }).join('');
         corpo=`${critHtml(s.criterios)}
           ${acoes.length?`<div class="pdf-interno-actions" style="margin-top:12px">
-            <div class="pdf-interno-actions-header">O que precisa ser feito nesta secao</div>
+            <div class="pdf-interno-actions-header">O que precisa ser feito nesta seção</div>
             ${acoesHtml}
           </div>`:''}`;
       } else {
@@ -902,7 +988,7 @@ async function gerarPDF(paraCliente){
       const ctaPage=`<div class="pdf-page">
         <div class="pdf-accent" style="background:${cor}"></div>
         <div class="pdf-cta">
-          <div class="pdf-cta-eye">Proximo passo</div>
+          <div class="pdf-cta-eye">Próximo passo</div>
           <div class="pdf-cta-hl">Seu perfil tem potencial.<br>Falta estrategia para desbloqueá-lo.</div>
           <div class="pdf-cta-sub">Este relatorio mapeou os pontos que estao impedindo que mais clientes encontrem este negocio no Google. A ${AGENCIA} tem um metodo estruturado para corrigir cada problema e aumentar a visibilidade local de forma mensuravel.</div>
           <div class="pdf-cta-phone">${WA_DISPLAY}</div>
