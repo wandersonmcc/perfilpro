@@ -147,14 +147,19 @@ body{font-family:'Inter',sans-serif;background:var(--n50);color:var(--n800);min-
 .pdf-btn-prospect:hover{background:var(--brand-dark);box-shadow:0 4px 16px rgba(26,86,219,0.35);}
 .pdf-btn:disabled{opacity:0.6;cursor:not-allowed;}
 
-.score-breakdown{background:white;border-radius:var(--radius);padding:28px 32px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid var(--n150);}
-.breakdown-title{font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--n400);margin-bottom:20px;}
-.breakdown-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-.breakdown-item{display:flex;flex-direction:column;gap:7px;}
-.breakdown-item-label{font-size:12px;font-weight:600;color:var(--n500);}
-.breakdown-bar-wrap{height:5px;background:var(--n100);border-radius:100px;overflow:hidden;}
-.breakdown-bar-fill{height:100%;border-radius:100px;transition:width 1.2s ease;width:0%;}
-.breakdown-item-score{font-size:13px;font-weight:700;color:var(--n700);}
+.score-breakdown{background:white;border-radius:var(--radius);padding:24px 28px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid var(--n150);}
+.breakdown-title{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--n400);margin-bottom:16px;}
+.breakdown-layout{display:flex;gap:24px;align-items:center;}
+.breakdown-score-big{flex-shrink:0;text-align:center;min-width:90px;}
+.breakdown-score-big-num{font-size:48px;font-weight:800;line-height:1;letter-spacing:-0.03em;}
+.breakdown-score-big-lbl{font-size:10px;color:var(--n400);font-weight:500;margin-top:4px;}
+.breakdown-divider{width:1px;background:var(--n150);align-self:stretch;flex-shrink:0;}
+.breakdown-bars{flex:1;display:flex;flex-direction:column;gap:10px;}
+.bd-row{display:flex;align-items:center;gap:10px;}
+.bd-name{font-size:12.5px;font-weight:500;color:var(--n600);width:140px;flex-shrink:0;}
+.bd-bar-wrap{flex:1;height:6px;background:var(--n100);border-radius:100px;overflow:hidden;}
+.bd-bar-fill{height:100%;border-radius:100px;transition:width 1.2s ease;width:0%;}
+.bd-score{font-size:12.5px;font-weight:700;width:32px;text-align:right;flex-shrink:0;}
 
 .sections-label{font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--n400);margin-bottom:12px;margin-top:8px;}
 .sections-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
@@ -176,19 +181,31 @@ body{font-family:'Inter',sans-serif;background:var(--n50);color:var(--n800);min-
 .section-card.open .section-body{max-height:3000px;padding:0 24px 24px;}
 .section-diagnosis{font-size:14px;line-height:1.75;color:var(--n600);margin-bottom:20px;padding:16px 20px;background:var(--n50);border-radius:var(--radius-sm);border-left:3px solid var(--brand);}
 .criteria-list{display:flex;flex-direction:column;gap:6px;}
-.criteria-item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;padding:13px 16px;border-radius:var(--radius-sm);background:var(--n50);border:1px solid transparent;transition:border-color 0.15s;}
-.criteria-item:hover{border-color:var(--n200);}
-.criteria-status-icon{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-weight:700;margin-top:1px;}
+.criteria-item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;padding:14px 16px;border-radius:var(--radius-sm);border:1px solid transparent;transition:all 0.15s;}
+.criteria-item.ok{background:#f0fdf4;border-color:#d1fae5;}
+.criteria-item.warn{background:#fffbeb;border-color:#fde68a;}
+.criteria-item.fail{background:#fef2f2;border-color:#fecaca;}
+.criteria-item:hover{box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.criteria-status-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;font-weight:800;margin-top:1px;}
 .criteria-status-icon.ok{background:var(--success-light);color:var(--success);}
 .criteria-status-icon.warn{background:var(--warning-light);color:var(--warning);}
 .criteria-status-icon.fail{background:var(--danger-light);color:var(--danger);}
 .criteria-text{flex:1;}
-.criteria-name{font-weight:600;font-size:13.5px;color:var(--n800);margin-bottom:3px;}
-.criteria-desc{font-size:12.5px;color:var(--n500);line-height:1.55;}
-.criteria-action-tag{font-size:12px;font-weight:700;min-width:56px;text-align:right;margin-top:2px;}
-.criteria-action-tag.ok{color:var(--success);}
-.criteria-action-tag.warn{color:var(--warning);}
-.criteria-action-tag.fail{color:var(--danger);}
+.criteria-name{font-weight:700;font-size:14px;color:var(--n900);margin-bottom:3px;}
+.criteria-desc{font-size:13px;color:var(--n600);line-height:1.6;}
+.criteria-acao{font-size:13px;color:var(--n700);line-height:1.5;margin-top:6px;font-weight:500;}
+.criteria-acao strong{color:var(--n900);}
+.criteria-como{font-size:12.5px;color:var(--brand-dark);line-height:1.65;margin-top:7px;padding:9px 13px;background:var(--brand-light);border-radius:6px;border-left:2px solid var(--brand);}
+.criteria-como strong{color:var(--brand-dark);font-weight:700;}
+.criteria-action-tag{font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;flex-shrink:0;margin-top:2px;text-transform:uppercase;letter-spacing:0.04em;}
+.criteria-action-tag.ok{background:var(--success-light);color:var(--success);}
+.criteria-action-tag.warn{background:var(--warning-light);color:var(--warning);}
+.criteria-action-tag.fail{background:var(--danger-light);color:var(--danger);}
+.sec-count{font-size:11px;font-weight:700;padding:2px 8px;border-radius:3px;letter-spacing:0.02em;}
+.sec-count-ok{background:var(--success-light);color:var(--success);}
+.sec-count-ok-zero{background:var(--n100);color:var(--n400);}
+.sec-count-warn{background:var(--warning-light);color:var(--warning);}
+.sec-count-fail{background:var(--danger-light);color:var(--danger);}
 
 .action-plan{background:white;border-radius:var(--radius);padding:28px 32px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid var(--n150);}
 .action-plan-title{font-family:'Inter',sans-serif;font-size:20px;color:var(--n900);margin-bottom:6px;}
@@ -547,10 +564,10 @@ function renderReport(data){
   const circ=408, off=circ-(data.score_geral/100)*circ;
   const secoes=[...data.secoes].sort((a,b)=>a.score-b.score);
   const breakdownHtml=data.secoes.map(s=>`
-    <div class="breakdown-item">
-      <div class="breakdown-item-label">${s.emoji} ${s.nome}</div>
-      <div class="breakdown-bar-wrap"><div class="breakdown-bar-fill fill-${s.classificacao}" data-width="${s.score}" style="width:0%"></div></div>
-      <div class="breakdown-item-score ${sc(s.score)}">${s.score}/100</div>
+    <div class="bd-row">
+      <div class="bd-name">${s.nome}</div>
+      <div class="bd-bar-wrap"><div class="bd-bar-fill fill-${s.classificacao}" data-width="${s.score}" style="width:0%"></div></div>
+      <div class="bd-score ${sc(s.score)}">${s.score}</div>
     </div>`).join('');
   const planoHtml=(data.plano_acao||[]).map(item=>`
     <div class="action-item">
@@ -594,7 +611,14 @@ function renderReport(data){
     </div>
     <div class="score-breakdown">
       <div class="breakdown-title">Score por seção</div>
-      <div class="breakdown-grid">${breakdownHtml}</div>
+      <div class="breakdown-layout">
+        <div class="breakdown-score-big">
+          <div class="breakdown-score-big-num" style="color:${COR[data.classificacao]||'#1a56db'}">${data.score_geral}</div>
+          <div class="breakdown-score-big-lbl">pontuação geral</div>
+        </div>
+        <div class="breakdown-divider"></div>
+        <div class="breakdown-bars">${breakdownHtml}</div>
+      </div>
     </div>
     ${planoHtml?`<div class="action-plan"><div class="action-plan-title">Plano de Ação Prioritário</div><div class="action-plan-sub">Ordenado do mais crítico ao menos urgente para maximizar o ranqueamento local.</div><div class="action-items">${planoHtml}</div></div>`:''}
     <div class="sections-label">Diagnóstico detalhado por seção</div>
@@ -611,7 +635,7 @@ function renderReport(data){
   setTimeout(()=>{
     document.getElementById('score-fill').style.strokeDashoffset=off;
     animateNumber('score-num',0,data.score_geral,1600);
-    document.querySelectorAll('.section-score-fill,.breakdown-bar-fill').forEach(el=>{el.style.width=el.dataset.width+'%';});
+    document.querySelectorAll('.section-score-fill,.breakdown-bar-fill,.bd-bar-fill').forEach(el=>{el.style.width=el.dataset.width+'%';});
   },120);
   setTimeout(()=>{document.querySelectorAll('.section-card,.sec-card').forEach(el=>el.classList.add('open'));},700);
 }
@@ -620,17 +644,23 @@ function renderSection(s){
   const ok=s.criterios.filter(c=>c.status==='ok').length;
   const wn=s.criterios.filter(c=>c.status==='warn').length;
   const fl=s.criterios.filter(c=>c.status==='fail').length;
-  const criteriosHtml=s.criterios.map(c=>`
-    <div class="criteria-item">
+  const okClass=ok>0?'sec-count-ok':'sec-count-ok-zero';
+
+  const criteriosHtml=s.criterios.map(c=>{
+    const cfz=(c.status!=='ok')?getComoFazer(c.nome):null;
+    return `
+    <div class="criteria-item ${c.status}">
       <div class="criteria-status-icon ${c.status}">${c.status==='ok'?'✓':c.status==='warn'?'!':'✗'}</div>
       <div class="criteria-text">
         <div class="criteria-name">${c.nome}</div>
-        <div class="criteria-desc">${c.descricao}${c.acao?`<br><strong style="color:var(--n700)">Ação: </strong>${c.acao}`:''}</div>
+        <div class="criteria-desc">${c.descricao}</div>
+        ${c.acao&&c.status!=='ok'?`<div class="criteria-acao"><strong>Ação:</strong> ${c.acao}</div>`:''}
+        ${cfz?`<div class="criteria-como"><strong>Como fazer:</strong> ${cfz}</div>`:''}
       </div>
       <div class="criteria-action-tag ${c.status}">${c.status==='ok'?'OK':c.status==='warn'?'Atenção':'Crítico'}</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
-  // Tela interna: sem blur, tudo visível
   const bodyContent=`<div class="section-diagnosis">${s.diagnostico}</div><div class="criteria-list">${criteriosHtml}</div>`;
 
   return `
@@ -639,7 +669,11 @@ function renderSection(s){
         <div class="section-icon icon-${s.classificacao}">${s.emoji}</div>
         <div class="section-title-wrap">
           <div class="section-title">${s.nome}</div>
-          <div class="section-subtitle">${ok} ok · ${wn} atenção · ${fl} crítico</div>
+          <div class="section-subtitle" style="display:flex;gap:6px;align-items:center;margin-top:3px;">
+            <span class="sec-count ${okClass}">${ok} ok</span>
+            <span class="sec-count sec-count-warn">${wn} atenção</span>
+            <span class="sec-count sec-count-fail">${fl} crítico</span>
+          </div>
         </div>
         <div class="section-score-wrap">
           <div class="section-score-bar"><div class="section-score-fill fill-${s.classificacao}" data-width="${s.score}" style="width:0%"></div></div>
