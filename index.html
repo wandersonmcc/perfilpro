@@ -4,370 +4,358 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PerfilPro | Auditoria de Google Meu Negócio</title>
+<title>PerfilPro | Diagnóstico de Google Meu Negócio</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231a56db'/><text y='78' x='50' text-anchor='middle' font-size='64'>📍</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root {
   --brand: #1a56db;
-  --brand-light: #e8f0fe;
+  --brand-light: #eff4ff;
   --brand-dark: #1240a8;
-  --success: #0d9f6e;
-  --success-light: #e6f9f3;
+  --success: #059669;
+  --success-light: #ecfdf5;
   --warning: #d97706;
-  --warning-light: #fef3c7;
+  --warning-light: #fffbeb;
   --danger: #dc2626;
   --danger-light: #fef2f2;
-  --neutral-50: #f8f9fc;
-  --neutral-100: #f1f3f7;
-  --neutral-150: #e8eaf0;
-  --neutral-200: #e2e5ed;
-  --neutral-300: #cdd1dc;
-  --neutral-400: #9aa1b4;
-  --neutral-500: #6b7390;
-  --neutral-600: #4a5168;
-  --neutral-700: #343b52;
-  --neutral-800: #1e2335;
-  --neutral-900: #111827;
-  --radius: 16px;
-  --radius-sm: 10px;
-  --shadow: 0 2px 16px rgba(17,24,39,0.06), 0 1px 4px rgba(17,24,39,0.04);
-  --shadow-md: 0 4px 24px rgba(17,24,39,0.09), 0 2px 8px rgba(17,24,39,0.05);
-  --shadow-lg: 0 12px 48px rgba(17,24,39,0.13), 0 4px 16px rgba(17,24,39,0.07);
+  --n0: #ffffff;
+  --n50: #f9fafb;
+  --n100: #f3f4f6;
+  --n200: #e5e7eb;
+  --n300: #d1d5db;
+  --n400: #9ca3af;
+  --n500: #6b7280;
+  --n600: #4b5563;
+  --n700: #374151;
+  --n800: #1f2937;
+  --n900: #111827;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-xs: 5px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 4px 12px rgba(0,0,0,0.06),0 2px 4px rgba(0,0,0,0.04);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.04);
+  --shadow-lg: 0 20px 48px rgba(0,0,0,0.12),0 8px 16px rgba(0,0,0,0.06);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'DM Sans', sans-serif; background: var(--neutral-50); color: var(--neutral-800); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:#f3f4f6;color:var(--n800);min-height:100vh;-webkit-font-smoothing:antialiased;font-size:14px;}
 
-/* LOCK */
-#lock-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(145deg, #f0f4ff 0%, #fafbfe 55%, #eef9f5 100%); padding: 24px; }
-.lock-card { background: white; border-radius: 24px; padding: 52px 44px; max-width: 400px; width: 100%; box-shadow: var(--shadow-lg); text-align: center; border: 1px solid var(--neutral-150); }
-.lock-logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 32px; }
-.lock-logo-icon { width: 40px; height: 40px; background: var(--brand); border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 12px rgba(26,86,219,0.3); }
-.lock-logo-text { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--neutral-900); }
-.lock-logo-text span { color: var(--brand); }
-.lock-card h1 { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--neutral-900); margin-bottom: 8px; }
-.lock-card p { color: var(--neutral-500); font-size: 14px; margin-bottom: 32px; line-height: 1.6; }
-.lock-input-wrap { position: relative; margin-bottom: 14px; }
-.lock-input-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 16px; color: var(--neutral-400); }
-.lock-input { width: 100%; padding: 14px 18px 14px 44px; border: 1.5px solid var(--neutral-200); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--neutral-900); outline: none; transition: border-color 0.2s; background: var(--neutral-50); letter-spacing: 3px; }
-.lock-input:focus { border-color: var(--brand); box-shadow: 0 0 0 4px rgba(26,86,219,0.08); background: white; }
-.lock-btn { width: 100%; padding: 14px; background: var(--brand); color: white; border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-.lock-btn:hover { background: var(--brand-dark); box-shadow: 0 4px 16px rgba(26,86,219,0.35); }
-.lock-error { color: var(--danger); font-size: 13px; margin-top: 10px; display: none; font-weight: 500; }
-.lock-footer { margin-top: 24px; font-size: 12px; color: var(--neutral-400); }
+/* ── LOCK ── */
+#lock-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#eef2ff 0%,#f9fafb 50%,#f0fdf4 100%);padding:24px;}
+.lock-card{background:var(--n0);border-radius:16px;padding:48px 40px;max-width:380px;width:100%;box-shadow:var(--shadow-lg);text-align:center;}
+.lock-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:36px;}
+.lock-logo-mark{width:36px;height:36px;background:var(--brand);border-radius:9px;display:flex;align-items:center;justify-content:center;}
+.lock-logo-mark svg{width:20px;height:20px;}
+.lock-logo-name{font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:var(--n900);letter-spacing:-0.02em;}
+.lock-logo-name span{color:var(--brand);}
+.lock-card h1{font-family:'Sora',sans-serif;font-size:22px;font-weight:700;color:var(--n900);margin-bottom:6px;letter-spacing:-0.02em;}
+.lock-card p{color:var(--n500);font-size:13.5px;margin-bottom:28px;line-height:1.6;}
+.lock-input{width:100%;padding:13px 16px;border:1.5px solid var(--n200);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:15px;color:var(--n900);outline:none;transition:all 0.15s;background:var(--n50);text-align:center;letter-spacing:4px;margin-bottom:12px;}
+.lock-input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(26,86,219,0.1);background:white;}
+.lock-btn{width:100%;padding:13px;background:var(--brand);color:white;border:none;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.15s;letter-spacing:0.01em;}
+.lock-btn:hover{background:var(--brand-dark);}
+.lock-error{color:var(--danger);font-size:12.5px;margin-top:8px;display:none;font-weight:500;}
+.lock-footer{margin-top:24px;font-size:11.5px;color:var(--n400);}
 
-/* APP */
-#app { display: none; }
-.header { background: white; border-bottom: 1px solid var(--neutral-150); padding: 0 32px; height: 62px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(17,24,39,0.05); }
-.logo { display: flex; align-items: center; gap: 10px; }
-.logo-icon { width: 34px; height: 34px; background: var(--brand); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: white; font-size: 17px; }
-.logo-text { font-family: 'DM Serif Display', serif; font-size: 19px; color: var(--neutral-900); }
-.logo-text span { color: var(--brand); }
-.header-right { display: flex; align-items: center; gap: 10px; }
-.header-badge { background: var(--neutral-100); color: var(--neutral-600); font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 100px; border: 1px solid var(--neutral-200); }
-.header-badge-brand { background: var(--brand-light); color: var(--brand); border-color: rgba(26,86,219,0.15); }
+/* ── APP ── */
+#app{display:none;}
+.header{background:var(--n0);border-bottom:1px solid var(--n200);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:9px;}
+.logo-mark{width:30px;height:30px;background:var(--brand);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-mark svg{width:16px;height:16px;}
+.logo-name{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;color:var(--n900);letter-spacing:-0.02em;}
+.logo-name span{color:var(--brand);}
+.header-right{display:flex;align-items:center;gap:8px;}
+.hbadge{background:var(--n100);color:var(--n600);font-size:11px;font-weight:600;padding:4px 10px;border-radius:100px;border:1px solid var(--n200);letter-spacing:0.01em;}
+.hbadge-brand{background:var(--brand-light);color:var(--brand);border-color:rgba(26,86,219,0.2);}
 
-/* MAIN */
-.main { max-width: 920px; margin: 0 auto; padding: 52px 24px; }
+/* ── MAIN ── */
+.main{max-width:900px;margin:0 auto;padding:44px 20px;}
 
-/* HERO */
-.tool-hero { text-align: center; margin-bottom: 44px; }
-.tool-hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; background: var(--brand-light); color: var(--brand); font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 100px; margin-bottom: 20px; letter-spacing: 0.06em; text-transform: uppercase; }
-.tool-hero h2 { font-family: 'DM Serif Display', serif; font-size: 40px; color: var(--neutral-900); margin-bottom: 14px; line-height: 1.15; }
-.tool-hero h2 em { font-style: italic; color: var(--brand); }
-.tool-hero p { color: var(--neutral-500); font-size: 16px; max-width: 520px; margin: 0 auto; line-height: 1.7; }
+/* ── HERO ── */
+.tool-hero{margin-bottom:36px;}
+.tool-hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--brand-light);color:var(--brand);font-size:11px;font-weight:700;padding:4px 12px;border-radius:100px;margin-bottom:16px;letter-spacing:0.06em;text-transform:uppercase;}
+.tool-hero h2{font-family:'Sora',sans-serif;font-size:32px;font-weight:800;color:var(--n900);margin-bottom:10px;line-height:1.15;letter-spacing:-0.03em;}
+.tool-hero h2 em{font-style:normal;color:var(--brand);}
+.tool-hero p{color:var(--n500);font-size:14.5px;max-width:500px;line-height:1.7;}
 
-/* SEARCH */
-.search-card { background: white; border-radius: var(--radius); padding: 36px; box-shadow: var(--shadow-md); margin-bottom: 28px; border: 1px solid var(--neutral-150); }
-.search-label { font-weight: 600; font-size: 14px; color: var(--neutral-700); margin-bottom: 6px; display: block; }
-.search-hint { font-size: 13px; color: var(--neutral-500); margin-bottom: 18px; line-height: 1.6; padding: 12px 16px; background: var(--neutral-50); border-radius: var(--radius-sm); border-left: 3px solid var(--brand-light); }
-.search-hint strong { color: var(--neutral-600); font-weight: 600; }
-.search-hint ol { margin: 6px 0 0 16px; }
-.search-hint li { margin-bottom: 3px; }
-.search-input-wrap { position: relative; margin-bottom: 14px; }
-.search-input-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 16px; color: var(--neutral-400); }
-.search-input { width: 100%; padding: 14px 18px 14px 44px; border: 1.5px solid var(--neutral-200); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--neutral-900); outline: none; transition: all 0.2s; background: var(--neutral-50); }
-.search-input:focus { border-color: var(--brand); box-shadow: 0 0 0 4px rgba(26,86,219,0.08); background: white; }
-.search-input::placeholder { color: var(--neutral-400); }
-.analyze-btn { width: 100%; padding: 15px 28px; background: var(--brand); color: white; border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.analyze-btn:hover { background: var(--brand-dark); box-shadow: 0 4px 20px rgba(26,86,219,0.35); }
-.analyze-btn:disabled { opacity: 0.55; cursor: not-allowed; }
-.compare-toggle { margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--neutral-100); }
-.toggle-label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: var(--neutral-600); font-weight: 500; }
-.toggle-label input[type="checkbox"] { display: none; }
-.toggle-switch { width: 40px; height: 22px; background: var(--neutral-200); border-radius: 100px; position: relative; transition: background 0.2s; flex-shrink: 0; }
-.toggle-switch::after { content: ''; position: absolute; width: 16px; height: 16px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: left 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
-.toggle-label input:checked + .toggle-switch { background: var(--brand); }
-.toggle-label input:checked + .toggle-switch::after { left: 21px; }
-.competitor-wrap { margin-top: 16px; display: none; }
-.competitor-wrap.show { display: block; }
+/* ── SEARCH CARD ── */
+.search-card{background:var(--n0);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow-sm);margin-bottom:20px;border:1px solid var(--n200);}
+.field-label{font-weight:600;font-size:13px;color:var(--n700);margin-bottom:5px;display:block;}
+.field-hint{font-size:12.5px;color:var(--n400);margin-bottom:14px;line-height:1.6;padding:10px 14px;background:var(--n50);border-radius:var(--radius-xs);border-left:3px solid var(--n200);}
+.field-hint strong{color:var(--n600);font-weight:600;}
+.field-hint ol{margin:5px 0 0 14px;}
+.field-hint li{margin-bottom:2px;}
+.field-input{width:100%;padding:11px 14px;border:1.5px solid var(--n200);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:13.5px;color:var(--n900);outline:none;transition:all 0.15s;background:var(--n50);margin-bottom:12px;}
+.field-input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(26,86,219,0.08);background:white;}
+.field-input::placeholder{color:var(--n400);}
+.analyze-btn{width:100%;padding:13px;background:var(--brand);color:white;border:none;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:7px;}
+.analyze-btn:hover{background:var(--brand-dark);}
+.analyze-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.compare-toggle{margin-top:18px;padding-top:18px;border-top:1px solid var(--n100);}
+.toggle-label{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:13px;color:var(--n600);font-weight:500;}
+.toggle-label input[type="checkbox"]{display:none;}
+.toggle-sw{width:36px;height:20px;background:var(--n300);border-radius:100px;position:relative;transition:background 0.15s;flex-shrink:0;}
+.toggle-sw::after{content:'';position:absolute;width:14px;height:14px;background:white;border-radius:50%;top:3px;left:3px;transition:left 0.15s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+.toggle-label input:checked+.toggle-sw{background:var(--brand);}
+.toggle-label input:checked+.toggle-sw::after{left:19px;}
+.competitor-wrap{margin-top:14px;display:none;}
+.competitor-wrap.show{display:block;}
 
-/* LOADING */
-#loading { display: none; text-align: center; padding: 80px 0; }
-.loading-spinner { width: 48px; height: 48px; border: 3px solid var(--neutral-150); border-top-color: var(--brand); border-radius: 50%; animation: spin 0.75s linear infinite; margin: 0 auto 24px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-text { font-size: 16px; color: var(--neutral-700); font-weight: 600; margin-bottom: 8px; }
-.loading-sub { font-size: 13px; color: var(--neutral-400); margin-bottom: 32px; }
-.loading-steps { display: flex; flex-direction: column; gap: 8px; align-items: center; max-width: 380px; margin: 0 auto; }
-.loading-step { font-size: 13px; color: var(--neutral-400); display: flex; align-items: center; gap: 10px; padding: 8px 16px; border-radius: var(--radius-sm); transition: all 0.3s; width: 100%; }
-.loading-step .step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--neutral-200); flex-shrink: 0; transition: all 0.3s; }
-.loading-step.active { color: var(--brand); font-weight: 600; background: var(--brand-light); }
-.loading-step.active .step-dot { background: var(--brand); animation: pulse-dot 1s ease infinite; }
-.loading-step.done { color: var(--success); }
-.loading-step.done .step-dot { background: var(--success); }
-@keyframes pulse-dot { 0%,100% { transform: scale(1); } 50% { transform: scale(1.4); } }
+/* ── LOADING ── */
+#loading{display:none;text-align:center;padding:72px 0;}
+.loading-spinner{width:40px;height:40px;border:2.5px solid var(--n200);border-top-color:var(--brand);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 20px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-text{font-size:15px;color:var(--n800);font-weight:600;margin-bottom:6px;}
+.loading-sub{font-size:13px;color:var(--n400);margin-bottom:28px;}
+.loading-steps{display:flex;flex-direction:column;gap:6px;align-items:center;max-width:340px;margin:0 auto;}
+.loading-step{font-size:12.5px;color:var(--n400);display:flex;align-items:center;gap:9px;padding:7px 14px;border-radius:var(--radius-sm);transition:all 0.25s;width:100%;}
+.loading-step .dot{width:6px;height:6px;border-radius:50%;background:var(--n300);flex-shrink:0;transition:all 0.25s;}
+.loading-step.active{color:var(--brand);font-weight:600;background:var(--brand-light);}
+.loading-step.active .dot{background:var(--brand);animation:pdot 1s ease infinite;}
+.loading-step.done{color:var(--success);}
+.loading-step.done .dot{background:var(--success);}
+@keyframes pdot{0%,100%{transform:scale(1);}50%{transform:scale(1.5);}}
 
-/* REPORT */
-#report { display: none; }
-.nova-btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; background: white; color: var(--neutral-600); border: 1.5px solid var(--neutral-200); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-bottom: 24px; }
-.nova-btn:hover { background: var(--neutral-50); border-color: var(--neutral-300); }
+/* ── REPORT ── */
+#report{display:none;}
+.nova-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--n0);color:var(--n600);border:1.5px solid var(--n200);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;margin-bottom:20px;}
+.nova-btn:hover{background:var(--n50);border-color:var(--n300);}
 
-/* REPORT HEADER */
-.report-header { background: white; border-radius: var(--radius); box-shadow: var(--shadow-md); margin-bottom: 16px; border: 1px solid var(--neutral-150); overflow: hidden; }
-.report-header-top { padding: 10px 28px; background: var(--neutral-900); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-.report-header-top-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--neutral-400); }
-.report-header-top-right { display: flex; align-items: center; gap: 20px; }
-.report-meta { font-size: 12px; color: var(--neutral-500); }
-.report-meta strong { color: var(--neutral-300); font-weight: 600; }
-.report-body { padding: 36px 40px; display: flex; align-items: flex-start; gap: 48px; flex-wrap: wrap; }
-.score-circle-wrap { flex-shrink: 0; position: relative; width: 150px; height: 150px; }
-.score-circle-svg { width: 150px; height: 150px; transform: rotate(-90deg); }
-.score-track { fill: none; stroke: var(--neutral-100); stroke-width: 9; }
-.score-fill { fill: none; stroke-width: 9; stroke-linecap: round; transition: stroke-dashoffset 1.6s cubic-bezier(0.4,0,0.2,1); stroke-dasharray: 408; stroke-dashoffset: 408; }
-.score-number { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
-.score-value { font-family: 'DM Serif Display', serif; font-size: 46px; line-height: 1; color: var(--neutral-900); }
-.score-max { font-size: 12px; color: var(--neutral-400); font-weight: 500; margin-top: 2px; }
-.score-info { flex: 1; min-width: 240px; }
-.score-business-name { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--neutral-900); margin-bottom: 4px; line-height: 1.2; }
-.score-segment { font-size: 13px; color: var(--neutral-400); font-weight: 500; margin-bottom: 16px; }
-.score-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 13px; border-radius: 100px; font-size: 12px; font-weight: 700; margin-bottom: 16px; letter-spacing: 0.02em; text-transform: uppercase; }
-.score-badge.ruim { background: var(--danger-light); color: var(--danger); }
-.score-badge.regular { background: var(--warning-light); color: var(--warning); }
-.score-badge.bom { background: var(--success-light); color: var(--success); }
-.score-badge.otimo { background: var(--brand-light); color: var(--brand); }
-.diagnostico-geral { font-size: 14.5px; line-height: 1.75; color: var(--neutral-600); border-left: 3px solid var(--neutral-200); padding-left: 16px; margin-bottom: 20px; }
-.pdf-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-.pdf-btn { padding: 11px 20px; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 7px; border: none; }
-.pdf-btn-full { background: var(--neutral-900); color: white; }
-.pdf-btn-full:hover { background: var(--neutral-700); }
-.pdf-btn-prospect { background: var(--brand); color: white; }
-.pdf-btn-prospect:hover { background: var(--brand-dark); box-shadow: 0 4px 16px rgba(26,86,219,0.35); }
-.pdf-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+/* Report header */
+.rpt-header{background:var(--n0);border-radius:var(--radius);box-shadow:var(--shadow-sm);margin-bottom:12px;border:1px solid var(--n200);overflow:hidden;}
+.rpt-header-bar{height:3px;width:100%;}
+.rpt-header-top{padding:10px 24px;background:var(--n900);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.rpt-header-top-label{font-size:10.5px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--n500);}
+.rpt-header-meta{font-size:11.5px;color:var(--n500);}
+.rpt-header-meta strong{color:var(--n300);}
+.rpt-body{padding:28px 32px;display:flex;align-items:flex-start;gap:36px;flex-wrap:wrap;}
+.score-circle-wrap{flex-shrink:0;position:relative;width:130px;height:130px;}
+.score-circle-svg{width:130px;height:130px;transform:rotate(-90deg);}
+.score-track{fill:none;stroke:var(--n100);stroke-width:8;}
+.score-fill{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1);stroke-dasharray:353;stroke-dashoffset:353;}
+.score-number{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.score-val{font-family:'Sora',sans-serif;font-size:38px;font-weight:800;line-height:1;letter-spacing:-0.03em;}
+.score-lbl{font-size:11px;color:var(--n400);font-weight:500;margin-top:1px;}
+.score-info{flex:1;min-width:220px;}
+.score-badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:4px;font-size:10.5px;font-weight:700;margin-bottom:10px;letter-spacing:0.04em;text-transform:uppercase;}
+.score-badge.ruim{background:var(--danger-light);color:var(--danger);}
+.score-badge.regular{background:var(--warning-light);color:var(--warning);}
+.score-badge.bom{background:var(--success-light);color:var(--success);}
+.score-badge.otimo{background:var(--brand-light);color:var(--brand);}
+.score-business{font-family:'Sora',sans-serif;font-size:24px;font-weight:700;color:var(--n900);margin-bottom:3px;letter-spacing:-0.02em;line-height:1.2;}
+.score-segment{font-size:12.5px;color:var(--n400);margin-bottom:14px;font-weight:500;}
+.diag-text{font-size:13.5px;line-height:1.75;color:var(--n600);border-left:2px solid var(--n200);padding-left:14px;margin-bottom:18px;}
+.pdf-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.pdf-btn{padding:10px 18px;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:6px;border:none;}
+.pdf-btn-full{background:var(--n900);color:white;}
+.pdf-btn-full:hover{background:var(--n700);}
+.pdf-btn-prospect{background:var(--brand);color:white;}
+.pdf-btn-prospect:hover{background:var(--brand-dark);}
+.pdf-btn:disabled{opacity:0.55;cursor:not-allowed;}
 
-/* BREAKDOWN */
-.score-breakdown { background: white; border-radius: var(--radius); padding: 28px 32px; box-shadow: var(--shadow); margin-bottom: 16px; border: 1px solid var(--neutral-150); }
-.breakdown-title { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--neutral-400); margin-bottom: 20px; }
-.breakdown-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-.breakdown-item { display: flex; flex-direction: column; gap: 7px; }
-.breakdown-item-label { font-size: 12px; font-weight: 600; color: var(--neutral-500); }
-.breakdown-bar-wrap { height: 5px; background: var(--neutral-100); border-radius: 100px; overflow: hidden; }
-.breakdown-bar-fill { height: 100%; border-radius: 100px; transition: width 1.2s ease; width: 0%; }
-.breakdown-item-score { font-size: 13px; font-weight: 700; color: var(--neutral-700); }
+/* Breakdown */
+.breakdown-card{background:var(--n0);border-radius:var(--radius);padding:22px 26px;box-shadow:var(--shadow-sm);margin-bottom:12px;border:1px solid var(--n200);}
+.card-label{font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--n400);margin-bottom:16px;}
+.breakdown-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.bd-item{display:flex;flex-direction:column;gap:6px;}
+.bd-name{font-size:11.5px;font-weight:500;color:var(--n600);}
+.bd-bar-wrap{height:4px;background:var(--n100);border-radius:100px;overflow:hidden;}
+.bd-bar{height:100%;border-radius:100px;transition:width 1.2s ease;width:0%;}
+.bd-score{font-size:12px;font-weight:700;color:var(--n700);}
 
-/* SECTIONS */
-.sections-label { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--neutral-400); margin-bottom: 12px; margin-top: 8px; }
-.sections-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-.section-card { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--neutral-150); transition: box-shadow 0.2s; }
-.section-card:hover { box-shadow: var(--shadow-md); }
-.section-header { padding: 20px 24px; display: flex; align-items: center; gap: 14px; cursor: pointer; user-select: none; transition: background 0.15s; }
-.section-header:hover { background: var(--neutral-50); }
-.section-icon { width: 42px; height: 42px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 19px; flex-shrink: 0; }
-.section-title-wrap { flex: 1; }
-.section-title { font-weight: 600; font-size: 15px; color: var(--neutral-900); margin-bottom: 2px; }
-.section-subtitle { font-size: 12px; color: var(--neutral-400); }
-.section-score-wrap { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-.section-score-bar { width: 72px; height: 5px; background: var(--neutral-100); border-radius: 100px; overflow: hidden; }
-.section-score-fill { height: 100%; border-radius: 100px; transition: width 1.2s ease; width: 0%; }
-.section-score-num { font-weight: 700; font-size: 14px; min-width: 32px; text-align: right; }
-.section-chevron { color: var(--neutral-300); font-size: 16px; transition: transform 0.25s; margin-left: 4px; }
-.section-card.open .section-chevron { transform: rotate(180deg); }
-.section-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
-.section-card.open .section-body { max-height: 3000px; padding: 0 24px 24px; }
-.section-diagnosis { font-size: 14px; line-height: 1.75; color: var(--neutral-600); margin-bottom: 20px; padding: 16px 20px; background: var(--neutral-50); border-radius: var(--radius-sm); border-left: 3px solid var(--brand); }
-.criteria-list { display: flex; flex-direction: column; gap: 6px; }
-.criteria-item { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: start; padding: 13px 16px; border-radius: var(--radius-sm); background: var(--neutral-50); border: 1px solid transparent; transition: border-color 0.15s; }
-.criteria-item:hover { border-color: var(--neutral-200); }
-.criteria-status-icon { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; font-weight: 700; margin-top: 1px; }
-.criteria-status-icon.ok { background: var(--success-light); color: var(--success); }
-.criteria-status-icon.warn { background: var(--warning-light); color: var(--warning); }
-.criteria-status-icon.fail { background: var(--danger-light); color: var(--danger); }
-.criteria-text { flex: 1; }
-.criteria-name { font-weight: 600; font-size: 13.5px; color: var(--neutral-800); margin-bottom: 3px; }
-.criteria-desc { font-size: 12.5px; color: var(--neutral-500); line-height: 1.55; }
-.criteria-action-label { font-size: 12px; font-weight: 700; min-width: 56px; text-align: right; margin-top: 2px; }
-.criteria-action-label.ok { color: var(--success); }
-.criteria-action-label.warn { color: var(--warning); }
-.criteria-action-label.fail { color: var(--danger); }
+/* Plano de ação */
+.plan-card{background:var(--n0);border-radius:var(--radius);padding:22px 26px;box-shadow:var(--shadow-sm);margin-bottom:12px;border:1px solid var(--n200);}
+.plan-title{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;color:var(--n900);margin-bottom:3px;letter-spacing:-0.02em;}
+.plan-sub{font-size:12px;color:var(--n400);margin-bottom:18px;}
+.plan-items{display:flex;flex-direction:column;gap:8px;}
+.plan-item{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;border-radius:var(--radius-sm);background:var(--n50);border:1px solid var(--n200);}
+.plan-prio{padding:2px 8px;border-radius:3px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;flex-shrink:0;margin-top:1px;}
+.plan-prio.alta{background:var(--danger-light);color:var(--danger);}
+.plan-prio.media{background:var(--warning-light);color:var(--warning);}
+.plan-prio.baixa{background:var(--success-light);color:var(--success);}
+.plan-text{flex:1;font-size:13px;color:var(--n700);line-height:1.5;}
+.plan-secao{font-size:10.5px;font-weight:600;color:var(--n400);text-transform:uppercase;letter-spacing:0.04em;flex-shrink:0;}
 
-/* BLUR */
-.blur-overlay { position: relative; }
-.blur-content { filter: blur(5px); user-select: none; pointer-events: none; opacity: 0.7; }
-.blur-cta { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: white; border-radius: var(--radius); padding: 28px 32px; box-shadow: var(--shadow-lg); text-align: center; width: 88%; max-width: 360px; z-index: 10; border: 1px solid var(--neutral-150); }
-.blur-cta-icon { font-size: 28px; margin-bottom: 10px; }
-.blur-cta h4 { font-weight: 700; font-size: 16px; color: var(--neutral-900); margin-bottom: 8px; line-height: 1.3; }
-.blur-cta p { font-size: 13px; color: var(--neutral-500); margin-bottom: 18px; line-height: 1.6; }
-.whatsapp-btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; background: #22c55e; color: white; border-radius: var(--radius-sm); font-weight: 600; font-size: 14px; text-decoration: none; transition: all 0.2s; width: 100%; justify-content: center; }
-.whatsapp-btn:hover { background: #16a34a; box-shadow: 0 4px 16px rgba(34,197,94,0.35); }
+/* Seções */
+.sections-label{font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--n400);margin-bottom:10px;margin-top:4px;}
+.sections-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.sec-card{background:var(--n0);border-radius:var(--radius);overflow:hidden;border:1px solid var(--n200);transition:box-shadow 0.15s;}
+.sec-card:hover{box-shadow:var(--shadow);}
+.sec-header{padding:16px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;transition:background 0.1s;}
+.sec-header:hover{background:var(--n50);}
+.sec-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.sec-title-wrap{flex:1;}
+.sec-title{font-weight:600;font-size:13.5px;color:var(--n900);margin-bottom:1px;}
+.sec-sub{font-size:11px;color:var(--n400);}
+.sec-score-wrap{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.sec-bar{width:60px;height:4px;background:var(--n100);border-radius:100px;overflow:hidden;}
+.sec-bar-fill{height:100%;border-radius:100px;transition:width 1.2s ease;width:0%;}
+.sec-score-num{font-weight:700;font-size:13.5px;min-width:28px;text-align:right;}
+.sec-chevron{color:var(--n300);font-size:14px;transition:transform 0.2s;margin-left:3px;}
+.sec-card.open .sec-chevron{transform:rotate(180deg);}
+.sec-body{max-height:0;overflow:hidden;transition:max-height 0.35s ease;}
+.sec-card.open .sec-body{max-height:3000px;padding:0 20px 20px;}
+.sec-diag{font-size:13px;line-height:1.7;color:var(--n600);margin-bottom:16px;padding:13px 16px;background:var(--n50);border-radius:var(--radius-xs);border-left:2px solid var(--brand);}
+.crit-list{display:flex;flex-direction:column;gap:5px;}
+.crit-item{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:11px 13px;border-radius:var(--radius-sm);background:var(--n50);border:1px solid transparent;transition:border-color 0.1s;}
+.crit-item:hover{border-color:var(--n200);}
+.crit-icon{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;font-weight:700;margin-top:1px;}
+.crit-icon.ok{background:var(--success-light);color:var(--success);}
+.crit-icon.warn{background:var(--warning-light);color:var(--warning);}
+.crit-icon.fail{background:var(--danger-light);color:var(--danger);}
+.crit-body{flex:1;}
+.crit-name{font-weight:600;font-size:12.5px;color:var(--n800);margin-bottom:2px;}
+.crit-desc{font-size:12px;color:var(--n500);line-height:1.5;}
+.crit-tag{font-size:10.5px;font-weight:700;margin-top:1px;}
+.crit-tag.ok{color:var(--success);}
+.crit-tag.warn{color:var(--warning);}
+.crit-tag.fail{color:var(--danger);}
 
-/* ACTION PLAN */
-.action-plan { background: white; border-radius: var(--radius); padding: 28px 32px; box-shadow: var(--shadow); margin-bottom: 16px; border: 1px solid var(--neutral-150); }
-.action-plan-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--neutral-900); margin-bottom: 6px; }
-.action-plan-sub { font-size: 13px; color: var(--neutral-400); margin-bottom: 24px; }
-.action-items { display: flex; flex-direction: column; gap: 10px; }
-.action-item { display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px; border-radius: var(--radius-sm); border: 1px solid var(--neutral-150); background: var(--neutral-50); }
-.action-item-priority { padding: 3px 10px; border-radius: 100px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; flex-shrink: 0; margin-top: 2px; }
-.action-item-priority.alta { background: var(--danger-light); color: var(--danger); }
-.action-item-priority.media { background: var(--warning-light); color: var(--warning); }
-.action-item-priority.baixa { background: var(--success-light); color: var(--success); }
-.action-item-text { flex: 1; font-size: 13.5px; color: var(--neutral-700); line-height: 1.6; }
-.action-item-section { font-size: 11px; font-weight: 600; color: var(--neutral-400); text-transform: uppercase; letter-spacing: 0.04em; flex-shrink: 0; }
+/* Comparativo */
+.cmp-card{background:var(--n0);border-radius:var(--radius);padding:22px 26px;box-shadow:var(--shadow-sm);margin-bottom:12px;border:1px solid var(--n200);}
+.cmp-title{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;color:var(--n900);margin-bottom:18px;letter-spacing:-0.02em;}
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.cmp-col{border-radius:var(--radius-sm);padding:16px;border:1.5px solid transparent;}
+.cmp-col.yours{background:var(--brand-light);border-color:rgba(26,86,219,0.2);}
+.cmp-col.theirs{background:var(--danger-light);border-color:rgba(220,38,38,0.15);}
+.cmp-col-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:6px;}
+.cmp-col.yours .cmp-col-lbl{color:var(--brand);}
+.cmp-col.theirs .cmp-col-lbl{color:var(--danger);}
+.cmp-col-name{font-weight:600;font-size:13px;color:var(--n900);margin-bottom:6px;}
+.cmp-col-score{font-family:'Sora',sans-serif;font-size:32px;font-weight:800;color:var(--n900);letter-spacing:-0.03em;}
+.gap-list{display:flex;flex-direction:column;gap:7px;}
+.gap-item{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--n50);border-radius:var(--radius-sm);border:1px solid var(--n200);}
+.gap-prio{padding:2px 8px;border-radius:3px;font-size:9.5px;font-weight:700;text-transform:uppercase;flex-shrink:0;margin-top:1px;}
+.gap-prio.alta{background:var(--danger-light);color:var(--danger);}
+.gap-prio.media{background:var(--warning-light);color:var(--warning);}
+.gap-prio.baixa{background:var(--success-light);color:var(--success);}
+.gap-text{font-size:13px;color:var(--n700);line-height:1.5;flex:1;}
 
-/* COMPARE */
-.compare-card { background: white; border-radius: var(--radius); padding: 28px 32px; box-shadow: var(--shadow); margin-bottom: 16px; border: 1px solid var(--neutral-150); }
-.compare-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--neutral-900); margin-bottom: 20px; }
-.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-.compare-col { border-radius: var(--radius-sm); padding: 20px; border: 1.5px solid transparent; }
-.compare-col.yours { background: var(--brand-light); border-color: rgba(26,86,219,0.2); }
-.compare-col.theirs { background: var(--danger-light); border-color: rgba(220,38,38,0.15); }
-.compare-col-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
-.compare-col.yours .compare-col-label { color: var(--brand); }
-.compare-col.theirs .compare-col-label { color: var(--danger); }
-.compare-col-name { font-weight: 600; font-size: 14px; color: var(--neutral-900); margin-bottom: 8px; }
-.compare-col-score { font-family: 'DM Serif Display', serif; font-size: 36px; color: var(--neutral-900); line-height: 1; }
-.gap-list { display: flex; flex-direction: column; gap: 8px; }
-.gap-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; background: var(--neutral-50); border-radius: var(--radius-sm); border: 1px solid var(--neutral-150); }
-.gap-priority { padding: 3px 10px; border-radius: 100px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; flex-shrink: 0; margin-top: 1px; }
-.gap-priority.alta { background: var(--danger-light); color: var(--danger); }
-.gap-priority.media { background: var(--warning-light); color: var(--warning); }
-.gap-priority.baixa { background: var(--success-light); color: var(--success); }
-.gap-text { font-size: 13.5px; color: var(--neutral-700); line-height: 1.6; flex: 1; }
+/* Footer */
+.agency-footer{background:var(--n900);border-radius:var(--radius);padding:20px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:4px;}
+.af-info{color:white;}
+.af-name{font-weight:700;font-size:14px;margin-bottom:2px;}
+.af-tag{font-size:11.5px;color:var(--n500);}
+.af-cta{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;background:#16a34a;color:white;border-radius:var(--radius-sm);font-weight:600;font-size:13px;text-decoration:none;transition:all 0.15s;}
+.af-cta:hover{background:#15803d;}
 
-/* FOOTER */
-.agency-footer { background: var(--neutral-900); border-radius: var(--radius); padding: 24px 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-top: 8px; }
-.agency-info { color: white; }
-.agency-name { font-weight: 700; font-size: 16px; margin-bottom: 2px; }
-.agency-tagline { font-size: 12.5px; color: var(--neutral-500); }
-.agency-cta { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; background: #22c55e; color: white; border-radius: var(--radius-sm); font-weight: 600; font-size: 14px; text-decoration: none; transition: all 0.2s; }
-.agency-cta:hover { background: #16a34a; box-shadow: 0 4px 12px rgba(34,197,94,0.3); }
+/* Cores de score */
+.cr{color:var(--danger);} .cy{color:var(--warning);} .cg{color:var(--success);} .cb{color:var(--brand);}
+.fr{background:var(--danger);stroke:var(--danger);} .fy{background:var(--warning);stroke:var(--warning);} .fg{background:var(--success);stroke:var(--success);} .fb{background:var(--brand);stroke:var(--brand);}
+.ir{background:var(--danger-light);} .iy{background:var(--warning-light);} .ig{background:var(--success-light);} .ib{background:var(--brand-light);}
 
-/* CORES */
-.score-ruim { color: var(--danger); }
-.score-regular { color: var(--warning); }
-.score-bom { color: var(--success); }
-.score-otimo { color: var(--brand); }
-.fill-ruim { background: var(--danger); stroke: var(--danger); }
-.fill-regular { background: var(--warning); stroke: var(--warning); }
-.fill-bom { background: var(--success); stroke: var(--success); }
-.fill-otimo { background: var(--brand); stroke: var(--brand); }
-.icon-ruim { background: var(--danger-light); }
-.icon-regular { background: var(--warning-light); }
-.icon-bom { background: var(--success-light); }
-.icon-otimo { background: var(--brand-light); }
+/* ── PDF TEMPLATE ── */
+#pdf-template{position:fixed;left:-9999px;top:0;width:794px;background:white;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;z-index:-1;display:none;}
 
-/* PDF TEMPLATE - oculto na tela, usado apenas para geração */
-#pdf-template { position: fixed; left: -9999px; top: 0; width: 794px; background: white; font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; z-index: -1; }
+/* PDF global */
+.pdf-page{width:794px;background:white;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+.pdf-accent{height:4px;width:100%;}
 
-/* PDF STYLES */
-.pdf-page { width: 794px; min-height: 1123px; background: white; position: relative; page-break-after: always; overflow: hidden; }
+/* PDF Header */
+.pdf-hdr{background:#111827;padding:28px 44px 24px;}
+.pdf-hdr-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;}
+.pdf-hdr-brand{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#4b5563;margin-bottom:8px;}
+.pdf-hdr-biz{font-family:'Sora',sans-serif;font-size:24px;font-weight:700;color:white;letter-spacing:-0.02em;line-height:1.15;margin-bottom:3px;}
+.pdf-hdr-seg{font-size:12px;color:#6b7280;}
+.pdf-hdr-badge{display:inline-flex;padding:4px 12px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;margin-top:10px;}
+.pdf-hdr-score{text-align:right;}
+.pdf-hdr-score-num{font-family:'Sora',sans-serif;font-size:56px;font-weight:800;line-height:1;letter-spacing:-0.04em;}
+.pdf-hdr-score-lbl{font-size:10px;color:#6b7280;margin-top:2px;}
+.pdf-hdr-meta{display:flex;gap:36px;padding-top:18px;border-top:1px solid #1f2937;}
+.pdf-hdr-meta-item{display:flex;flex-direction:column;gap:2px;}
+.pdf-hdr-meta-lbl{font-size:8.5px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:#374151;}
+.pdf-hdr-meta-val{font-size:11.5px;color:#9ca3af;font-weight:500;}
 
-.pdf-cover { background: #111827; width: 794px; min-height: 1123px; position: relative; display: flex; flex-direction: column; }
-.pdf-cover-accent { height: 5px; width: 100%; }
-.pdf-cover-body { padding: 64px 56px; flex: 1; display: flex; flex-direction: column; }
-.pdf-cover-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 80px; }
-.pdf-cover-brand { display: flex; flex-direction: column; gap: 4px; }
-.pdf-cover-brand-name { color: white; font-size: 18px; font-weight: 700; letter-spacing: 0.02em; }
-.pdf-cover-brand-sub { color: #6b7390; font-size: 12px; font-weight: 400; }
-.pdf-cover-score-wrap { text-align: right; }
-.pdf-cover-score-num { font-size: 88px; font-weight: 700; line-height: 1; }
-.pdf-cover-score-label { font-size: 13px; color: #6b7390; margin-top: 4px; }
-.pdf-cover-main { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; }
-.pdf-cover-badge { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 100px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px; width: fit-content; }
-.pdf-cover-business { font-size: 42px; font-weight: 700; color: white; line-height: 1.1; margin-bottom: 12px; }
-.pdf-cover-segment { font-size: 16px; color: #9aa1b4; margin-bottom: 48px; }
-.pdf-cover-meta { display: flex; gap: 40px; padding-top: 32px; border-top: 1px solid #1e2335; }
-.pdf-cover-meta-item { display: flex; flex-direction: column; gap: 4px; }
-.pdf-cover-meta-label { font-size: 10px; font-weight: 700; color: #4a5168; letter-spacing: 0.08em; text-transform: uppercase; }
-.pdf-cover-meta-value { font-size: 14px; color: #9aa1b4; font-weight: 500; }
+/* PDF Body */
+.pdf-body{padding:28px 44px;}
+.pdf-sec-lbl{font-size:9.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#9ca3af;margin-bottom:13px;padding-bottom:9px;border-bottom:1px solid #f3f4f6;display:flex;justify-content:space-between;}
+.pdf-sec-lbl span{color:#1f2937;}
 
-.pdf-inner { background: white; }
-.pdf-page-header { height: 5px; width: 100%; }
-.pdf-page-body { padding: 44px 52px; }
-.pdf-section-title { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9aa1b4; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #e8eaf0; display: flex; align-items: center; justify-content: space-between; }
-.pdf-section-title span { color: #1e2335; }
+/* Diagnóstico PDF */
+.pdf-diag{border-left:3px solid;padding:15px 18px;border-radius:0 6px 6px 0;background:#f9fafb;margin-bottom:24px;}
+.pdf-diag-text{font-size:12.5px;line-height:1.8;color:#4b5563;}
 
-/* Diagnóstico geral PDF */
-.pdf-diag-block { background: #f8f9fc; border-radius: 10px; padding: 24px 28px; border-left: 4px solid; margin-bottom: 32px; }
-.pdf-diag-text { font-size: 14px; line-height: 1.8; color: #4a5168; }
+/* Score PDF */
+.pdf-score-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+.pdf-score-row-lbl{font-size:11px;color:#4b5563;font-weight:500;width:140px;flex-shrink:0;}
+.pdf-score-row-track{flex:1;height:5px;background:#e5e7eb;border-radius:100px;overflow:hidden;}
+.pdf-score-row-bar{height:100%;border-radius:100px;}
+.pdf-score-row-num{font-size:11px;font-weight:700;width:32px;text-align:right;flex-shrink:0;}
+.pdf-score-big-wrap{display:flex;gap:20px;align-items:stretch;margin-bottom:24px;background:#f9fafb;border-radius:8px;overflow:hidden;}
+.pdf-score-big{flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px 24px;border-right:1px solid #e5e7eb;}
+.pdf-score-big-num{font-family:'Sora',sans-serif;font-size:48px;font-weight:800;line-height:1;letter-spacing:-0.04em;}
+.pdf-score-big-lbl{font-size:9.5px;color:#9ca3af;margin-top:3px;font-weight:500;}
+.pdf-score-bars{flex:1;padding:16px 20px;display:flex;flex-direction:column;justify-content:space-between;}
 
-/* Score overview PDF */
-.pdf-score-overview { display: flex; gap: 32px; align-items: center; margin-bottom: 36px; padding: 28px 32px; background: #f8f9fc; border-radius: 12px; }
-.pdf-score-big { flex-shrink: 0; text-align: center; }
-.pdf-score-big-num { font-size: 64px; font-weight: 700; line-height: 1; }
-.pdf-score-big-label { font-size: 11px; color: #9aa1b4; margin-top: 4px; font-weight: 500; }
-.pdf-score-divider { width: 1px; background: #e2e5ed; align-self: stretch; }
-.pdf-score-bars { flex: 1; display: flex; flex-direction: column; gap: 12px; }
-.pdf-score-row { display: flex; align-items: center; gap: 12px; }
-.pdf-score-row-label { font-size: 12px; color: #4a5168; font-weight: 500; width: 160px; flex-shrink: 0; }
-.pdf-score-row-bar-wrap { flex: 1; height: 6px; background: #e2e5ed; border-radius: 100px; overflow: hidden; }
-.pdf-score-row-bar { height: 100%; border-radius: 100px; }
-.pdf-score-row-num { font-size: 12px; font-weight: 700; width: 40px; text-align: right; flex-shrink: 0; }
+/* Plano PDF */
+.pdf-plan-item{display:flex;gap:12px;align-items:flex-start;padding:12px 15px;border-radius:7px;background:#f9fafb;border:1px solid #f3f4f6;margin-bottom:7px;}
+.pdf-plan-num{width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;flex-shrink:0;margin-top:1px;}
+.pdf-plan-body{flex:1;}
+.pdf-plan-prio{font-size:8px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px;}
+.pdf-plan-text{font-size:11.5px;color:#374151;line-height:1.55;}
+.pdf-plan-tag{font-size:9px;color:#9ca3af;font-weight:600;text-transform:uppercase;flex-shrink:0;margin-top:3px;}
 
-/* Plano de ação PDF */
-.pdf-action-list { display: flex; flex-direction: column; gap: 10px; }
-.pdf-action-item { display: flex; gap: 16px; align-items: flex-start; padding: 16px 20px; border-radius: 8px; background: #f8f9fc; border: 1px solid #e8eaf0; }
-.pdf-action-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
-.pdf-action-content { flex: 1; }
-.pdf-action-priority { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
-.pdf-action-text { font-size: 13px; color: #343b52; line-height: 1.6; }
-.pdf-action-tag { font-size: 10px; color: #9aa1b4; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; flex-shrink: 0; margin-top: 6px; }
+/* Seção PDF */
+.pdf-sec-hdr{display:flex;align-items:stretch;margin-bottom:13px;border-radius:7px;overflow:hidden;}
+.pdf-sec-ac{width:4px;flex-shrink:0;}
+.pdf-sec-hdr-body{flex:1;background:#1f2937;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;}
+.pdf-sec-nome{font-family:'Sora',sans-serif;font-size:11.5px;font-weight:700;color:white;letter-spacing:0.02em;text-transform:uppercase;}
+.pdf-sec-score{font-family:'Sora',sans-serif;font-size:17px;font-weight:800;}
+.pdf-sec-diag{font-size:11.5px;line-height:1.7;color:#6b7280;margin-bottom:13px;padding:12px 15px;background:#f9fafb;border-radius:6px;border-left:2px solid #e5e7eb;}
+.pdf-crit{display:flex;gap:9px;align-items:flex-start;padding:10px 13px;background:#f9fafb;border-radius:6px;margin-bottom:5px;}
+.pdf-crit-badge{width:16px;height:16px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;flex-shrink:0;margin-top:1px;}
+.pdf-crit-body{flex:1;}
+.pdf-crit-name{font-size:11px;font-weight:700;color:#1f2937;margin-bottom:2px;}
+.pdf-crit-desc{font-size:10px;color:#6b7280;line-height:1.5;}
+.pdf-crit-acao{font-size:10px;color:#374151;line-height:1.5;margin-top:3px;padding-top:3px;border-top:1px solid #e5e7eb;}
+.pdf-crit-status{font-size:8px;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;flex-shrink:0;margin-top:2px;}
 
-/* Seção detalhada PDF */
-.pdf-secao-header { display: flex; align-items: center; gap: 0; margin-bottom: 16px; border-radius: 8px; overflow: hidden; }
-.pdf-secao-accent { width: 5px; align-self: stretch; flex-shrink: 0; }
-.pdf-secao-header-body { flex: 1; background: #1e2335; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
-.pdf-secao-nome { font-size: 13px; font-weight: 700; color: white; letter-spacing: 0.02em; text-transform: uppercase; }
-.pdf-secao-score { font-size: 20px; font-weight: 700; }
-.pdf-secao-diag { font-size: 12.5px; line-height: 1.7; color: #6b7390; margin-bottom: 16px; padding: 14px 18px; background: #f8f9fc; border-radius: 8px; border-left: 3px solid #e2e5ed; }
-.pdf-criterios { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
-.pdf-criterio { display: flex; gap: 12px; align-items: flex-start; padding: 12px 16px; background: #f8f9fc; border-radius: 8px; }
-.pdf-criterio-badge { width: 20px; height: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
-.pdf-criterio-body { flex: 1; }
-.pdf-criterio-nome { font-size: 12px; font-weight: 700; color: #1e2335; margin-bottom: 2px; }
-.pdf-criterio-desc { font-size: 11px; color: #6b7390; line-height: 1.5; }
-.pdf-criterio-acao { font-size: 11px; color: #343b52; line-height: 1.5; margin-top: 4px; padding-top: 4px; border-top: 1px solid #e8eaf0; }
-.pdf-criterio-acao strong { font-weight: 700; }
-.pdf-criterio-status { font-size: 9px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; flex-shrink: 0; margin-top: 3px; }
+/* Interno: checklist de ações */
+.pdf-interno-actions{background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb;overflow:hidden;margin-bottom:16px;}
+.pdf-interno-actions-header{background:#1f2937;padding:10px 16px;font-size:9.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#9ca3af;}
+.pdf-interno-action-item{display:flex;gap:10px;align-items:flex-start;padding:10px 16px;border-bottom:1px solid #e5e7eb;}
+.pdf-interno-action-item:last-child{border-bottom:none;}
+.pdf-interno-action-prio{padding:2px 7px;border-radius:3px;font-size:8px;font-weight:800;text-transform:uppercase;flex-shrink:0;margin-top:1px;}
+.pdf-interno-action-prio.fail{background:#fef2f2;color:#dc2626;}
+.pdf-interno-action-prio.warn{background:#fffbeb;color:#d97706;}
+.pdf-interno-action-text{font-size:11px;color:#374151;line-height:1.5;flex:1;}
 
-/* Bloqueio prospecção */
-.pdf-locked-block { border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
-.pdf-locked-inner { padding: 24px 28px; display: flex; gap: 20px; align-items: center; }
-.pdf-locked-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.pdf-locked-text h4 { font-size: 14px; font-weight: 700; color: #1e2335; margin-bottom: 6px; }
-.pdf-locked-text p { font-size: 12px; color: #6b7390; line-height: 1.6; }
-.pdf-locked-cta { margin: 0 28px 24px; padding: 14px 20px; background: #22c55e; border-radius: 8px; text-align: center; color: white; font-size: 13px; font-weight: 700; }
+/* Blur prospecção PDF */
+.pdf-blur-wrap{position:relative;margin-bottom:14px;min-height:200px;}
+.pdf-blur-inner{filter:blur(5px);opacity:0.5;user-select:none;pointer-events:none;}
+.pdf-lock-overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;}
+.pdf-lock-card{background:white;border-radius:10px;padding:22px 26px;box-shadow:0 8px 32px rgba(0,0,0,0.14),0 2px 8px rgba(0,0,0,0.08);text-align:center;width:320px;border:1px solid #e5e7eb;}
+.pdf-lock-icon{width:40px;height:40px;background:#f3f4f6;border-radius:9px;display:flex;align-items:center;justify-content:center;margin:0 auto 11px;font-size:18px;}
+.pdf-lock-title{font-family:'Sora',sans-serif;font-size:13.5px;font-weight:700;color:#111827;margin-bottom:5px;}
+.pdf-lock-desc{font-size:11px;color:#6b7280;line-height:1.6;margin-bottom:14px;}
+.pdf-lock-btn{background:#16a34a;color:white;padding:10px 16px;border-radius:7px;font-size:11.5px;font-weight:700;}
 
-/* Rodapé PDF */
-.pdf-footer { background: #111827; padding: 28px 52px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.pdf-footer-left {}
-.pdf-footer-brand { font-size: 16px; font-weight: 700; color: white; margin-bottom: 4px; }
-.pdf-footer-tagline { font-size: 11px; color: #4a5168; }
-.pdf-footer-right { text-align: right; }
-.pdf-footer-contact { font-size: 15px; font-weight: 700; color: white; margin-bottom: 4px; }
-.pdf-footer-site { font-size: 11px; color: #4a5168; }
-.pdf-footer-page { font-size: 10px; color: #4a5168; margin-top: 2px; }
+/* CTA final PDF */
+.pdf-cta{background:#111827;min-height:860px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 72px;text-align:center;}
+.pdf-cta-eye{font-size:9.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#374151;margin-bottom:18px;}
+.pdf-cta-hl{font-family:'Sora',sans-serif;font-size:30px;font-weight:800;color:white;line-height:1.2;margin-bottom:14px;letter-spacing:-0.02em;}
+.pdf-cta-sub{font-size:13.5px;color:#6b7280;line-height:1.8;max-width:480px;margin:0 auto 44px;}
+.pdf-cta-phone{font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:white;letter-spacing:-0.02em;margin-bottom:6px;}
+.pdf-cta-site{font-size:12px;color:#374151;}
 
-@media (max-width: 640px) {
-  .header { padding: 0 16px; }
-  .main { padding: 28px 16px; }
-  .tool-hero h2 { font-size: 28px; }
-  .search-card { padding: 22px; }
-  .report-body { padding: 24px; flex-direction: column; gap: 24px; }
-  .breakdown-grid { grid-template-columns: 1fr 1fr; }
-  .compare-grid { grid-template-columns: 1fr; }
-  .pdf-actions { flex-direction: column; }
-  .pdf-btn { width: 100%; justify-content: center; }
+/* PDF Footer */
+.pdf-ftr{background:#111827;padding:16px 44px;display:flex;align-items:center;justify-content:space-between;}
+.pdf-ftr-brand{font-size:13px;font-weight:700;color:white;margin-bottom:1px;}
+.pdf-ftr-tag{font-size:9.5px;color:#374151;}
+.pdf-ftr-right{text-align:right;}
+.pdf-ftr-phone{font-size:12px;font-weight:700;color:white;margin-bottom:1px;}
+.pdf-ftr-site{font-size:9.5px;color:#374151;}
+.pdf-ftr-pg{font-size:9px;color:#374151;margin-top:1px;}
+
+@media(max-width:640px){
+  .header{padding:0 14px;} .main{padding:24px 14px;} .tool-hero h2{font-size:24px;}
+  .search-card{padding:20px;} .rpt-body{padding:20px;flex-direction:column;gap:20px;}
+  .breakdown-grid{grid-template-columns:1fr 1fr;} .cmp-grid{grid-template-columns:1fr;}
+  .pdf-actions{flex-direction:column;} .pdf-btn{width:100%;justify-content:center;}
 }
 </style>
 </head>
@@ -376,16 +364,15 @@ body { font-family: 'DM Sans', sans-serif; background: var(--neutral-50); color:
 <div id="lock-screen">
   <div class="lock-card">
     <div class="lock-logo">
-      <div class="lock-logo-icon">📍</div>
-      <span class="lock-logo-text">Perfil<span>Pro</span></span>
+      <div class="lock-logo-mark">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M10 2C7.24 2 5 4.24 5 7c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 1110 5a1.5 1.5 0 010 3.5z" fill="white"/></svg>
+      </div>
+      <span class="lock-logo-name">Perfil<span>Pro</span></span>
     </div>
     <h1>Acesso restrito</h1>
     <p>Ferramenta interna da Agência Plugue. Digite a senha para continuar.</p>
-    <div class="lock-input-wrap">
-      <span class="lock-input-icon">🔑</span>
-      <input type="password" id="password-input" class="lock-input" placeholder="••••••••" maxlength="20"
-        onkeydown="if(event.key==='Enter') checkPassword()">
-    </div>
+    <input type="password" id="password-input" class="lock-input" placeholder="••••••••" maxlength="20"
+      onkeydown="if(event.key==='Enter') checkPassword()">
     <button class="lock-btn" onclick="checkPassword()">Entrar</button>
     <div class="lock-error" id="lock-error">Senha incorreta. Tente novamente.</div>
     <div class="lock-footer">Agência Plugue · agenciaplugue.com.br</div>
@@ -395,68 +382,64 @@ body { font-family: 'DM Sans', sans-serif; background: var(--neutral-50); color:
 <div id="app">
   <header class="header">
     <div class="logo">
-      <div class="logo-icon">📍</div>
-      <span class="logo-text">Perfil<span>Pro</span></span>
+      <div class="logo-mark">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M10 2C7.24 2 5 4.24 5 7c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 1110 5a1.5 1.5 0 010 3.5z" fill="white"/></svg>
+      </div>
+      <span class="logo-name">Perfil<span>Pro</span></span>
     </div>
     <div class="header-right">
-      <span class="header-badge">Agência Plugue</span>
-      <span class="header-badge header-badge-brand">Uso Interno</span>
+      <span class="hbadge">Agência Plugue</span>
+      <span class="hbadge hbadge-brand">Uso Interno</span>
     </div>
   </header>
 
   <main class="main">
     <div class="tool-hero">
       <div class="tool-hero-eyebrow">Diagnóstico de SEO Local</div>
-      <h2>Audite qualquer perfil do<br><em>Google Meu Negócio</em></h2>
-      <p>Cole a URL do perfil, a IA analisa mais de 35 critérios de ranqueamento local e entrega um relatório executivo completo com diagnóstico e plano de ação.</p>
+      <h2>Visibilidade no Google.<br><em>Diagnóstico em segundos.</em></h2>
+      <p>Cole a URL do perfil no Google Maps. A IA analisa mais de 35 critérios de ranqueamento e entrega um relatório executivo com score real, diagnóstico e plano de ação.</p>
     </div>
 
     <div class="search-card" id="search-card">
-      <label class="search-label">URL do perfil no Google Maps</label>
-      <div class="search-hint">
+      <label class="field-label">URL do perfil no Google Maps</label>
+      <div class="field-hint">
         <strong>Como obter a URL correta:</strong>
         <ol>
           <li>Pesquise o nome do negócio no Google</li>
           <li>Clique em <strong>Maps</strong> nos resultados</li>
           <li>Clique na ficha do negócio que deseja avaliar</li>
-          <li>Copie a URL da barra do navegador</li>
+          <li>Copie a URL completa da barra do navegador</li>
         </ol>
       </div>
-      <div class="search-input-wrap">
-        <span class="search-input-icon">🔗</span>
-        <input type="text" id="gmb-url" class="search-input"
-          placeholder="https://www.google.com/maps/place/..."
-          onkeydown="if(event.key==='Enter') startAnalysis()">
-      </div>
+      <input type="text" id="gmb-url" class="field-input"
+        placeholder="https://www.google.com/maps/place/..."
+        onkeydown="if(event.key==='Enter') startAnalysis()">
       <button class="analyze-btn" onclick="startAnalysis()">
-        🔍 Gerar Relatório de Diagnóstico
+        Gerar Relatório de Diagnóstico
       </button>
       <div class="compare-toggle">
         <label class="toggle-label">
           <input type="checkbox" id="compare-toggle" onchange="toggleCompare()">
-          <span class="toggle-switch"></span>
+          <span class="toggle-sw"></span>
           Análise competitiva: comparar com concorrente
         </label>
         <div class="competitor-wrap" id="competitor-wrap">
-          <label class="search-label" style="margin-top:16px">URL do perfil do concorrente</label>
-          <div class="search-input-wrap" style="margin-top:8px">
-            <span class="search-input-icon">🏁</span>
-            <input type="text" id="competitor-url" class="search-input"
-              placeholder="https://www.google.com/maps/place/...">
-          </div>
+          <label class="field-label" style="margin-top:14px">URL do perfil do concorrente</label>
+          <input type="text" id="competitor-url" class="field-input"
+            placeholder="https://www.google.com/maps/place/...">
         </div>
       </div>
     </div>
 
     <div id="loading">
       <div class="loading-spinner"></div>
-      <div class="loading-text">Processando análise do perfil</div>
-      <div class="loading-sub">Isso pode levar até 20 segundos</div>
+      <div class="loading-text">Processando análise</div>
+      <div class="loading-sub">Pode levar até 20 segundos</div>
       <div class="loading-steps">
-        <div class="loading-step" id="step-1"><span class="step-dot"></span>Identificando o negócio e segmento</div>
-        <div class="loading-step" id="step-2"><span class="step-dot"></span>Avaliando critérios de ranqueamento local</div>
-        <div class="loading-step" id="step-3"><span class="step-dot"></span>Gerando diagnóstico consultivo por seção</div>
-        <div class="loading-step" id="step-4"><span class="step-dot"></span>Calculando scores e priorizando plano de ação</div>
+        <div class="loading-step" id="step-1"><span class="dot"></span>Identificando o negócio e segmento</div>
+        <div class="loading-step" id="step-2"><span class="dot"></span>Avaliando critérios de ranqueamento</div>
+        <div class="loading-step" id="step-3"><span class="dot"></span>Gerando diagnóstico por seção</div>
+        <div class="loading-step" id="step-4"><span class="dot"></span>Calculando scores e plano de ação</div>
       </div>
     </div>
 
@@ -464,577 +447,477 @@ body { font-family: 'DM Sans', sans-serif; background: var(--neutral-50); color:
   </main>
 </div>
 
-<!-- Template oculto para geração do PDF -->
 <div id="pdf-template"></div>
 
 <script>
-const SENHA = 'plugue2024';
-const WHATSAPP = '5521990715689';
-const AGENCIA = 'Agência Plugue';
-const AGENCIA_TAGLINE = 'Presença digital estratégica para negócios locais';
-const AGENCIA_SITE = 'agenciaplugue.com.br';
-const WHATSAPP_DISPLAY = '(21) 99071-5689';
+const SENHA='plugue2024',WHATSAPP='5521990715689',AGENCIA='Agência Plugue';
+const AGENCIA_TAGLINE='Presença digital estratégica para negócios locais';
+const AGENCIA_SITE='agenciaplugue.com.br',WA_DISPLAY='(21) 99071-5689';
+let dadosRelatorio=null;
 
-let dadosRelatorio = null;
+const COR={ruim:'#dc2626',regular:'#d97706',bom:'#059669',otimo:'#1a56db'};
+const COR_BG={ruim:'#fef2f2',regular:'#fffbeb',bom:'#ecfdf5',otimo:'#eff4ff'};
+const BADGE={ruim:'Perfil Crítico',regular:'Requer Atenção',bom:'Bom Desempenho',otimo:'Perfil Excelente'};
+const COR_CLASS={ruim:'cr',regular:'cy',bom:'cg',otimo:'cb'};
+const FILL_CLASS={ruim:'fr',regular:'fy',bom:'fg',otimo:'fb'};
+const ICON_CLASS={ruim:'ir',regular:'iy',bom:'ig',otimo:'ib'};
 
-const COR_SCORE = {
-  ruim:    '#dc2626',
-  regular: '#d97706',
-  bom:     '#0d9f6e',
-  otimo:   '#1a56db'
-};
-
-const COR_BG = {
-  ruim:    '#fef2f2',
-  regular: '#fef3c7',
-  bom:     '#e6f9f3',
-  otimo:   '#e8f0fe'
-};
-
-const BADGE_LABEL = {
-  ruim: 'Perfil Crítico',
-  regular: 'Requer Atenção',
-  bom: 'Bom Desempenho',
-  otimo: 'Perfil Excelente'
-};
-
-function checkPassword() {
-  const val = document.getElementById('password-input').value;
-  if (val === SENHA) {
-    document.getElementById('lock-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    document.getElementById('gmb-url').focus();
-  } else {
-    document.getElementById('lock-error').style.display = 'block';
-    document.getElementById('password-input').value = '';
-    document.getElementById('password-input').focus();
-  }
+function checkPassword(){
+  const v=document.getElementById('password-input').value;
+  if(v===SENHA){document.getElementById('lock-screen').style.display='none';document.getElementById('app').style.display='block';document.getElementById('gmb-url').focus();}
+  else{document.getElementById('lock-error').style.display='block';document.getElementById('password-input').value='';document.getElementById('password-input').focus();}
 }
 
-function toggleCompare() {
-  const wrap = document.getElementById('competitor-wrap');
-  wrap.classList.toggle('show', document.getElementById('compare-toggle').checked);
+function toggleCompare(){
+  document.getElementById('competitor-wrap').classList.toggle('show',document.getElementById('compare-toggle').checked);
 }
 
-async function startAnalysis() {
-  const url = document.getElementById('gmb-url').value.trim();
-  const hasCompare = document.getElementById('compare-toggle').checked;
-  const competitorUrl = document.getElementById('competitor-url') ? document.getElementById('competitor-url').value.trim() : '';
-  if (!url) { alert('Por favor, cole a URL do perfil no Google Maps.'); return; }
-  document.getElementById('loading').style.display = 'block';
-  document.getElementById('report').style.display = 'none';
-  document.getElementById('report').innerHTML = '';
-  document.getElementById('search-card').style.display = 'none';
-  const steps = ['step-1','step-2','step-3','step-4'];
-  const delays = [0,4000,9000,14000];
-  steps.forEach((id,i) => {
-    setTimeout(() => {
-      if (i > 0) { const prev = document.getElementById(steps[i-1]); if (prev) prev.className = 'loading-step done'; }
-      const el = document.getElementById(id); if (el) el.className = 'loading-step active';
-    }, delays[i]);
+async function startAnalysis(){
+  const url=document.getElementById('gmb-url').value.trim();
+  const hasCompare=document.getElementById('compare-toggle').checked;
+  const compUrl=document.getElementById('competitor-url')?document.getElementById('competitor-url').value.trim():'';
+  if(!url){alert('Cole a URL do perfil no Google Maps.');return;}
+  document.getElementById('loading').style.display='block';
+  document.getElementById('report').style.display='none';
+  document.getElementById('report').innerHTML='';
+  document.getElementById('search-card').style.display='none';
+  ['step-1','step-2','step-3','step-4'].forEach((id,i)=>{
+    setTimeout(()=>{
+      if(i>0){const p=document.getElementById(['step-1','step-2','step-3','step-4'][i-1]);if(p)p.className='loading-step done';}
+      const el=document.getElementById(id);if(el)el.className='loading-step active';
+    },[0,4000,9000,14000][i]);
   });
-  try {
-    const prompt = buildPrompt(url, hasCompare ? competitorUrl : null);
-    const data = await callAPI(prompt);
-    dadosRelatorio = data;
-    renderReport(data);
-  } catch(err) {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('search-card').style.display = 'block';
-    document.getElementById('report').style.display = 'block';
-    document.getElementById('report').innerHTML = `<div style="background:white;border-radius:16px;padding:48px;text-align:center;box-shadow:var(--shadow-md);border:1px solid var(--neutral-150)"><div style="font-size:40px;margin-bottom:16px">⚠️</div><h3 style="font-size:18px;color:var(--neutral-900);margin-bottom:8px;font-family:'DM Serif Display',serif">Não foi possível completar a análise</h3><p style="color:var(--neutral-500);font-size:14px;line-height:1.7;margin-bottom:8px">Verifique sua conexão e tente novamente.</p><p style="color:var(--neutral-400);font-size:12px">Detalhe: ${err.message}</p></div>`;
+  try{
+    const data=await callAPI(buildPrompt(url,hasCompare?compUrl:null));
+    dadosRelatorio=data;renderReport(data);
+  }catch(err){
+    document.getElementById('loading').style.display='none';
+    document.getElementById('search-card').style.display='block';
+    document.getElementById('report').style.display='block';
+    document.getElementById('report').innerHTML=`<div style="background:white;border-radius:12px;padding:40px;text-align:center;border:1px solid #e5e7eb"><div style="font-size:36px;margin-bottom:14px">⚠️</div><h3 style="font-family:'Sora',sans-serif;font-size:17px;color:#111827;margin-bottom:7px">Não foi possível completar a análise</h3><p style="color:#6b7280;font-size:13px;line-height:1.7;margin-bottom:7px">Verifique sua conexão e tente novamente.</p><p style="color:#9ca3af;font-size:12px">Detalhe: ${err.message}</p></div>`;
     console.error(err);
   }
 }
 
-function buildPrompt(url, competitorUrl) {
-  const hoje = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
-  const compareInstr = competitorUrl
-    ? `CONCORRENTE: "${competitorUrl}". Preencha "comparativo" com: score_concorrente(0-100), nome_concorrente(string), gaps(array de {prioridade:"alta"|"media"|"baixa", descricao:string}).`
-    : `Campo "comparativo": null.`;
-  return `Você é um consultor sênior de SEO local especializado em Google Business Profile. Retorne APENAS JSON válido, sem markdown.
+function buildPrompt(url,compUrl){
+  const hoje=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+  const cmp=compUrl?`CONCORRENTE: "${compUrl}". Campo "comparativo": {score_concorrente,nome_concorrente,gaps:[{prioridade,descricao}]}.`:`Campo "comparativo": null.`;
+  return `Você é um auditor sênior de SEO local especializado em Google Business Profile. Retorne APENAS JSON válido, sem markdown.
 
-PERFIL: "${url}"
+PERFIL A ANALISAR: "${url}"
 DATA: ${hoje}
-${compareInstr}
+${cmp}
 
-TOM: consultivo, conecte cada problema à sua consequência no negócio. Seja específico para o segmento. Nunca use traços ou hifens.
+REGRAS CRÍTICAS:
+1. O campo "nome_negocio" deve conter SOMENTE o nome do estabelecimento, sem cidade, bairro ou subtítulo.
+2. O score_geral deve ser calculado com rigor real. Não use valores genéricos como 55 ou 60. Calcule somando: informacoes(peso 25%) + fotos(peso 20%) + avaliacoes(peso 20%) + atividade(peso 15%) + categorias(peso 12%) + engajamento(peso 8%). Perfis reais variam de 15 a 90. Seja honesto.
+3. Tom consultivo: conecte cada problema à consequência no negócio. Nunca use traços ou hifens.
+4. Seja específico para o segmento identificado na URL.
 
-JSON:
+JSON ESPERADO:
 {
-  "nome_negocio":"string","segmento":"string","score_geral":0-100,"classificacao":"ruim|regular|bom|otimo","data_analise":"${hoje}",
-  "diagnostico_geral":"3 a 4 frases consultivas densas sobre a situação geral",
-  "plano_acao":[{"prioridade":"alta|media|baixa","secao":"string","acao":"string imperativa e específica"}],
-  "secoes":[{
-    "id":"informacoes|fotos|avaliacoes|atividade|categorias|engajamento",
-    "nome":"string","emoji":"string","score":0-100,"classificacao":"ruim|regular|bom|otimo",
-    "diagnostico":"2 a 3 frases consultivas específicas","tem_problema":true|false,
-    "criterios":[{"nome":"string","status":"ok|warn|fail","descricao":"string","acao":"string ou null"}]
-  }],
-  "comparativo":null
+  "nome_negocio": "string",
+  "segmento": "string",
+  "score_geral": número inteiro entre 10 e 95,
+  "classificacao": "ruim|regular|bom|otimo",
+  "data_analise": "${hoje}",
+  "diagnostico_geral": "3 a 4 frases consultivas densas e específicas para este negócio",
+  "plano_acao": [
+    {"prioridade": "alta|media|baixa", "secao": "string", "acao": "string imperativa e específica"}
+  ],
+  "secoes": [
+    {
+      "id": "informacoes",
+      "nome": "Informações Básicas",
+      "emoji": "📋",
+      "score": número calculado com rigor,
+      "classificacao": "ruim|regular|bom|otimo",
+      "diagnostico": "2 a 3 frases consultivas específicas para este segmento",
+      "tem_problema": true|false,
+      "criterios": [
+        {
+          "nome": "string",
+          "status": "ok|warn|fail",
+          "descricao": "o que foi encontrado, de forma objetiva",
+          "acao": "ação concreta e específica (obrigatório se warn ou fail, null se ok)"
+        }
+      ]
+    }
+  ],
+  "comparativo": null
 }
 
-Seções obrigatórias: informacoes, fotos, avaliacoes, atividade, categorias, engajamento.
+SEÇÕES OBRIGATÓRIAS em ordem: informacoes, fotos, avaliacoes, atividade, categorias, engajamento.
+Para "informacoes": nome, categoria principal (correta?), categorias secundárias faltando, descrição (usa os 750 caracteres? tem palavras-chave?), telefone, site, endereço, horário, verificação.
+Para "fotos": quantidade, capa, perfil, ambiente, equipe, recência (últimos 90 dias).
+Para "avaliacoes": quantidade total de avaliações, nota média (escala de 0 a 5 estrelas do Google, NÃO use essa nota como score da seção), taxa de resposta do proprietário, frequência de novas avaliações. O score desta seção (0 a 100) deve refletir a saúde geral das avaliações, não a nota média em si.
+Para "atividade": frequência de posts, qualidade, CTAs, data do último post.
+Para "categorias": principal correta, secundárias sugeridas, palavras-chave na descrição, atributos, serviços.
+Para "engajamento": FAQs criadas, respostas a perguntas, perguntas estratégicas.
+
 Plano de ação: 6 a 8 itens do mais crítico ao menos urgente.
-Retorne SOMENTE o JSON.`;
+Retorne SOMENTE o JSON, sem nenhum texto antes ou depois.`;
 }
 
-async function callAPI(prompt) {
-  const response = await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
-  if (!response.ok) throw new Error('Erro na API: ' + response.status);
-  const data = await response.json();
-  let text = '';
-  if (data.content && Array.isArray(data.content)) text = data.content.map(b => b.text||'').join('');
-  else if (data.content && typeof data.content === 'string') text = data.content;
-  else if (typeof data === 'string') text = data;
+async function callAPI(prompt){
+  const r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+  if(!r.ok)throw new Error('Erro na API: '+r.status);
+  const d=await r.json();
+  let t='';
+  if(d.content&&Array.isArray(d.content))t=d.content.map(b=>b.text||'').join('');
+  else if(d.content&&typeof d.content==='string')t=d.content;
+  else if(typeof d==='string')t=d;
   else throw new Error('Resposta inesperada da API.');
-  return JSON.parse(text.replace(/```json|```/g,'').trim());
+  return JSON.parse(t.replace(/```json|```/g,'').trim());
 }
 
-function getScoreClass(score) {
-  if (score < 40) return 'score-ruim';
-  if (score < 60) return 'score-regular';
-  if (score < 80) return 'score-bom';
-  return 'score-otimo';
-}
+function sc(s){return s<40?'cr':s<60?'cy':s<80?'cg':'cb';}
 
-function renderReport(data) {
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('report').style.display = 'block';
-  const circumference = 408;
-  const offset = circumference - (data.score_geral / 100) * circumference;
-  const secoes = [...data.secoes].sort((a,b) => a.score - b.score);
-  const breakdownHtml = data.secoes.map(s => `
-    <div class="breakdown-item">
-      <div class="breakdown-item-label">${s.emoji} ${s.nome}</div>
-      <div class="breakdown-bar-wrap"><div class="breakdown-bar-fill fill-${s.classificacao}" data-width="${s.score}" style="width:0%"></div></div>
-      <div class="breakdown-item-score ${getScoreClass(s.score)}">${s.score}/100</div>
+function renderReport(data){
+  document.getElementById('loading').style.display='none';
+  document.getElementById('report').style.display='block';
+  const circ=353,off=circ-(data.score_geral/100)*circ;
+  const secoes=[...data.secoes].sort((a,b)=>a.score-b.score);
+  const bdHtml=data.secoes.map(s=>`
+    <div class="bd-item">
+      <div class="bd-name">${s.nome}</div>
+      <div class="bd-bar-wrap"><div class="bd-bar ${FILL_CLASS[s.classificacao]}" data-width="${s.score}" style="width:0%"></div></div>
+      <div class="bd-score ${sc(s.score)}">${s.score}/100</div>
     </div>`).join('');
-  const planoHtml = (data.plano_acao||[]).map(item => `
-    <div class="action-item">
-      <span class="action-item-priority ${item.prioridade}">${item.prioridade}</span>
-      <span class="action-item-text">${item.acao}</span>
-      <span class="action-item-section">${item.secao}</span>
+  const planoHtml=(data.plano_acao||[]).map(item=>`
+    <div class="plan-item">
+      <span class="plan-prio ${item.prioridade}">${item.prioridade}</span>
+      <span class="plan-text">${item.acao}</span>
+      <span class="plan-secao">${item.secao}</span>
     </div>`).join('');
-  document.getElementById('report').innerHTML = `
+
+  document.getElementById('report').innerHTML=`
     <button class="nova-btn" onclick="novaAnalise()">← Nova análise</button>
-    <div class="report-header">
-      <div class="report-header-top">
-        <span class="report-header-top-label">Relatório de Diagnóstico · Google Meu Negócio</span>
-        <div class="report-header-top-right">
-          <span class="report-meta">Gerado em <strong>${data.data_analise||new Date().toLocaleDateString('pt-BR')}</strong></span>
-          <span class="report-meta">por <strong>${AGENCIA}</strong></span>
+    <div class="rpt-header">
+      <div class="rpt-header-bar ${FILL_CLASS[data.classificacao]}"></div>
+      <div class="rpt-header-top">
+        <span class="rpt-header-top-label">Relatório de Diagnóstico · Google Meu Negócio</span>
+        <div style="display:flex;gap:16px;">
+          <span class="rpt-header-meta">Gerado em <strong>${data.data_analise||new Date().toLocaleDateString('pt-BR')}</strong></span>
+          <span class="rpt-header-meta">por <strong>${AGENCIA}</strong></span>
         </div>
       </div>
-      <div class="report-body">
+      <div class="rpt-body">
         <div class="score-circle-wrap">
-          <svg class="score-circle-svg" viewBox="0 0 150 150">
-            <circle class="score-track" cx="75" cy="75" r="65"/>
-            <circle class="score-fill fill-${data.classificacao}" cx="75" cy="75" r="65" id="score-fill" style="stroke-dashoffset:${circumference}"/>
+          <svg class="score-circle-svg" viewBox="0 0 130 130">
+            <circle class="score-track" cx="65" cy="65" r="56"/>
+            <circle class="score-fill ${FILL_CLASS[data.classificacao]}" cx="65" cy="65" r="56" id="score-fill" style="stroke-dashoffset:${circ}"/>
           </svg>
           <div class="score-number">
-            <div class="score-value ${getScoreClass(data.score_geral)}" id="score-num">0</div>
-            <div class="score-max">de 100</div>
+            <div class="score-val ${sc(data.score_geral)}" id="score-num">0</div>
+            <div class="score-lbl">de 100</div>
           </div>
         </div>
         <div class="score-info">
-          <div class="score-badge ${data.classificacao}">${BADGE_LABEL[data.classificacao]||''}</div>
-          <div class="score-business-name">${data.nome_negocio}</div>
+          <div class="score-badge ${data.classificacao}">${BADGE[data.classificacao]||''}</div>
+          <div class="score-business">${data.nome_negocio}</div>
           <div class="score-segment">${data.segmento}</div>
-          <div class="diagnostico-geral">${data.diagnostico_geral}</div>
+          <div class="diag-text">${data.diagnostico_geral}</div>
           <div class="pdf-actions">
-            <button class="pdf-btn pdf-btn-full" id="btn-interno" onclick="gerarPDF(false)">📄 PDF Interno (completo)</button>
-            <button class="pdf-btn pdf-btn-prospect" id="btn-prospecto" onclick="gerarPDF(true)">📤 PDF para Prospecção</button>
+            <button class="pdf-btn pdf-btn-full" id="btn-interno" onclick="gerarPDF(false)">PDF Interno</button>
+            <button class="pdf-btn pdf-btn-prospect" id="btn-prospecto" onclick="gerarPDF(true)">PDF para Prospecção</button>
           </div>
         </div>
       </div>
     </div>
-    <div class="score-breakdown">
-      <div class="breakdown-title">Score por seção</div>
-      <div class="breakdown-grid">${breakdownHtml}</div>
+    <div class="breakdown-card">
+      <div class="card-label">Score por seção</div>
+      <div class="breakdown-grid">${bdHtml}</div>
     </div>
-    ${planoHtml ? `<div class="action-plan"><div class="action-plan-title">Plano de Ação Prioritário</div><div class="action-plan-sub">Ordenado do mais crítico ao menos urgente para maximizar o ranqueamento local.</div><div class="action-items">${planoHtml}</div></div>` : ''}
+    ${planoHtml?`<div class="plan-card"><div class="plan-title">Plano de Ação Prioritário</div><div class="plan-sub">Ordenado do mais crítico ao menos urgente.</div><div class="plan-items">${planoHtml}</div></div>`:''}
     <div class="sections-label">Diagnóstico detalhado por seção</div>
     <div class="sections-grid">${secoes.map(renderSection).join('')}</div>
-    ${data.comparativo ? renderComparativo(data.comparativo,data) : ''}
+    ${data.comparativo?renderComparativo(data.comparativo,data):''}
     <div class="agency-footer">
-      <div class="agency-info">
-        <div class="agency-name">${AGENCIA}</div>
-        <div class="agency-tagline">${AGENCIA_TAGLINE} · ${AGENCIA_SITE}</div>
+      <div class="af-info">
+        <div class="af-name">${AGENCIA}</div>
+        <div class="af-tag">${AGENCIA_TAGLINE} · ${AGENCIA_SITE}</div>
       </div>
-      <a href="https://wa.me/${WHATSAPP}?text=Olá! Analisei o meu perfil no Google com o PerfilPro e gostaria de conversar sobre como melhorar o ranqueamento." class="agency-cta" target="_blank">💬 Falar com um especialista</a>
+      <a href="https://wa.me/${WHATSAPP}?text=Olá! Analisei um perfil no Google com o PerfilPro e quero conversar sobre como melhorar o ranqueamento." class="af-cta" target="_blank">Falar com um especialista</a>
     </div>`;
-  setTimeout(() => {
-    document.getElementById('score-fill').style.strokeDashoffset = offset;
-    animateNumber('score-num', 0, data.score_geral, 1600);
-    document.querySelectorAll('.section-score-fill, .breakdown-bar-fill').forEach(el => { el.style.width = el.dataset.width + '%'; });
-  }, 120);
-  setTimeout(() => { const first = document.querySelector('.section-card'); if (first) first.classList.add('open'); }, 700);
+
+  setTimeout(()=>{
+    document.getElementById('score-fill').style.strokeDashoffset=off;
+    animNum('score-num',0,data.score_geral,1500);
+    document.querySelectorAll('.sec-bar-fill,.bd-bar').forEach(el=>{el.style.width=el.dataset.width+'%';});
+  },120);
+  setTimeout(()=>{const f=document.querySelector('.sec-card');if(f)f.classList.add('open');},650);
 }
 
-function renderSection(s) {
-  const countOk = s.criterios.filter(c => c.status==='ok').length;
-  const countWarn = s.criterios.filter(c => c.status==='warn').length;
-  const countFail = s.criterios.filter(c => c.status==='fail').length;
-  const criteriosHtml = s.criterios.map(c => `
-    <div class="criteria-item">
-      <div class="criteria-status-icon ${c.status}">${c.status==='ok'?'✓':c.status==='warn'?'!':'✗'}</div>
-      <div class="criteria-text">
-        <div class="criteria-name">${c.nome}</div>
-        <div class="criteria-desc">${c.descricao}${c.acao?`<br><strong style="color:var(--neutral-700)">Ação: </strong>${c.acao}`:''}</div>
+function renderSection(s){
+  const ok=s.criterios.filter(c=>c.status==='ok').length;
+  const wn=s.criterios.filter(c=>c.status==='warn').length;
+  const fl=s.criterios.filter(c=>c.status==='fail').length;
+  const critHtml=s.criterios.map(c=>`
+    <div class="crit-item">
+      <div class="crit-icon ${c.status}">${c.status==='ok'?'✓':c.status==='warn'?'!':'✗'}</div>
+      <div class="crit-body">
+        <div class="crit-name">${c.nome}</div>
+        <div class="crit-desc">${c.descricao}${c.acao?`<br><strong style="color:#374151">Ação: </strong>${c.acao}`:''}</div>
       </div>
-      <div class="criteria-action-label ${c.status}">${c.status==='ok'?'OK':c.status==='warn'?'Atenção':'Crítico'}</div>
+      <div class="crit-tag ${c.status}">${c.status==='ok'?'OK':c.status==='warn'?'Atenção':'Crítico'}</div>
     </div>`).join('');
-  const bodyContent = s.tem_problema ? `
-    <div class="blur-overlay">
-      <div class="blur-content"><div class="section-diagnosis">${s.diagnostico}</div><div class="criteria-list">${criteriosHtml}</div></div>
-      <div class="blur-cta">
-        <div class="blur-cta-icon">🔒</div>
-        <h4>Diagnóstico completo disponível</h4>
-        <p>Receba a análise detalhada desta seção com o plano de ação personalizado para melhorar o ranqueamento deste perfil.</p>
-        <a href="https://wa.me/${WHATSAPP}?text=Olá! Quero receber o diagnóstico completo do meu perfil no Google." class="whatsapp-btn" target="_blank">💬 Quero o diagnóstico completo</a>
-      </div>
-    </div>` : `<div class="section-diagnosis">${s.diagnostico}</div><div class="criteria-list">${criteriosHtml}</div>`;
+
   return `
-    <div class="section-card" data-id="${s.id}">
-      <div class="section-header" onclick="this.parentElement.classList.toggle('open')">
-        <div class="section-icon icon-${s.classificacao}">${s.emoji}</div>
-        <div class="section-title-wrap">
-          <div class="section-title">${s.nome}</div>
-          <div class="section-subtitle">${countOk} ok · ${countWarn} atenção · ${countFail} crítico</div>
+    <div class="sec-card" data-id="${s.id}">
+      <div class="sec-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="sec-icon ${ICON_CLASS[s.classificacao]}">${s.emoji}</div>
+        <div class="sec-title-wrap">
+          <div class="sec-title">${s.nome}</div>
+          <div class="sec-sub">${ok} ok · ${wn} atenção · ${fl} crítico</div>
         </div>
-        <div class="section-score-wrap">
-          <div class="section-score-bar"><div class="section-score-fill fill-${s.classificacao}" data-width="${s.score}" style="width:0%"></div></div>
-          <div class="section-score-num ${getScoreClass(s.score)}">${s.score}</div>
+        <div class="sec-score-wrap">
+          <div class="sec-bar"><div class="sec-bar-fill ${FILL_CLASS[s.classificacao]}" data-width="${s.score}" style="width:0%"></div></div>
+          <div class="sec-score-num ${sc(s.score)}">${s.score}</div>
         </div>
-        <div class="section-chevron">▾</div>
+        <div class="sec-chevron">▾</div>
       </div>
-      <div class="section-body">${bodyContent}</div>
+      <div class="sec-body">
+        <div class="sec-diag">${s.diagnostico}</div>
+        <div class="crit-list">${critHtml}</div>
+      </div>
     </div>`;
 }
 
-function renderComparativo(comp, data) {
+function renderComparativo(comp,data){
   return `
-    <div class="compare-card">
-      <div class="compare-title">Análise Competitiva</div>
-      <div class="compare-grid">
-        <div class="compare-col yours"><div class="compare-col-label">Seu perfil</div><div class="compare-col-name">${data.nome_negocio}</div><div class="compare-col-score ${getScoreClass(data.score_geral)}">${data.score_geral}</div></div>
-        <div class="compare-col theirs"><div class="compare-col-label">Concorrente</div><div class="compare-col-name">${comp.nome_concorrente}</div><div class="compare-col-score ${getScoreClass(comp.score_concorrente)}">${comp.score_concorrente}</div></div>
+    <div class="cmp-card">
+      <div class="cmp-title">Análise Competitiva</div>
+      <div class="cmp-grid">
+        <div class="cmp-col yours"><div class="cmp-col-lbl">Seu perfil</div><div class="cmp-col-name">${data.nome_negocio}</div><div class="cmp-col-score ${sc(data.score_geral)}">${data.score_geral}</div></div>
+        <div class="cmp-col theirs"><div class="cmp-col-lbl">Concorrente</div><div class="cmp-col-name">${comp.nome_concorrente}</div><div class="cmp-col-score ${sc(comp.score_concorrente)}">${comp.score_concorrente}</div></div>
       </div>
-      <div style="font-weight:600;font-size:14px;color:var(--neutral-700);margin-bottom:10px">Onde o concorrente está à frente:</div>
-      <div class="gap-list">${comp.gaps.map(g=>`<div class="gap-item"><span class="gap-priority ${g.prioridade}">${g.prioridade}</span><span class="gap-text">${g.descricao}</span></div>`).join('')}</div>
+      <div style="font-weight:600;font-size:13px;color:#374151;margin-bottom:10px">Onde o concorrente está à frente:</div>
+      <div class="gap-list">${comp.gaps.map(g=>`<div class="gap-item"><span class="gap-prio ${g.prioridade}">${g.prioridade}</span><span class="gap-text">${g.descricao}</span></div>`).join('')}</div>
     </div>`;
 }
 
-function novaAnalise() {
-  dadosRelatorio = null;
-  document.getElementById('report').style.display = 'none';
-  document.getElementById('report').innerHTML = '';
-  document.getElementById('search-card').style.display = 'block';
-  document.getElementById('gmb-url').value = '';
-  const c = document.getElementById('competitor-url'); if (c) c.value = '';
-  document.getElementById('compare-toggle').checked = false;
+function novaAnalise(){
+  dadosRelatorio=null;
+  document.getElementById('report').style.display='none';
+  document.getElementById('report').innerHTML='';
+  document.getElementById('search-card').style.display='block';
+  document.getElementById('gmb-url').value='';
+  const c=document.getElementById('competitor-url');if(c)c.value='';
+  document.getElementById('compare-toggle').checked=false;
   document.getElementById('competitor-wrap').classList.remove('show');
   document.getElementById('gmb-url').focus();
 }
 
-function animateNumber(id, from, to, duration) {
-  const el = document.getElementById(id); if (!el) return;
-  const start = performance.now();
-  const update = (now) => {
-    const p = Math.min((now-start)/duration, 1);
-    const e = 1 - Math.pow(1-p, 3);
-    el.textContent = Math.round(from + (to-from)*e);
-    if (p < 1) requestAnimationFrame(update);
-  };
-  requestAnimationFrame(update);
+function animNum(id,from,to,dur){
+  const el=document.getElementById(id);if(!el)return;
+  const start=performance.now();
+  const up=(now)=>{const p=Math.min((now-start)/dur,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(from+(to-from)*e);if(p<1)requestAnimationFrame(up);};
+  requestAnimationFrame(up);
 }
 
-/* ===================== PDF ===================== */
-async function gerarPDF(paraCliente) {
-  if (!dadosRelatorio) { alert('Nenhum relatório disponível.'); return; }
-  const btnId = paraCliente ? 'btn-prospecto' : 'btn-interno';
-  const btn = document.getElementById(btnId);
-  const textoOriginal = btn.innerHTML;
-  btn.innerHTML = '⏳ Gerando PDF...';
-  btn.disabled = true;
+/* ══════════ PDF ══════════ */
+async function gerarPDF(paraCliente){
+  if(!dadosRelatorio){alert('Nenhum relatório disponível.');return;}
+  const btnId=paraCliente?'btn-prospecto':'btn-interno';
+  const btn=document.getElementById(btnId);
+  const orig=btn.innerHTML;
+  btn.innerHTML='Gerando PDF...';btn.disabled=true;
+  try{
+    const data=dadosRelatorio;
+    const cor=COR[data.classificacao]||'#1a56db';
+    const corBg=COR_BG[data.classificacao]||'#eff4ff';
+    const hoje=data.data_analise||new Date().toLocaleDateString('pt-BR');
+    const tipoDoc=paraCliente?'Versão para Prospecção':'Versão Interna Completa';
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'px',format:[794,1123],hotfixes:['px_scaling']});
+    const tmpl=document.getElementById('pdf-template');
 
-  try {
-    const data = dadosRelatorio;
-    const cor = COR_SCORE[data.classificacao] || '#1a56db';
-    const corBg = COR_BG[data.classificacao] || '#e8f0fe';
-    const hoje = data.data_analise || new Date().toLocaleDateString('pt-BR');
-    const tipoDoc = paraCliente ? 'Versão para Prospecção' : 'Versão Interna Completa';
-
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [794, 1123], hotfixes: ['px_scaling'] });
-
-    const tmpl = document.getElementById('pdf-template');
-
-    async function renderPage(htmlContent) {
-      tmpl.innerHTML = htmlContent;
-      tmpl.style.display = 'block';
-      await new Promise(r => setTimeout(r, 200));
-      const canvas = await html2canvas(tmpl, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#ffffff',
-        width: 794,
-        windowWidth: 794
-      });
-      tmpl.style.display = 'none';
-      return canvas;
+    async function renderPage(html){
+      tmpl.innerHTML=html;tmpl.style.display='block';
+      await new Promise(r=>setTimeout(r,280));
+      const canvas=await html2canvas(tmpl,{scale:2,useCORS:true,logging:false,backgroundColor:'#ffffff',width:794,windowWidth:794});
+      tmpl.style.display='none';return canvas;
     }
 
-    function addCanvasToPDF(canvas, isFirst) {
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
-      const pdfW = pdf.internal.pageSize.getWidth();
-      const pdfH = pdf.internal.pageSize.getHeight();
-      if (!isFirst) pdf.addPage();
-      pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, pdfH, '', 'FAST');
+    let isFirst=true;
+    function addPage(canvas){
+      const img=canvas.toDataURL('image/jpeg',0.95);
+      const pW=pdf.internal.pageSize.getWidth(),pH=pdf.internal.pageSize.getHeight();
+      if(!isFirst)pdf.addPage();
+      pdf.addImage(img,'JPEG',0,0,pW,pH,'','FAST');
+      isFirst=false;
     }
 
-    // ---- CAPA ----
-    const capaHtml = `
-      <div class="pdf-page pdf-cover">
-        <div class="pdf-cover-accent" style="background:${cor}"></div>
-        <div class="pdf-cover-body">
-          <div class="pdf-cover-top">
-            <div class="pdf-cover-brand">
-              <div class="pdf-cover-brand-name">PerfilPro</div>
-              <div class="pdf-cover-brand-sub">Diagnóstico de Visibilidade Local</div>
-            </div>
-            <div class="pdf-cover-score-wrap">
-              <div class="pdf-cover-score-num" style="color:${cor}">${data.score_geral}</div>
-              <div class="pdf-cover-score-label">pontuação geral / 100</div>
-            </div>
+    function critHtml(criterios){
+      return criterios.map(c=>{
+        const cc=c.status==='ok'?'#059669':c.status==='warn'?'#d97706':'#dc2626';
+        const ccBg=c.status==='ok'?'#ecfdf5':c.status==='warn'?'#fffbeb':'#fef2f2';
+        const ic=c.status==='ok'?'V':c.status==='warn'?'!':'X';
+        const st=c.status==='ok'?'OK':c.status==='warn'?'ATENCAO':'CRITICO';
+        return `<div class="pdf-crit">
+          <div class="pdf-crit-badge" style="background:${ccBg};color:${cc}">${ic}</div>
+          <div class="pdf-crit-body">
+            <div class="pdf-crit-name">${c.nome}</div>
+            <div class="pdf-crit-desc">${c.descricao}</div>
+            ${c.acao&&c.status!=='ok'?`<div class="pdf-crit-acao"><strong style="color:${cc}">Acao:</strong> ${c.acao}</div>`:''}
           </div>
-          <div class="pdf-cover-main">
-            <div class="pdf-cover-badge" style="background:${corBg};color:${cor}">${BADGE_LABEL[data.classificacao]||''}</div>
-            <div class="pdf-cover-business">${data.nome_negocio}</div>
-            <div class="pdf-cover-segment">${data.segmento}</div>
-            <div class="pdf-cover-meta">
-              <div class="pdf-cover-meta-item">
-                <div class="pdf-cover-meta-label">Elaborado por</div>
-                <div class="pdf-cover-meta-value">${AGENCIA}</div>
-              </div>
-              <div class="pdf-cover-meta-item">
-                <div class="pdf-cover-meta-label">Data da análise</div>
-                <div class="pdf-cover-meta-value">${hoje}</div>
-              </div>
-              <div class="pdf-cover-meta-item">
-                <div class="pdf-cover-meta-label">Tipo de relatório</div>
-                <div class="pdf-cover-meta-value">${tipoDoc}</div>
-              </div>
-              <div class="pdf-cover-meta-item">
-                <div class="pdf-cover-meta-label">Contato</div>
-                <div class="pdf-cover-meta-value">${WHATSAPP_DISPLAY}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>`;
-    const capaCanvas = await renderPage(capaHtml);
-    addCanvasToPDF(capaCanvas, true);
-
-    // ---- PÁGINA 2: DIAGNÓSTICO + SCORE ----
-    const scoreRowsHtml = data.secoes.map(s => {
-      const c = COR_SCORE[s.classificacao] || '#1a56db';
-      const barW = s.score;
-      return `
-        <div class="pdf-score-row">
-          <div class="pdf-score-row-label">${s.nome}</div>
-          <div class="pdf-score-row-bar-wrap">
-            <div class="pdf-score-row-bar" style="width:${barW}%;background:${c}"></div>
-          </div>
-          <div class="pdf-score-row-num" style="color:${c}">${s.score}</div>
+          <div class="pdf-crit-status" style="color:${cc}">${st}</div>
         </div>`;
+      }).join('');
+    }
+
+    function hdrHtml(){
+      return `
+        <div class="pdf-accent" style="background:${cor}"></div>
+        <div class="pdf-hdr">
+          <div class="pdf-hdr-top">
+            <div>
+              <div class="pdf-hdr-brand">PerfilPro · Diagnostico de Visibilidade Local</div>
+              <div class="pdf-hdr-biz">${data.nome_negocio}</div>
+              <div class="pdf-hdr-seg">${data.segmento}</div>
+              <div class="pdf-hdr-badge" style="background:${corBg};color:${cor}">${BADGE[data.classificacao]||''}</div>
+            </div>
+            <div class="pdf-hdr-score">
+              <div class="pdf-hdr-score-num" style="color:${cor}">${data.score_geral}</div>
+              <div class="pdf-hdr-score-lbl">pontuacao geral / 100</div>
+            </div>
+          </div>
+          <div class="pdf-hdr-meta">
+            <div class="pdf-hdr-meta-item"><div class="pdf-hdr-meta-lbl">Elaborado por</div><div class="pdf-hdr-meta-val">${AGENCIA}</div></div>
+            <div class="pdf-hdr-meta-item"><div class="pdf-hdr-meta-lbl">Data da analise</div><div class="pdf-hdr-meta-val">${hoje}</div></div>
+            <div class="pdf-hdr-meta-item"><div class="pdf-hdr-meta-lbl">Tipo</div><div class="pdf-hdr-meta-val">${tipoDoc}</div></div>
+            <div class="pdf-hdr-meta-item"><div class="pdf-hdr-meta-lbl">Contato</div><div class="pdf-hdr-meta-val">${WA_DISPLAY}</div></div>
+          </div>
+        </div>`;
+    }
+
+    function ftrHtml(pg){
+      return `<div class="pdf-ftr">
+        <div><div class="pdf-ftr-brand">${AGENCIA}</div><div class="pdf-ftr-tag">${AGENCIA_TAGLINE}</div></div>
+        <div class="pdf-ftr-right"><div class="pdf-ftr-phone">${WA_DISPLAY}</div><div class="pdf-ftr-site">${AGENCIA_SITE}</div><div class="pdf-ftr-pg">Pagina ${pg}</div></div>
+      </div>`;
+    }
+
+    // PG 1: header + diagnóstico + score + plano
+    const scoreRowsHtml=data.secoes.map(s=>{
+      const c=COR[s.classificacao]||'#1a56db';
+      return `<div class="pdf-score-row">
+        <div class="pdf-score-row-lbl">${s.nome}</div>
+        <div class="pdf-score-row-track"><div class="pdf-score-row-bar" style="width:${s.score}%;background:${c}"></div></div>
+        <div class="pdf-score-row-num" style="color:${c}">${s.score}</div>
+      </div>`;
     }).join('');
 
-    const pg2Html = `
-      <div class="pdf-page pdf-inner">
-        <div class="pdf-page-header" style="background:${cor}"></div>
-        <div class="pdf-page-body">
-          <div class="pdf-section-title"><span>Diagnóstico Geral</span>${tipoDoc}</div>
-          <div class="pdf-diag-block" style="border-color:${cor}">
-            <div class="pdf-diag-text">${data.diagnostico_geral}</div>
-          </div>
-          <div class="pdf-section-title" style="margin-top:8px"><span>Score por Seção</span></div>
-          <div class="pdf-score-overview">
-            <div class="pdf-score-big">
-              <div class="pdf-score-big-num" style="color:${cor}">${data.score_geral}</div>
-              <div class="pdf-score-big-label">pontuação geral</div>
-            </div>
-            <div class="pdf-score-divider"></div>
-            <div class="pdf-score-bars">${scoreRowsHtml}</div>
-          </div>
-          ${data.plano_acao && data.plano_acao.length ? `
-          <div class="pdf-section-title" style="margin-top:8px"><span>Plano de Ação Prioritário</span></div>
-          <div class="pdf-action-list">
-            ${data.plano_acao.map((item,i) => {
-              const cp = item.prioridade==='alta'?'#dc2626':item.prioridade==='media'?'#d97706':'#0d9f6e';
-              const cpBg = item.prioridade==='alta'?'#fef2f2':item.prioridade==='media'?'#fef3c7':'#e6f9f3';
-              return `
-              <div class="pdf-action-item">
-                <div class="pdf-action-num" style="background:${cpBg};color:${cp}">${String(i+1).padStart(2,'0')}</div>
-                <div class="pdf-action-content">
-                  <div class="pdf-action-priority" style="color:${cp}">${item.prioridade.toUpperCase()}</div>
-                  <div class="pdf-action-text">${item.acao}</div>
-                </div>
-                <div class="pdf-action-tag">${item.secao}</div>
-              </div>`;
-            }).join('')}
-          </div>` : ''}
-        </div>
-        <div class="pdf-footer">
-          <div class="pdf-footer-left">
-            <div class="pdf-footer-brand">${AGENCIA}</div>
-            <div class="pdf-footer-tagline">${AGENCIA_TAGLINE}</div>
-          </div>
-          <div class="pdf-footer-right">
-            <div class="pdf-footer-contact">${WHATSAPP_DISPLAY}</div>
-            <div class="pdf-footer-site">${AGENCIA_SITE}</div>
-            <div class="pdf-footer-page">Página 2</div>
-          </div>
-        </div>
+    const planHtml=(data.plano_acao||[]).map((item,i)=>{
+      const cp=item.prioridade==='alta'?'#dc2626':item.prioridade==='media'?'#d97706':'#059669';
+      const cpBg=item.prioridade==='alta'?'#fef2f2':item.prioridade==='media'?'#fffbeb':'#ecfdf5';
+      return `<div class="pdf-plan-item">
+        <div class="pdf-plan-num" style="background:${cpBg};color:${cp}">${String(i+1).padStart(2,'0')}</div>
+        <div class="pdf-plan-body"><div class="pdf-plan-prio" style="color:${cp}">${item.prioridade.toUpperCase()}</div><div class="pdf-plan-text">${item.acao}</div></div>
+        <div class="pdf-plan-tag">${item.secao}</div>
       </div>`;
-    const pg2Canvas = await renderPage(pg2Html);
-    addCanvasToPDF(pg2Canvas, false);
+    }).join('');
 
-    // ---- PÁGINAS DE SEÇÕES ----
-    const secoes = [...data.secoes].sort((a,b) => a.score - b.score);
-    let pgNum = 3;
+    const pg1=`<div class="pdf-page">
+      ${hdrHtml()}
+      <div class="pdf-body">
+        <div class="pdf-sec-lbl"><span>Diagnostico Geral</span>${tipoDoc}</div>
+        <div class="pdf-diag" style="border-color:${cor}"><div class="pdf-diag-text">${data.diagnostico_geral}</div></div>
+        <div class="pdf-sec-lbl"><span>Score por Secao</span></div>
+        <div class="pdf-score-big-wrap">
+          <div class="pdf-score-big"><div class="pdf-score-big-num" style="color:${cor}">${data.score_geral}</div><div class="pdf-score-big-lbl">pontuacao geral</div></div>
+          <div class="pdf-score-bars">${scoreRowsHtml}</div>
+        </div>
+        ${planHtml?`<div class="pdf-sec-lbl"><span>Plano de Acao Prioritario</span></div>${planHtml}`:''}
+      </div>
+      ${ftrHtml(1)}
+    </div>`;
+    addPage(await renderPage(pg1));
 
-    for (const s of secoes) {
-      const cs = COR_SCORE[s.classificacao] || '#1a56db';
-      const csBg = COR_BG[s.classificacao] || '#e8f0fe';
+    // PGS DE SEÇÕES
+    const secoes=[...data.secoes].sort((a,b)=>a.score-b.score);
+    let pgNum=2;
 
-      let criteriosHtml = '';
-      if (paraCliente && s.tem_problema) {
-        // Prospecção: mostra apenas critérios OK e WARN, bloqueia os FAIL
-        const visiveis = s.criterios.filter(c => c.status !== 'fail');
-        const bloqueados = s.criterios.filter(c => c.status === 'fail');
-        criteriosHtml = visiveis.map(c => {
-          const cc = c.status==='ok'?'#0d9f6e':'#d97706';
-          const ccBg = c.status==='ok'?'#e6f9f3':'#fef3c7';
-          const statusTxt = c.status==='ok'?'OK':'ATENÇÃO';
-          return `
-            <div class="pdf-criterio">
-              <div class="pdf-criterio-badge" style="background:${ccBg};color:${cc}">${statusTxt==='OK'?'✓':'!'}</div>
-              <div class="pdf-criterio-body">
-                <div class="pdf-criterio-nome">${c.nome}</div>
-                <div class="pdf-criterio-desc">${c.descricao}</div>
-              </div>
-              <div class="pdf-criterio-status" style="color:${cc}">${statusTxt}</div>
-            </div>`;
-        }).join('');
+    for(const s of secoes){
+      const cs=COR[s.classificacao]||'#1a56db';
+      let corpo='';
 
-        if (bloqueados.length > 0) {
-          criteriosHtml += `
-            <div class="pdf-locked-block" style="background:${csBg};border:1.5px solid ${cs}20">
-              <div class="pdf-locked-inner">
-                <div class="pdf-locked-icon" style="background:${cs}15">🔒</div>
-                <div class="pdf-locked-text">
-                  <h4>${bloqueados.length} problema${bloqueados.length>1?'s':''} crítico${bloqueados.length>1?'s':''} identificado${bloqueados.length>1?'s':''}</h4>
-                  <p>O diagnóstico completo desta seção está disponível mediante contato com a ${AGENCIA}. Inclui análise detalhada, impacto no ranqueamento e plano de ação específico.</p>
-                </div>
-              </div>
-              <div class="pdf-locked-cta">Entre em contato: ${WHATSAPP_DISPLAY} · ${AGENCIA_SITE}</div>
-            </div>`;
-        }
-      } else {
-        // Interno ou seção sem problema: tudo visível
-        criteriosHtml = s.criterios.map(c => {
-          const cc = c.status==='ok'?'#0d9f6e':c.status==='warn'?'#d97706':'#dc2626';
-          const ccBg = c.status==='ok'?'#e6f9f3':c.status==='warn'?'#fef3c7':'#fef2f2';
-          const statusTxt = c.status==='ok'?'OK':c.status==='warn'?'ATENÇÃO':'CRÍTICO';
-          const icone = c.status==='ok'?'✓':c.status==='warn'?'!':'✗';
-          return `
-            <div class="pdf-criterio">
-              <div class="pdf-criterio-badge" style="background:${ccBg};color:${cc}">${icone}</div>
-              <div class="pdf-criterio-body">
-                <div class="pdf-criterio-nome">${c.nome}</div>
-                <div class="pdf-criterio-desc">${c.descricao}</div>
-                ${c.acao && c.status!=='ok' ? `<div class="pdf-criterio-acao"><strong style="color:${cc}">Ação recomendada:</strong> ${c.acao}</div>` : ''}
-              </div>
-              <div class="pdf-criterio-status" style="color:${cc}">${statusTxt}</div>
-            </div>`;
-        }).join('');
-      }
-
-      const secaoHtml = `
-        <div class="pdf-page pdf-inner">
-          <div class="pdf-page-header" style="background:${cor}"></div>
-          <div class="pdf-page-body">
-            <div class="pdf-section-title"><span>${s.nome}</span>${tipoDoc}</div>
-            <div class="pdf-secao-header">
-              <div class="pdf-secao-accent" style="background:${cs}"></div>
-              <div class="pdf-secao-header-body">
-                <div class="pdf-secao-nome">${s.nome}</div>
-                <div class="pdf-secao-score" style="color:${cs}">${s.score}/100</div>
-              </div>
-            </div>
-            <div class="pdf-secao-diag" style="border-color:${cs}">${s.diagnostico}</div>
-            <div class="pdf-criterios">${criteriosHtml}</div>
-          </div>
-          <div class="pdf-footer">
-            <div class="pdf-footer-left">
-              <div class="pdf-footer-brand">${AGENCIA}</div>
-              <div class="pdf-footer-tagline">${AGENCIA_TAGLINE}</div>
-            </div>
-            <div class="pdf-footer-right">
-              <div class="pdf-footer-contact">${WHATSAPP_DISPLAY}</div>
-              <div class="pdf-footer-site">${AGENCIA_SITE}</div>
-              <div class="pdf-footer-page">Página ${pgNum}</div>
+      if(paraCliente&&s.tem_problema){
+        // Prospecção: blur com cadeado
+        corpo=`<div class="pdf-blur-wrap">
+          <div class="pdf-blur-inner"><div>${critHtml(s.criterios)}</div></div>
+          <div class="pdf-lock-overlay">
+            <div class="pdf-lock-card">
+              <div class="pdf-lock-icon">&#128274;</div>
+              <div class="pdf-lock-title">Diagnostico completo disponivel</div>
+              <div class="pdf-lock-desc">Esta secao apresenta pontos criticos que impactam diretamente o ranqueamento. O plano de acao detalhado esta disponivel com a ${AGENCIA}.</div>
+              <div class="pdf-lock-btn">${WA_DISPLAY}</div>
             </div>
           </div>
         </div>`;
-      const secaoCanvas = await renderPage(secaoHtml);
-      addCanvasToPDF(secaoCanvas, false);
+      } else if(!paraCliente&&s.tem_problema){
+        // Interno: mostra critérios + bloco "o que precisa ser feito"
+        const acoes=s.criterios.filter(c=>c.status!=='ok'&&c.acao);
+        const acoesHtml=acoes.map(c=>{
+          const cc=c.status==='warn'?'#d97706':'#dc2626';
+          const ccBg=c.status==='warn'?'#fffbeb':'#fef2f2';
+          const st=c.status==='warn'?'ATENCAO':'CRITICO';
+          return `<div class="pdf-interno-action-item">
+            <div class="pdf-interno-action-prio ${c.status}" style="background:${ccBg};color:${cc}">${st}</div>
+            <div class="pdf-interno-action-text"><strong>${c.nome}:</strong> ${c.acao}</div>
+          </div>`;
+        }).join('');
+        corpo=`${critHtml(s.criterios)}
+          ${acoes.length?`<div class="pdf-interno-actions" style="margin-top:12px">
+            <div class="pdf-interno-actions-header">O que precisa ser feito nesta secao</div>
+            ${acoesHtml}
+          </div>`:''}`;
+      } else {
+        corpo=critHtml(s.criterios);
+      }
+
+      const secaoPage=`<div class="pdf-page">
+        <div class="pdf-accent" style="background:${cor}"></div>
+        <div class="pdf-body" style="padding-top:22px">
+          <div class="pdf-sec-lbl"><span>${s.nome}</span>${tipoDoc}</div>
+          <div class="pdf-sec-hdr">
+            <div class="pdf-sec-ac" style="background:${cs}"></div>
+            <div class="pdf-sec-hdr-body">
+              <div class="pdf-sec-nome">${s.nome}</div>
+              <div class="pdf-sec-score" style="color:${cs}">${s.score}/100</div>
+            </div>
+          </div>
+          <div class="pdf-sec-diag" style="border-color:${cs}">${s.diagnostico}</div>
+          ${corpo}
+        </div>
+        ${ftrHtml(pgNum)}
+      </div>`;
+      addPage(await renderPage(secaoPage));
       pgNum++;
     }
 
-    // ---- PÁGINA FINAL: CTA (só no PDF de prospecção) ----
-    if (paraCliente) {
-      const ctaHtml = `
-        <div class="pdf-page pdf-inner" style="display:flex;flex-direction:column;">
-          <div class="pdf-page-header" style="background:${cor}"></div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 80px;text-align:center;">
-            <div style="font-size:14px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#9aa1b4;margin-bottom:20px">Próximo passo</div>
-            <div style="font-size:36px;font-weight:700;color:#111827;line-height:1.2;margin-bottom:16px">Seu perfil tem potencial.<br>Falta estratégia para desbloqueá-lo.</div>
-            <div style="font-size:16px;color:#6b7390;line-height:1.8;max-width:520px;margin-bottom:48px">Este relatório mapeou os principais pontos de melhoria do seu perfil no Google. A ${AGENCIA} tem um plano estruturado para corrigir cada problema e aumentar sua visibilidade local de forma mensurável.</div>
-            <div style="background:${cor};color:white;padding:20px 48px;border-radius:12px;font-size:20px;font-weight:700;margin-bottom:16px">${WHATSAPP_DISPLAY}</div>
-            <div style="font-size:14px;color:#9aa1b4">${AGENCIA_SITE}</div>
-          </div>
-          <div class="pdf-footer">
-            <div class="pdf-footer-left">
-              <div class="pdf-footer-brand">${AGENCIA}</div>
-              <div class="pdf-footer-tagline">${AGENCIA_TAGLINE}</div>
-            </div>
-            <div class="pdf-footer-right">
-              <div class="pdf-footer-contact">${WHATSAPP_DISPLAY}</div>
-              <div class="pdf-footer-site">${AGENCIA_SITE}</div>
-              <div class="pdf-footer-page">Página ${pgNum}</div>
-            </div>
-          </div>
-        </div>`;
-      const ctaCanvas = await renderPage(ctaHtml);
-      addCanvasToPDF(ctaCanvas, false);
+    // PG FINAL CTA (só prospecção)
+    if(paraCliente){
+      const ctaPage=`<div class="pdf-page">
+        <div class="pdf-accent" style="background:${cor}"></div>
+        <div class="pdf-cta">
+          <div class="pdf-cta-eye">Proximo passo</div>
+          <div class="pdf-cta-hl">Seu perfil tem potencial.<br>Falta estrategia para desbloqueá-lo.</div>
+          <div class="pdf-cta-sub">Este relatorio mapeou os pontos que estao impedindo que mais clientes encontrem este negocio no Google. A ${AGENCIA} tem um metodo estruturado para corrigir cada problema e aumentar a visibilidade local de forma mensuravel.</div>
+          <div class="pdf-cta-phone">${WA_DISPLAY}</div>
+          <div class="pdf-cta-site">${AGENCIA_SITE}</div>
+        </div>
+        ${ftrHtml(pgNum)}
+      </div>`;
+      addPage(await renderPage(ctaPage));
     }
 
-    const nomeArquivo = paraCliente
-      ? `PerfilPro_Prospeccao_${data.nome_negocio.replace(/[^a-zA-Z0-9]/g,'_')}.pdf`
-      : `PerfilPro_Interno_${data.nome_negocio.replace(/[^a-zA-Z0-9]/g,'_')}.pdf`;
-    pdf.save(nomeArquivo);
+    const nomeBase=data.nome_negocio.replace(/[^a-zA-Z0-9]/g,'_').replace(/_+/g,'_');
+    pdf.save(paraCliente?`Diagnostico_Google_${nomeBase}.pdf`:`PerfilPro_Interno_${nomeBase}.pdf`);
 
-  } catch(err) {
-    alert('Erro ao gerar o PDF: ' + err.message);
-    console.error(err);
-  } finally {
-    btn.innerHTML = textoOriginal;
-    btn.disabled = false;
-  }
+  }catch(err){alert('Erro ao gerar o PDF: '+err.message);console.error(err);}
+  finally{btn.innerHTML=orig;btn.disabled=false;}
 }
 </script>
 </body>
