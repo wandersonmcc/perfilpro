@@ -6,215 +6,1305 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PerfilPro | Auditoria de Google Meu Negócio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-  :root {
-    --brand: #1a56db;
-    --brand-light: #e8f0fe;
-    --brand-dark: #1240a8;
-    --success: #0d9f6e;
-    --success-light: #e6f9f3;
-    --warning: #f59e0b;
-    --warning-light: #fffbeb;
-    --danger: #e53e3e;
-    --danger-light: #fff5f5;
-    --neutral-50: #f9fafb;
-    --neutral-100: #f3f4f6;
-    --neutral-200: #e5e7eb;
-    --neutral-400: #9ca3af;
-    --neutral-600: #4b5563;
-    --neutral-800: #1f2937;
-    --neutral-900: #111827;
-    --radius: 16px;
-    --radius-sm: 10px;
-    --shadow: 0 4px 24px rgba(0,0,0,0.07);
-    --shadow-lg: 0 12px 48px rgba(0,0,0,0.12);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--neutral-50); color: var(--neutral-800); min-height: 100vh; }
+:root {
+  --brand: #1a56db;
+  --brand-light: #e8f0fe;
+  --brand-dark: #1240a8;
+  --brand-mid: #3b6fd4;
+  --success: #0d9f6e;
+  --success-light: #e6f9f3;
+  --warning: #d97706;
+  --warning-light: #fef3c7;
+  --danger: #dc2626;
+  --danger-light: #fef2f2;
+  --neutral-50: #f8f9fc;
+  --neutral-100: #f1f3f7;
+  --neutral-150: #e8eaf0;
+  --neutral-200: #e2e5ed;
+  --neutral-300: #cdd1dc;
+  --neutral-400: #9aa1b4;
+  --neutral-500: #6b7390;
+  --neutral-600: #4a5168;
+  --neutral-700: #343b52;
+  --neutral-800: #1e2335;
+  --neutral-900: #111827;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --shadow: 0 2px 16px rgba(17,24,39,0.06), 0 1px 4px rgba(17,24,39,0.04);
+  --shadow-md: 0 4px 24px rgba(17,24,39,0.09), 0 2px 8px rgba(17,24,39,0.05);
+  --shadow-lg: 0 12px 48px rgba(17,24,39,0.13), 0 4px 16px rgba(17,24,39,0.07);
+}
 
-  /* LOCK */
-  #lock-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f0f4ff 0%, #fafafa 60%, #f0fff8 100%); padding: 24px; }
-  .lock-card { background: white; border-radius: 24px; padding: 56px 48px; max-width: 420px; width: 100%; box-shadow: var(--shadow-lg); text-align: center; }
-  .lock-icon { width: 64px; height: 64px; background: var(--brand-light); border-radius: 18px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 28px; }
-  .lock-card h1 { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--neutral-900); margin-bottom: 8px; }
-  .lock-card p { color: var(--neutral-600); font-size: 15px; margin-bottom: 32px; }
-  .lock-input { width: 100%; padding: 14px 18px; border: 2px solid var(--neutral-200); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--neutral-900); outline: none; transition: border-color 0.2s; text-align: center; letter-spacing: 4px; margin-bottom: 16px; }
-  .lock-input:focus { border-color: var(--brand); }
-  .lock-btn { width: 100%; padding: 14px; background: var(--brand); color: white; border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-  .lock-btn:hover { background: var(--brand-dark); }
-  .lock-error { color: var(--danger); font-size: 13px; margin-top: 12px; display: none; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* APP */
-  #app { display: none; }
-  .header { background: white; border-bottom: 1px solid var(--neutral-200); padding: 0 32px; height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-  .logo { display: flex; align-items: center; gap: 10px; }
-  .logo-icon { width: 36px; height: 36px; background: var(--brand); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
-  .logo-text { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--neutral-900); }
-  .logo-text span { color: var(--brand); }
-  .header-badge { background: var(--brand-light); color: var(--brand); font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 100px; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--neutral-50);
+  color: var(--neutral-800);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
 
-  .main { max-width: 900px; margin: 0 auto; padding: 48px 24px; }
+/* ========== LOCK ========== */
+#lock-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #f0f4ff 0%, #fafbfe 55%, #eef9f5 100%);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
 
-  .tool-hero { text-align: center; margin-bottom: 48px; }
-  .tool-hero h2 { font-family: 'DM Serif Display', serif; font-size: 38px; color: var(--neutral-900); margin-bottom: 12px; line-height: 1.2; }
-  .tool-hero h2 em { font-style: italic; color: var(--brand); }
-  .tool-hero p { color: var(--neutral-600); font-size: 17px; max-width: 560px; margin: 0 auto; line-height: 1.6; }
+#lock-screen::before {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(26,86,219,0.06) 0%, transparent 70%);
+  top: -200px; right: -200px;
+  pointer-events: none;
+}
 
-  /* SEARCH CARD */
-  .search-card { background: white; border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow); margin-bottom: 32px; }
-  .search-label { font-weight: 600; font-size: 15px; color: var(--neutral-800); margin-bottom: 8px; display: block; }
-  .search-hint { font-size: 13px; color: var(--neutral-400); margin-bottom: 16px; line-height: 1.5; }
+.lock-card {
+  background: white;
+  border-radius: 24px;
+  padding: 52px 44px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  border: 1px solid var(--neutral-150);
+  position: relative;
+  z-index: 1;
+}
 
-  .fields-row { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 16px; }
-  .search-input { width: 100%; padding: 14px 18px; border: 2px solid var(--neutral-200); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--neutral-900); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
-  .search-input:focus { border-color: var(--brand); box-shadow: 0 0 0 4px rgba(26,86,219,0.08); }
-  .search-input::placeholder { color: var(--neutral-400); }
+.lock-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 36px;
+}
 
-  .analyze-btn { width: 100%; padding: 14px 28px; background: var(--brand); color: white; border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s, box-shadow 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-  .analyze-btn:hover { background: var(--brand-dark); box-shadow: 0 4px 16px rgba(26,86,219,0.3); }
-  .analyze-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.lock-logo-icon {
+  width: 40px; height: 40px;
+  background: var(--brand);
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 4px 12px rgba(26,86,219,0.3);
+}
 
-  .compare-toggle { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--neutral-100); }
-  .toggle-label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: var(--neutral-600); font-weight: 500; }
-  .toggle-label input[type="checkbox"] { display: none; }
-  .toggle-switch { width: 40px; height: 22px; background: var(--neutral-200); border-radius: 100px; position: relative; transition: background 0.2s; flex-shrink: 0; }
-  .toggle-switch::after { content: ''; position: absolute; width: 16px; height: 16px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: left 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
-  .toggle-label input:checked + .toggle-switch { background: var(--brand); }
-  .toggle-label input:checked + .toggle-switch::after { left: 21px; }
-  .competitor-wrap { margin-top: 16px; display: none; }
-  .competitor-wrap.show { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+.lock-logo-text {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--neutral-900);
+}
 
-  /* LOADING */
-  #loading { display: none; text-align: center; padding: 64px 0; }
-  .loading-spinner { width: 52px; height: 52px; border: 3px solid var(--neutral-200); border-top-color: var(--brand); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-text { font-size: 16px; color: var(--neutral-600); font-weight: 500; margin-bottom: 20px; }
-  .loading-steps { display: flex; flex-direction: column; gap: 10px; align-items: center; }
-  .loading-step { font-size: 13px; color: var(--neutral-400); display: flex; align-items: center; gap: 8px; transition: color 0.3s; }
-  .loading-step.active { color: var(--brand); font-weight: 600; }
-  .loading-step.done { color: var(--success); }
+.lock-logo-text span { color: var(--brand); }
 
-  /* REPORT */
-  #report { display: none; }
-  .nova-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--neutral-100); color: var(--neutral-700); border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-bottom: 28px; }
-  .nova-btn:hover { background: var(--neutral-200); }
+.lock-divider {
+  width: 40px; height: 2px;
+  background: var(--neutral-150);
+  margin: 0 auto 28px;
+  border-radius: 2px;
+}
 
-  /* SCORE HERO */
-  .score-hero { background: white; border-radius: var(--radius); padding: 48px 40px; box-shadow: var(--shadow); margin-bottom: 20px; display: flex; align-items: center; gap: 48px; flex-wrap: wrap; }
-  .score-circle-wrap { flex-shrink: 0; position: relative; width: 160px; height: 160px; }
-  .score-circle-svg { width: 160px; height: 160px; transform: rotate(-90deg); }
-  .score-circle-bg { fill: none; stroke: var(--neutral-100); stroke-width: 10; }
-  .score-circle-fill { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1); stroke-dasharray: 439.8; stroke-dashoffset: 439.8; }
-  .score-number { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
-  .score-value { font-family: 'DM Serif Display', serif; font-size: 48px; line-height: 1; color: var(--neutral-900); }
-  .score-max { font-size: 13px; color: var(--neutral-400); font-weight: 500; }
-  .score-info { flex: 1; min-width: 240px; }
-  .score-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 100px; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
-  .score-badge.ruim { background: var(--danger-light); color: var(--danger); }
-  .score-badge.regular { background: var(--warning-light); color: var(--warning); }
-  .score-badge.bom { background: var(--success-light); color: var(--success); }
-  .score-badge.otimo { background: var(--brand-light); color: var(--brand); }
-  .score-info h2 { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--neutral-900); margin-bottom: 12px; line-height: 1.3; }
-  .score-info p { color: var(--neutral-600); font-size: 15px; line-height: 1.7; }
-  .pdf-actions { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
-  .pdf-btn { padding: 12px 22px; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; border: none; }
-  .pdf-btn-full { background: var(--neutral-900); color: white; }
-  .pdf-btn-full:hover { background: var(--neutral-800); }
-  .pdf-btn-prospect { background: var(--brand); color: white; }
-  .pdf-btn-prospect:hover { background: var(--brand-dark); }
+.lock-card h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 24px;
+  color: var(--neutral-900);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
 
-  /* SEÇÕES */
-  .sections-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-  .section-card { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
-  .section-header { padding: 22px 28px; display: flex; align-items: center; gap: 16px; cursor: pointer; user-select: none; transition: background 0.15s; }
-  .section-header:hover { background: var(--neutral-50); }
-  .section-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-  .section-title-wrap { flex: 1; }
-  .section-title { font-weight: 600; font-size: 16px; color: var(--neutral-900); margin-bottom: 2px; }
-  .section-subtitle { font-size: 13px; color: var(--neutral-400); }
-  .section-score-wrap { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-  .section-score-bar { width: 80px; height: 6px; background: var(--neutral-100); border-radius: 100px; overflow: hidden; }
-  .section-score-fill { height: 100%; border-radius: 100px; transition: width 1s ease; width: 0%; }
-  .section-score-num { font-weight: 700; font-size: 15px; min-width: 36px; text-align: right; }
-  .section-chevron { color: var(--neutral-400); font-size: 18px; transition: transform 0.2s; }
-  .section-card.open .section-chevron { transform: rotate(180deg); }
-  .section-body { padding: 0 28px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
-  .section-card.open .section-body { max-height: 2000px; padding: 0 28px 28px; }
-  .section-diagnosis { background: var(--neutral-50); border-radius: var(--radius-sm); padding: 16px 20px; font-size: 14px; line-height: 1.7; color: var(--neutral-600); margin-bottom: 20px; border-left: 3px solid var(--brand); }
-  .criteria-list { display: flex; flex-direction: column; gap: 10px; }
-  .criteria-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; border-radius: var(--radius-sm); background: var(--neutral-50); }
-  .criteria-status { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; margin-top: 1px; }
-  .criteria-status.ok { background: var(--success-light); color: var(--success); }
-  .criteria-status.warn { background: var(--warning-light); color: var(--warning); }
-  .criteria-status.fail { background: var(--danger-light); color: var(--danger); }
-  .criteria-name { font-weight: 500; font-size: 14px; color: var(--neutral-800); }
-  .criteria-desc { font-size: 13px; color: var(--neutral-400); margin-top: 2px; line-height: 1.5; }
+.lock-card p {
+  color: var(--neutral-500);
+  font-size: 14px;
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
 
-  /* BLUR */
-  .blur-overlay { position: relative; margin-top: 16px; }
-  .blur-content { filter: blur(6px); user-select: none; pointer-events: none; }
-  .blur-cta { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: white; border-radius: var(--radius); padding: 24px 28px; box-shadow: var(--shadow-lg); text-align: center; width: 90%; max-width: 380px; z-index: 10; border: 1px solid var(--neutral-200); }
-  .blur-cta-icon { font-size: 32px; margin-bottom: 10px; }
-  .blur-cta h4 { font-weight: 700; font-size: 16px; color: var(--neutral-900); margin-bottom: 8px; }
-  .blur-cta p { font-size: 13px; color: var(--neutral-600); margin-bottom: 16px; line-height: 1.5; }
-  .whatsapp-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; background: #25d366; color: white; border-radius: var(--radius-sm); font-weight: 600; font-size: 14px; text-decoration: none; transition: background 0.2s; }
-  .whatsapp-btn:hover { background: #1da851; }
+.lock-input-wrap {
+  position: relative;
+  margin-bottom: 14px;
+}
 
-  /* COMPARATIVO */
-  .compare-card { background: white; border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); margin-bottom: 20px; }
-  .compare-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--neutral-900); margin-bottom: 24px; }
-  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-  .compare-col { border-radius: var(--radius-sm); padding: 20px; }
-  .compare-col.yours { background: var(--brand-light); border: 2px solid var(--brand); }
-  .compare-col.theirs { background: var(--danger-light); border: 2px solid #fecaca; }
-  .compare-col-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
-  .compare-col.yours .compare-col-label { color: var(--brand); }
-  .compare-col.theirs .compare-col-label { color: var(--danger); }
-  .compare-col-name { font-weight: 600; font-size: 15px; color: var(--neutral-900); margin-bottom: 4px; }
-  .compare-col-score { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--neutral-900); }
-  .gap-list { display: flex; flex-direction: column; gap: 10px; }
-  .gap-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--neutral-50); border-radius: var(--radius-sm); }
-  .gap-priority { padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; text-transform: uppercase; flex-shrink: 0; }
-  .gap-priority.alta { background: var(--danger-light); color: var(--danger); }
-  .gap-priority.media { background: var(--warning-light); color: var(--warning); }
-  .gap-priority.baixa { background: var(--success-light); color: var(--success); }
-  .gap-text { font-size: 14px; color: var(--neutral-700); line-height: 1.5; flex: 1; }
+.lock-input-icon {
+  position: absolute;
+  left: 16px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: var(--neutral-400);
+}
 
-  /* AGÊNCIA */
-  .agency-footer { background: var(--neutral-900); border-radius: var(--radius); padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-top: 20px; }
-  .agency-info { color: white; }
-  .agency-name { font-weight: 700; font-size: 18px; margin-bottom: 4px; }
-  .agency-tagline { font-size: 13px; color: var(--neutral-400); }
-  .agency-cta { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: #25d366; color: white; border-radius: var(--radius-sm); font-weight: 600; font-size: 15px; text-decoration: none; transition: background 0.2s; }
-  .agency-cta:hover { background: #1da851; }
+.lock-input {
+  width: 100%;
+  padding: 14px 18px 14px 44px;
+  border: 1.5px solid var(--neutral-200);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--neutral-900);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: var(--neutral-50);
+  letter-spacing: 3px;
+}
 
-  /* CORES */
-  .score-ruim { color: var(--danger); }
-  .score-regular { color: var(--warning); }
-  .score-bom { color: var(--success); }
-  .score-otimo { color: var(--brand); }
-  .fill-ruim { background: var(--danger); stroke: var(--danger); }
-  .fill-regular { background: var(--warning); stroke: var(--warning); }
-  .fill-bom { background: var(--success); stroke: var(--success); }
-  .fill-otimo { background: var(--brand); stroke: var(--brand); }
-  .icon-ruim { background: var(--danger-light); }
-  .icon-regular { background: var(--warning-light); }
-  .icon-bom { background: var(--success-light); }
-  .icon-otimo { background: var(--brand-light); }
+.lock-input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(26,86,219,0.08);
+  background: white;
+}
 
-  @media (max-width: 640px) {
-    .header { padding: 0 16px; }
-    .main { padding: 24px 16px; }
-    .tool-hero h2 { font-size: 26px; }
-    .search-card { padding: 24px; }
-    .fields-row { grid-template-columns: 1fr; }
-    .competitor-wrap.show { grid-template-columns: 1fr; }
-    .score-hero { padding: 28px 24px; flex-direction: column; align-items: flex-start; gap: 24px; }
-    .section-header { padding: 16px 18px; }
-    .section-card.open .section-body { padding: 0 18px 18px; }
-    .compare-grid { grid-template-columns: 1fr; }
-  }
+.lock-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--brand);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  letter-spacing: 0.01em;
+}
+
+.lock-btn:hover {
+  background: var(--brand-dark);
+  box-shadow: 0 4px 16px rgba(26,86,219,0.35);
+}
+
+.lock-btn:active { transform: translateY(1px); }
+
+.lock-error {
+  color: var(--danger);
+  font-size: 13px;
+  margin-top: 10px;
+  display: none;
+  font-weight: 500;
+}
+
+.lock-footer {
+  margin-top: 28px;
+  font-size: 12px;
+  color: var(--neutral-400);
+}
+
+/* ========== APP ========== */
+#app { display: none; }
+
+.header {
+  background: white;
+  border-bottom: 1px solid var(--neutral-150);
+  padding: 0 32px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 4px rgba(17,24,39,0.05);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 34px; height: 34px;
+  background: var(--brand);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 17px;
+  box-shadow: 0 2px 8px rgba(26,86,219,0.25);
+}
+
+.logo-text {
+  font-family: 'DM Serif Display', serif;
+  font-size: 19px;
+  color: var(--neutral-900);
+}
+
+.logo-text span { color: var(--brand); }
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-badge {
+  background: var(--neutral-100);
+  color: var(--neutral-600);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 100px;
+  border: 1px solid var(--neutral-200);
+  letter-spacing: 0.02em;
+}
+
+.header-badge-brand {
+  background: var(--brand-light);
+  color: var(--brand);
+  border-color: rgba(26,86,219,0.15);
+}
+
+/* ========== MAIN ========== */
+.main {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 52px 24px;
+}
+
+/* ========== HERO ========== */
+.tool-hero {
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+.tool-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--brand-light);
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tool-hero h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 40px;
+  color: var(--neutral-900);
+  margin-bottom: 14px;
+  line-height: 1.15;
+}
+
+.tool-hero h2 em {
+  font-style: italic;
+  color: var(--brand);
+}
+
+.tool-hero p {
+  color: var(--neutral-500);
+  font-size: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ========== SEARCH CARD ========== */
+.search-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 36px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 28px;
+  border: 1px solid var(--neutral-150);
+}
+
+.search-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--neutral-700);
+  margin-bottom: 6px;
+  display: block;
+  letter-spacing: 0.01em;
+}
+
+.search-hint {
+  font-size: 13px;
+  color: var(--neutral-400);
+  margin-bottom: 18px;
+  line-height: 1.6;
+  padding: 12px 16px;
+  background: var(--neutral-50);
+  border-radius: var(--radius-xs);
+  border-left: 3px solid var(--brand-light);
+}
+
+.search-hint strong {
+  color: var(--neutral-600);
+  font-weight: 600;
+}
+
+.search-hint ol {
+  margin: 6px 0 0 16px;
+}
+
+.search-hint li {
+  margin-bottom: 3px;
+}
+
+.search-input-wrap {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.search-input-icon {
+  position: absolute;
+  left: 16px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: var(--neutral-400);
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 18px 14px 44px;
+  border: 1.5px solid var(--neutral-200);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--neutral-900);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: var(--neutral-50);
+}
+
+.search-input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(26,86,219,0.08);
+  background: white;
+}
+
+.search-input::placeholder { color: var(--neutral-400); }
+
+.analyze-btn {
+  width: 100%;
+  padding: 15px 28px;
+  background: var(--brand);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px;
+  letter-spacing: 0.01em;
+}
+
+.analyze-btn:hover {
+  background: var(--brand-dark);
+  box-shadow: 0 4px 20px rgba(26,86,219,0.35);
+}
+
+.analyze-btn:active { transform: translateY(1px); }
+.analyze-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.compare-toggle {
+  margin-top: 22px;
+  padding-top: 22px;
+  border-top: 1px solid var(--neutral-100);
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--neutral-600);
+  font-weight: 500;
+}
+
+.toggle-label input[type="checkbox"] { display: none; }
+
+.toggle-switch {
+  width: 40px; height: 22px;
+  background: var(--neutral-200);
+  border-radius: 100px;
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  width: 16px; height: 16px;
+  background: white;
+  border-radius: 50%;
+  top: 3px; left: 3px;
+  transition: left 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.toggle-label input:checked + .toggle-switch { background: var(--brand); }
+.toggle-label input:checked + .toggle-switch::after { left: 21px; }
+
+.competitor-wrap { margin-top: 16px; display: none; }
+.competitor-wrap.show { display: block; }
+
+/* ========== LOADING ========== */
+#loading {
+  display: none;
+  text-align: center;
+  padding: 80px 0;
+}
+
+.loading-spinner {
+  width: 48px; height: 48px;
+  border: 3px solid var(--neutral-150);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+  margin: 0 auto 24px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-text {
+  font-size: 16px;
+  color: var(--neutral-700);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.loading-sub {
+  font-size: 13px;
+  color: var(--neutral-400);
+  margin-bottom: 32px;
+}
+
+.loading-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.loading-step {
+  font-size: 13px;
+  color: var(--neutral-400);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  transition: all 0.3s;
+  width: 100%;
+  background: transparent;
+}
+
+.loading-step .step-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--neutral-200);
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+
+.loading-step.active {
+  color: var(--brand);
+  font-weight: 600;
+  background: var(--brand-light);
+}
+
+.loading-step.active .step-dot {
+  background: var(--brand);
+  box-shadow: 0 0 0 3px rgba(26,86,219,0.2);
+  animation: pulse-dot 1s ease infinite;
+}
+
+.loading-step.done { color: var(--success); }
+.loading-step.done .step-dot { background: var(--success); }
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+/* ========== REPORT ========== */
+#report { display: none; }
+
+.nova-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  background: white;
+  color: var(--neutral-600);
+  border: 1.5px solid var(--neutral-200);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 24px;
+}
+
+.nova-btn:hover {
+  background: var(--neutral-50);
+  color: var(--neutral-800);
+  border-color: var(--neutral-300);
+}
+
+/* ========== SCORE HERO ========== */
+.report-header {
+  background: white;
+  border-radius: var(--radius);
+  padding: 0;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 16px;
+  border: 1px solid var(--neutral-150);
+  overflow: hidden;
+}
+
+.report-header-top {
+  padding: 10px 28px;
+  background: var(--neutral-900);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.report-header-top-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--neutral-400);
+}
+
+.report-header-top-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.report-meta {
+  font-size: 12px;
+  color: var(--neutral-500);
+}
+
+.report-meta strong {
+  color: var(--neutral-300);
+  font-weight: 600;
+}
+
+.report-body {
+  padding: 36px 40px;
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+.score-circle-wrap {
+  flex-shrink: 0;
+  position: relative;
+  width: 150px; height: 150px;
+}
+
+.score-circle-svg {
+  width: 150px; height: 150px;
+  transform: rotate(-90deg);
+}
+
+.score-track {
+  fill: none;
+  stroke: var(--neutral-100);
+  stroke-width: 9;
+}
+
+.score-fill {
+  fill: none;
+  stroke-width: 9;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.6s cubic-bezier(0.4, 0, 0.2, 1);
+  stroke-dasharray: 408;
+  stroke-dashoffset: 408;
+}
+
+.score-number {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+}
+
+.score-value {
+  font-family: 'DM Serif Display', serif;
+  font-size: 46px;
+  line-height: 1;
+  color: var(--neutral-900);
+}
+
+.score-max {
+  font-size: 12px;
+  color: var(--neutral-400);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.score-info { flex: 1; min-width: 240px; }
+
+.score-business-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  color: var(--neutral-900);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.score-segment {
+  font-size: 13px;
+  color: var(--neutral-400);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.score-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 13px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.score-badge.ruim    { background: var(--danger-light);  color: var(--danger); }
+.score-badge.regular { background: var(--warning-light); color: var(--warning); }
+.score-badge.bom     { background: var(--success-light); color: var(--success); }
+.score-badge.otimo   { background: var(--brand-light);   color: var(--brand); }
+
+.diagnostico-geral {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--neutral-600);
+  border-left: 3px solid var(--neutral-200);
+  padding-left: 16px;
+  margin-bottom: 20px;
+}
+
+.pdf-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pdf-btn {
+  padding: 11px 20px;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; gap: 7px;
+  border: none;
+  letter-spacing: 0.01em;
+}
+
+.pdf-btn-full {
+  background: var(--neutral-900);
+  color: white;
+}
+
+.pdf-btn-full:hover {
+  background: var(--neutral-700);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.pdf-btn-prospect {
+  background: var(--brand);
+  color: white;
+}
+
+.pdf-btn-prospect:hover {
+  background: var(--brand-dark);
+  box-shadow: 0 4px 16px rgba(26,86,219,0.35);
+}
+
+/* ========== SCORE BREAKDOWN ========== */
+.score-breakdown {
+  background: white;
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+  border: 1px solid var(--neutral-150);
+}
+
+.breakdown-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--neutral-400);
+  margin-bottom: 20px;
+}
+
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.breakdown-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.breakdown-item-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--neutral-500);
+}
+
+.breakdown-bar-wrap {
+  height: 5px;
+  background: var(--neutral-100);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.breakdown-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 1.2s ease;
+  width: 0%;
+}
+
+.breakdown-item-score {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--neutral-700);
+}
+
+/* ========== SECTIONS ========== */
+.sections-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--neutral-400);
+  margin-bottom: 12px;
+  margin-top: 8px;
+}
+
+.sections-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.section-card {
+  background: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--neutral-150);
+  transition: box-shadow 0.2s;
+}
+
+.section-card:hover { box-shadow: var(--shadow-md); }
+
+.section-header {
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+
+.section-header:hover { background: var(--neutral-50); }
+
+.section-icon {
+  width: 42px; height: 42px;
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px;
+  flex-shrink: 0;
+}
+
+.section-title-wrap { flex: 1; }
+
+.section-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--neutral-900);
+  margin-bottom: 2px;
+}
+
+.section-subtitle {
+  font-size: 12px;
+  color: var(--neutral-400);
+}
+
+.section-score-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.section-score-bar {
+  width: 72px; height: 5px;
+  background: var(--neutral-100);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.section-score-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 1.2s ease;
+  width: 0%;
+}
+
+.section-score-num {
+  font-weight: 700;
+  font-size: 14px;
+  min-width: 32px;
+  text-align: right;
+}
+
+.section-chevron {
+  color: var(--neutral-300);
+  font-size: 16px;
+  transition: transform 0.25s;
+  margin-left: 4px;
+}
+
+.section-card.open .section-chevron { transform: rotate(180deg); }
+
+.section-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.section-card.open .section-body {
+  max-height: 3000px;
+  padding: 0 24px 24px;
+}
+
+.section-diagnosis {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--neutral-600);
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  background: var(--neutral-50);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--brand);
+}
+
+/* Critérios */
+.criteria-header {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--neutral-400);
+  margin-bottom: 4px;
+}
+
+.criteria-list { display: flex; flex-direction: column; gap: 6px; }
+
+.criteria-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: start;
+  padding: 13px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--neutral-50);
+  border: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+
+.criteria-item:hover { border-color: var(--neutral-200); }
+
+.criteria-status-icon {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  flex-shrink: 0;
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+.criteria-status-icon.ok   { background: var(--success-light); color: var(--success); }
+.criteria-status-icon.warn { background: var(--warning-light); color: var(--warning); }
+.criteria-status-icon.fail { background: var(--danger-light);  color: var(--danger); }
+
+.criteria-text { flex: 1; }
+
+.criteria-name {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--neutral-800);
+  margin-bottom: 3px;
+}
+
+.criteria-desc {
+  font-size: 12.5px;
+  color: var(--neutral-500);
+  line-height: 1.55;
+}
+
+.criteria-action {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--brand);
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.criteria-action.ok   { color: var(--success); }
+.criteria-action.warn { color: var(--warning); }
+.criteria-action.fail { color: var(--danger); }
+
+/* ========== BLUR ========== */
+.blur-overlay {
+  position: relative;
+  margin-top: 0;
+}
+
+.blur-content {
+  filter: blur(5px);
+  user-select: none;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.blur-cta {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  background: white;
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  width: 88%;
+  max-width: 360px;
+  z-index: 10;
+  border: 1px solid var(--neutral-150);
+}
+
+.blur-cta-icon { font-size: 28px; margin-bottom: 10px; }
+
+.blur-cta h4 {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--neutral-900);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.blur-cta p {
+  font-size: 13px;
+  color: var(--neutral-500);
+  margin-bottom: 18px;
+  line-height: 1.6;
+}
+
+.whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 24px;
+  background: #22c55e;
+  color: white;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s;
+  width: 100%;
+  justify-content: center;
+}
+
+.whatsapp-btn:hover {
+  background: #16a34a;
+  box-shadow: 0 4px 16px rgba(34,197,94,0.35);
+}
+
+/* ========== PLANO DE AÇÃO ========== */
+.action-plan {
+  background: white;
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+  border: 1px solid var(--neutral-150);
+}
+
+.action-plan-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--neutral-900);
+  margin-bottom: 6px;
+}
+
+.action-plan-sub {
+  font-size: 13px;
+  color: var(--neutral-400);
+  margin-bottom: 24px;
+}
+
+.action-items { display: flex; flex-direction: column; gap: 10px; }
+
+.action-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--neutral-150);
+  background: var(--neutral-50);
+}
+
+.action-item-priority {
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.action-item-priority.alta   { background: var(--danger-light);  color: var(--danger); }
+.action-item-priority.media  { background: var(--warning-light); color: var(--warning); }
+.action-item-priority.baixa  { background: var(--success-light); color: var(--success); }
+
+.action-item-text {
+  flex: 1;
+  font-size: 13.5px;
+  color: var(--neutral-700);
+  line-height: 1.6;
+}
+
+.action-item-section {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--neutral-400);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+/* ========== COMPARATIVO ========== */
+.compare-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+  border: 1px solid var(--neutral-150);
+}
+
+.compare-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--neutral-900);
+  margin-bottom: 20px;
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.compare-col {
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  border: 1.5px solid transparent;
+}
+
+.compare-col.yours {
+  background: var(--brand-light);
+  border-color: rgba(26,86,219,0.2);
+}
+
+.compare-col.theirs {
+  background: var(--danger-light);
+  border-color: rgba(220,38,38,0.15);
+}
+
+.compare-col-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.compare-col.yours  .compare-col-label { color: var(--brand); }
+.compare-col.theirs .compare-col-label { color: var(--danger); }
+
+.compare-col-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--neutral-900);
+  margin-bottom: 8px;
+}
+
+.compare-col-score {
+  font-family: 'DM Serif Display', serif;
+  font-size: 36px;
+  color: var(--neutral-900);
+  line-height: 1;
+}
+
+.gap-list { display: flex; flex-direction: column; gap: 8px; }
+
+.gap-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--neutral-50);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--neutral-150);
+}
+
+.gap-priority {
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.gap-priority.alta  { background: var(--danger-light);  color: var(--danger); }
+.gap-priority.media { background: var(--warning-light); color: var(--warning); }
+.gap-priority.baixa { background: var(--success-light); color: var(--success); }
+
+.gap-text {
+  font-size: 13.5px;
+  color: var(--neutral-700);
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* ========== AGENCY FOOTER ========== */
+.agency-footer {
+  background: var(--neutral-900);
+  border-radius: var(--radius);
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.agency-info { color: white; }
+
+.agency-name {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+
+.agency-tagline {
+  font-size: 12.5px;
+  color: var(--neutral-500);
+}
+
+.agency-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: #22c55e;
+  color: white;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.agency-cta:hover {
+  background: #16a34a;
+  box-shadow: 0 4px 12px rgba(34,197,94,0.3);
+}
+
+/* ========== CORES DE SCORE ========== */
+.score-ruim    { color: var(--danger); }
+.score-regular { color: var(--warning); }
+.score-bom     { color: var(--success); }
+.score-otimo   { color: var(--brand); }
+
+.fill-ruim    { background: var(--danger);  stroke: var(--danger); }
+.fill-regular { background: var(--warning); stroke: var(--warning); }
+.fill-bom     { background: var(--success); stroke: var(--success); }
+.fill-otimo   { background: var(--brand);   stroke: var(--brand); }
+
+.icon-ruim    { background: var(--danger-light);  }
+.icon-regular { background: var(--warning-light); }
+.icon-bom     { background: var(--success-light); }
+.icon-otimo   { background: var(--brand-light);   }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 640px) {
+  .header { padding: 0 16px; }
+  .main { padding: 28px 16px; }
+  .tool-hero h2 { font-size: 28px; }
+  .search-card { padding: 22px; }
+  .report-body { padding: 24px; flex-direction: column; gap: 24px; }
+  .report-header-top { padding: 8px 20px; }
+  .section-header { padding: 16px 18px; }
+  .section-card.open .section-body { padding: 0 16px 18px; }
+  .breakdown-grid { grid-template-columns: 1fr 1fr; }
+  .compare-grid { grid-template-columns: 1fr; }
+  .pdf-actions { flex-direction: column; }
+  .pdf-btn { width: 100%; justify-content: center; }
+}
 </style>
 </head>
 <body>
@@ -222,12 +1312,21 @@
 <!-- TELA DE SENHA -->
 <div id="lock-screen">
   <div class="lock-card">
-    <div class="lock-icon">📍</div>
-    <h1>PerfilPro</h1>
-    <p>Ferramenta interna de auditoria de Google Meu Negócio. Digite a senha para continuar.</p>
-    <input type="password" id="password-input" class="lock-input" placeholder="••••••" maxlength="20" onkeydown="if(event.key==='Enter') checkPassword()">
+    <div class="lock-logo">
+      <div class="lock-logo-icon">📍</div>
+      <span class="lock-logo-text">Perfil<span>Pro</span></span>
+    </div>
+    <div class="lock-divider"></div>
+    <h1>Acesso restrito</h1>
+    <p>Esta ferramenta é de uso interno da Agência Plugue. Digite a senha para continuar.</p>
+    <div class="lock-input-wrap">
+      <span class="lock-input-icon">🔑</span>
+      <input type="password" id="password-input" class="lock-input" placeholder="••••••••" maxlength="20"
+        onkeydown="if(event.key==='Enter') checkPassword()">
+    </div>
     <button class="lock-btn" onclick="checkPassword()">Entrar</button>
     <div class="lock-error" id="lock-error">Senha incorreta. Tente novamente.</div>
+    <div class="lock-footer">Agência Plugue &middot; agenciaplugue.com.br</div>
   </div>
 </div>
 
@@ -238,35 +1337,54 @@
       <div class="logo-icon">📍</div>
       <span class="logo-text">Perfil<span>Pro</span></span>
     </div>
-    <span class="header-badge">Uso Interno · Agência Plugue</span>
+    <div class="header-right">
+      <span class="header-badge">Agência Plugue</span>
+      <span class="header-badge header-badge-brand">Uso Interno</span>
+    </div>
   </header>
 
   <main class="main">
     <div class="tool-hero">
-      <h2>Audite qualquer perfil do<br><em>Google Meu Negócio</em> em segundos</h2>
-      <p>Cole a URL do perfil, a IA analisa todos os critérios de ranqueamento e gera um diagnóstico completo com score e plano de ação.</p>
+      <div class="tool-hero-eyebrow">⚡ Diagnóstico de SEO Local</div>
+      <h2>Audite qualquer perfil do<br><em>Google Meu Negócio</em></h2>
+      <p>Cole a URL do perfil, a IA analisa mais de 35 critérios de ranqueamento local e entrega um relatório executivo completo com diagnóstico e plano de ação.</p>
     </div>
 
     <!-- BUSCA -->
     <div class="search-card" id="search-card">
-      <label class="search-label">URL do perfil no Google</label>
-      <div class="search-hint">Como pegar a URL: pesquise o negócio no Google, clique no nome dele, e copie o endereço da barra do navegador. Começa com https://www.google.com/maps/place/...</div>
-      <div class="fields-row" style="grid-template-columns:1fr;">
-        <input type="text" id="gmb-url" class="search-input" placeholder="Cole aqui a URL do Google Maps..." onkeydown="if(event.key==='Enter') startAnalysis()">
+      <label class="search-label">URL do perfil no Google Maps</label>
+      <div class="search-hint">
+        <strong>Como obter a URL correta:</strong>
+        <ol>
+          <li>Pesquise o nome do negócio no Google</li>
+          <li>Clique em <strong>Maps</strong> nos resultados</li>
+          <li>Clique na ficha do negócio que deseja avaliar</li>
+          <li>Copie a URL da barra do navegador</li>
+        </ol>
+      </div>
+      <div class="search-input-wrap">
+        <span class="search-input-icon">🔗</span>
+        <input type="text" id="gmb-url" class="search-input"
+          placeholder="https://www.google.com/maps/place/..."
+          onkeydown="if(event.key==='Enter') startAnalysis()">
       </div>
       <button class="analyze-btn" onclick="startAnalysis()">
-        🔍 Analisar Perfil
+        🔍 Gerar Relatório de Diagnóstico
       </button>
 
       <div class="compare-toggle">
         <label class="toggle-label">
           <input type="checkbox" id="compare-toggle" onchange="toggleCompare()">
           <span class="toggle-switch"></span>
-          Comparar com concorrente (análise competitiva)
+          Análise competitiva: comparar com concorrente
         </label>
         <div class="competitor-wrap" id="competitor-wrap">
           <label class="search-label" style="margin-top:16px">URL do perfil do concorrente</label>
-          <input type="text" id="competitor-url" class="search-input" style="width:100%;margin-top:8px" placeholder="Cole aqui a URL do concorrente...">
+          <div class="search-input-wrap" style="margin-top:8px">
+            <span class="search-input-icon">🏁</span>
+            <input type="text" id="competitor-url" class="search-input"
+              placeholder="https://www.google.com/maps/place/...">
+          </div>
         </div>
       </div>
     </div>
@@ -274,12 +1392,25 @@
     <!-- LOADING -->
     <div id="loading">
       <div class="loading-spinner"></div>
-      <div class="loading-text">Analisando o perfil...</div>
+      <div class="loading-text">Processando análise do perfil</div>
+      <div class="loading-sub">Isso pode levar até 20 segundos</div>
       <div class="loading-steps">
-        <div class="loading-step" id="step-1">⏳ Buscando dados do negócio</div>
-        <div class="loading-step" id="step-2">⏳ Avaliando critérios de ranqueamento</div>
-        <div class="loading-step" id="step-3">⏳ Gerando diagnóstico com inteligência artificial</div>
-        <div class="loading-step" id="step-4">⏳ Calculando scores e plano de ação</div>
+        <div class="loading-step" id="step-1">
+          <span class="step-dot"></span>
+          Identificando o negócio e segmento
+        </div>
+        <div class="loading-step" id="step-2">
+          <span class="step-dot"></span>
+          Avaliando critérios de ranqueamento local
+        </div>
+        <div class="loading-step" id="step-3">
+          <span class="step-dot"></span>
+          Gerando diagnóstico consultivo por seção
+        </div>
+        <div class="loading-step" id="step-4">
+          <span class="step-dot"></span>
+          Calculando scores e priorizando plano de ação
+        </div>
       </div>
     </div>
 
@@ -293,6 +1424,9 @@ const SENHA = 'plugue2024';
 const WHATSAPP = '5521990715689';
 const AGENCIA = 'Agência Plugue';
 const AGENCIA_TAGLINE = 'Sites e marketing digital para pequenas empresas';
+const AGENCIA_SITE = 'agenciaplugue.com.br';
+
+let dadosRelatorio = null;
 
 function checkPassword() {
   const val = document.getElementById('password-input').value;
@@ -315,176 +1449,115 @@ function toggleCompare() {
 async function startAnalysis() {
   const url = document.getElementById('gmb-url').value.trim();
   const hasCompare = document.getElementById('compare-toggle').checked;
-  const competitorUrl = document.getElementById('competitor-url') ? document.getElementById('competitor-url').value.trim() : '';
+  const competitorUrl = document.getElementById('competitor-url') ?
+    document.getElementById('competitor-url').value.trim() : '';
 
-  if (!url) { alert('Por favor, cole a URL do perfil do Google Meu Negócio.'); return; }
+  if (!url) { alert('Por favor, cole a URL do perfil no Google Maps.'); return; }
 
   document.getElementById('loading').style.display = 'block';
   document.getElementById('report').style.display = 'none';
   document.getElementById('report').innerHTML = '';
   document.getElementById('search-card').style.display = 'none';
 
-  const steps = ['step-1','step-2','step-3','step-4'];
-  const icons = ['⏳','⏳','⏳','⏳'];
-  const delays = [0, 3000, 7000, 11000];
+  const steps = ['step-1', 'step-2', 'step-3', 'step-4'];
+  const delays = [0, 4000, 9000, 14000];
 
   steps.forEach((id, i) => {
     setTimeout(() => {
       if (i > 0) {
-        const prev = document.getElementById(steps[i-1]);
-        if (prev) { prev.className = 'loading-step done'; prev.innerHTML = prev.innerHTML.replace('🔄','✅'); }
+        const prev = document.getElementById(steps[i - 1]);
+        if (prev) prev.className = 'loading-step done';
       }
       const el = document.getElementById(id);
-      if (el) { el.className = 'loading-step active'; el.innerHTML = el.innerHTML.replace('⏳','🔄'); }
+      if (el) el.className = 'loading-step active';
     }, delays[i]);
   });
 
   try {
     const prompt = buildPrompt(url, hasCompare ? competitorUrl : null);
     const data = await callAPI(prompt);
+    dadosRelatorio = data;
     renderReport(data, url);
   } catch (err) {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('search-card').style.display = 'block';
     document.getElementById('report').style.display = 'block';
     document.getElementById('report').innerHTML = `
-      <div style="background:white;border-radius:16px;padding:40px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,0.07)">
-        <div style="font-size:48px;margin-bottom:16px">⚠️</div>
-        <h3 style="font-size:20px;color:#111827;margin-bottom:8px">Não foi possível completar a análise</h3>
-        <p style="color:#4b5563;font-size:15px;line-height:1.6;margin-bottom:16px">Verifique sua conexão e tente novamente.</p>
-        <p style="color:#9ca3af;font-size:13px">Erro: ${err.message}</p>
+      <div style="background:white;border-radius:16px;padding:48px;text-align:center;box-shadow:var(--shadow-md);border:1px solid var(--neutral-150)">
+        <div style="font-size:40px;margin-bottom:16px">⚠️</div>
+        <h3 style="font-size:18px;color:var(--neutral-900);margin-bottom:8px;font-family:'DM Serif Display',serif">Não foi possível completar a análise</h3>
+        <p style="color:var(--neutral-500);font-size:14px;line-height:1.7;margin-bottom:8px">Verifique sua conexão e tente novamente. Certifique-se de que a URL é válida.</p>
+        <p style="color:var(--neutral-400);font-size:12px">Detalhe: ${err.message}</p>
       </div>`;
     console.error(err);
   }
 }
 
 function buildPrompt(url, competitorUrl) {
-  const compareSection = competitorUrl ? `
-CONCORRENTE PARA ANÁLISE COMPARATIVA: "${competitorUrl}"
-Inclua no JSON uma seção "comparativo" com: score_concorrente (número de 0 a 100), nome_concorrente (string), gaps (array de objetos com prioridade "alta"/"media"/"baixa" e descricao string detalhada).
-` : `No campo "comparativo" retorne null.`;
+  const hoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
 
-  return `Você é um especialista sênior em SEO local e otimização de perfis no Google Meu Negócio (Google Business Profile).
+  const compareInstr = competitorUrl
+    ? `CONCORRENTE: "${competitorUrl}". Preencha o campo "comparativo" com: score_concorrente (0-100), nome_concorrente (string), gaps (array de {prioridade:"alta"|"media"|"baixa", descricao:string}).`
+    : `Campo "comparativo": null.`;
 
-Faça uma análise completa e realista do perfil do Google Meu Negócio:
-URL/NEGÓCIO: "${url}"
-${compareSection}
+  return `Você é um consultor sênior de SEO local com especialidade em Google Business Profile. Analise o perfil e retorne APENAS JSON válido, sem markdown.
 
-Analise com base na URL fornecida. Se for URL do Google Maps, identifique o negócio. Se for apenas um nome, simule análise realista. Seja específico e direto. Use linguagem acessível para o dono do negócio, não técnica.
+PERFIL: "${url}"
+DATA: ${hoje}
+${compareInstr}
 
-Retorne EXCLUSIVAMENTE um JSON válido sem markdown, sem texto antes ou depois:
+INSTRUÇÕES DE ESCRITA:
+- Tom consultivo: conecte cada problema à sua consequência real no negócio
+- Seja específico para o segmento identificado, não use textos genéricos
+- Diagnósticos em 2 a 3 frases diretas e densas
+- Ações no campo "acao" devem ser imperativas e acionáveis (ex: "Adicione ao menos 15 fotos...")
+- Nunca use traços ou hifens no texto
 
+JSON ESPERADO:
 {
-  "nome_negocio": "Nome real ou provável do negócio",
-  "segmento": "Tipo de negócio",
-  "score_geral": 58,
-  "classificacao": "regular",
-  "diagnostico_geral": "Parágrafo de 3 a 4 linhas direto e profissional sobre a situação geral do perfil. Mencione os pontos críticos e o potencial de melhoria. Seja específico para este tipo de negócio em ${url}.",
+  "nome_negocio": "string",
+  "segmento": "string",
+  "score_geral": 0-100,
+  "classificacao": "ruim|regular|bom|otimo",
+  "data_analise": "${hoje}",
+  "diagnostico_geral": "3 a 4 frases consultivas sobre a situação geral, mencionando pontos críticos e impacto no negócio",
+  "plano_acao": [
+    { "prioridade": "alta|media|baixa", "secao": "string", "acao": "string" }
+  ],
   "secoes": [
     {
       "id": "informacoes",
       "nome": "Informações Básicas",
       "emoji": "📋",
-      "score": 70,
-      "classificacao": "bom",
-      "diagnostico": "Diagnóstico específico e realista desta seção em 2 a 3 linhas.",
-      "tem_problema": false,
+      "score": 0-100,
+      "classificacao": "ruim|regular|bom|otimo",
+      "diagnostico": "Diagnóstico consultivo específico desta seção",
+      "tem_problema": true|false,
       "criterios": [
-        { "nome": "Nome do negócio correto", "status": "ok", "descricao": "Nome cadastrado sem palavras-chave artificiais forçadas" },
-        { "nome": "Categoria principal adequada", "status": "ok", "descricao": "Categoria alinhada ao segmento do negócio" },
-        { "nome": "Categorias secundárias", "status": "warn", "descricao": "Poucas categorias secundárias, recomendamos de 3 a 5" },
-        { "nome": "Descrição completa", "status": "fail", "descricao": "Descrição não utiliza os 750 caracteres disponíveis" },
-        { "nome": "Telefone local cadastrado", "status": "ok", "descricao": "Número local identificado no perfil" },
-        { "nome": "Site vinculado", "status": "ok", "descricao": "Site vinculado ao perfil" },
-        { "nome": "Endereço completo", "status": "ok", "descricao": "Endereço completo com CEP" },
-        { "nome": "Horário de funcionamento", "status": "warn", "descricao": "Horários cadastrados mas sem horários especiais para feriados" },
-        { "nome": "Perfil verificado pelo Google", "status": "ok", "descricao": "Perfil com verificação ativa" }
-      ]
-    },
-    {
-      "id": "fotos",
-      "nome": "Fotos e Mídia",
-      "emoji": "📸",
-      "score": 25,
-      "classificacao": "ruim",
-      "diagnostico": "Diagnóstico específico sobre fotos.",
-      "tem_problema": true,
-      "criterios": [
-        { "nome": "Foto de capa", "status": "ok", "descricao": "Foto de capa presente" },
-        { "nome": "Foto de perfil", "status": "ok", "descricao": "Logo ou foto de perfil cadastrada" },
-        { "nome": "Mínimo de 10 fotos", "status": "fail", "descricao": "Poucas fotos no perfil, mínimo recomendado é 10" },
-        { "nome": "Fotos de ambiente interno", "status": "fail", "descricao": "Sem fotos do ambiente interno" },
-        { "nome": "Fotos de equipe ou produto", "status": "fail", "descricao": "Sem fotos da equipe ou dos produtos e serviços" },
-        { "nome": "Fotos recentes (últimos 90 dias)", "status": "fail", "descricao": "Sem fotos adicionadas recentemente" },
-        { "nome": "Fotos com geolocalização", "status": "warn", "descricao": "Fotos sem geolocalização incorporada perdem relevância local" }
-      ]
-    },
-    {
-      "id": "avaliacoes",
-      "nome": "Avaliações",
-      "emoji": "⭐",
-      "score": 60,
-      "classificacao": "regular",
-      "diagnostico": "Diagnóstico específico sobre avaliações.",
-      "tem_problema": true,
-      "criterios": [
-        { "nome": "Mais de 50 avaliações", "status": "warn", "descricao": "Número de avaliações abaixo do ideal para o segmento" },
-        { "nome": "Nota média acima de 4.3", "status": "ok", "descricao": "Nota dentro do esperado" },
-        { "nome": "Responde às avaliações positivas", "status": "fail", "descricao": "Menos da metade das avaliações têm resposta do proprietário" },
-        { "nome": "Responde avaliações negativas", "status": "fail", "descricao": "Avaliações negativas sem resposta prejudicam a reputação" },
-        { "nome": "Frequência de novas avaliações", "status": "warn", "descricao": "Poucas novas avaliações por mês" }
-      ]
-    },
-    {
-      "id": "atividade",
-      "nome": "Atividade e Posts",
-      "emoji": "📣",
-      "score": 10,
-      "classificacao": "ruim",
-      "diagnostico": "Diagnóstico específico sobre atividade.",
-      "tem_problema": true,
-      "criterios": [
-        { "nome": "Post nos últimos 7 dias", "status": "fail", "descricao": "Nenhum post recente identificado no perfil" },
-        { "nome": "Frequência semanal de posts", "status": "fail", "descricao": "Perfil inativo perde posições no ranqueamento local" },
-        { "nome": "Posts com imagens atrativas", "status": "fail", "descricao": "Sem posts recentes para avaliar qualidade visual" },
-        { "nome": "Posts com chamada para ação", "status": "fail", "descricao": "Sem CTAs nos posts para converter visitantes em clientes" }
-      ]
-    },
-    {
-      "id": "categorias",
-      "nome": "Categorias e Palavras-chave",
-      "emoji": "🏷️",
-      "score": 50,
-      "classificacao": "regular",
-      "diagnostico": "Diagnóstico específico sobre categorias.",
-      "tem_problema": true,
-      "criterios": [
-        { "nome": "Categoria principal correta", "status": "ok", "descricao": "Categoria principal alinhada ao negócio" },
-        { "nome": "Categorias secundárias completas", "status": "warn", "descricao": "Poucas categorias secundárias cadastradas" },
-        { "nome": "Palavras-chave na descrição", "status": "warn", "descricao": "Descrição poderia incorporar mais termos de busca relevantes" },
-        { "nome": "Atributos do perfil preenchidos", "status": "fail", "descricao": "Atributos específicos do segmento não estão configurados" },
-        { "nome": "Serviços ou produtos cadastrados", "status": "warn", "descricao": "Lista de serviços incompleta ou ausente" }
-      ]
-    },
-    {
-      "id": "engajamento",
-      "nome": "Perguntas e Respostas",
-      "emoji": "💬",
-      "score": 15,
-      "classificacao": "ruim",
-      "diagnostico": "Diagnóstico específico sobre perguntas e respostas.",
-      "tem_problema": true,
-      "criterios": [
-        { "nome": "Perguntas frequentes cadastradas", "status": "fail", "descricao": "Nenhuma FAQ criada pelo proprietário" },
-        { "nome": "Responde perguntas de clientes", "status": "warn", "descricao": "Algumas perguntas de clientes sem resposta" },
-        { "nome": "Perguntas estratégicas criadas", "status": "fail", "descricao": "Criar perguntas e respostas reduz objeções e melhora conversão" }
+        {
+          "nome": "string",
+          "status": "ok|warn|fail",
+          "descricao": "Explicação do que foi encontrado",
+          "acao": "Ação concreta e específica a tomar (obrigatório se warn ou fail, null se ok)"
+        }
       ]
     }
   ],
   "comparativo": null
 }
 
-IMPORTANTE: Adapte TODOS os scores, diagnósticos e critérios para refletir uma análise realista e específica para o negócio analisado. Cada texto deve ser único e personalizado para este negócio. Retorne SOMENTE o JSON.`;
+SEÇÕES obrigatórias (nessa ordem no array): informacoes, fotos, avaliacoes, atividade, categorias, engajamento.
+
+Para "informacoes": avalie nome, categoria principal (está correta para o segmento?), categorias secundárias faltando, descrição (usa os 750 caracteres? tem palavras-chave?), telefone, site, endereço, horário, verificação.
+Para "fotos": quantidade, capa, perfil, ambiente, equipe, recência (últimos 90 dias), geolocalização.
+Para "avaliacoes": quantidade total, nota média, taxa de resposta do proprietário a positivas e negativas, frequência de novas avaliações.
+Para "atividade": frequência de posts, qualidade visual, uso de CTAs, datas dos últimos posts.
+Para "categorias": categoria principal correta, secundárias faltando (sugira quais), palavras-chave na descrição, atributos, serviços ou produtos cadastrados.
+Para "engajamento": FAQs criadas pelo proprietário, respostas a perguntas de clientes, perguntas estratégicas cadastradas.
+
+Plano de ação: gere de 5 a 8 itens priorizados, do mais crítico ao menos urgente.
+
+Retorne SOMENTE o JSON.`;
 }
 
 async function callAPI(prompt) {
@@ -493,11 +1566,12 @@ async function callAPI(prompt) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ prompt })
   });
-  if (!response.ok) throw new Error('Erro na API: ' + response.status);
-  const data = await response.json();
 
-  // Tratamento robusto da resposta
+  if (!response.ok) throw new Error('Erro na API: ' + response.status);
+
+  const data = await response.json();
   let text = '';
+
   if (data.content && Array.isArray(data.content)) {
     text = data.content.map(b => b.text || '').join('');
   } else if (data.content && typeof data.content === 'string') {
@@ -505,56 +1579,110 @@ async function callAPI(prompt) {
   } else if (typeof data === 'string') {
     text = data;
   } else {
-    throw new Error('Formato de resposta inesperado: ' + JSON.stringify(data).substring(0, 200));
+    throw new Error('Resposta inesperada da API.');
   }
 
   const clean = text.replace(/```json|```/g, '').trim();
   return JSON.parse(clean);
 }
 
+function getScoreClass(score) {
+  if (score < 40) return 'score-ruim';
+  if (score < 60) return 'score-regular';
+  if (score < 80) return 'score-bom';
+  return 'score-otimo';
+}
+
+function getClassificacao(score) {
+  if (score < 40) return 'ruim';
+  if (score < 60) return 'regular';
+  if (score < 80) return 'bom';
+  return 'otimo';
+}
+
 function renderReport(data, url) {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('report').style.display = 'block';
 
-  const circumference = 439.8;
+  const circumference = 408;
   const offset = circumference - (data.score_geral / 100) * circumference;
   const scoreClass = getScoreClass(data.score_geral);
   const circleClass = 'fill-' + data.classificacao;
 
   const badgeLabel = {
     ruim: '🔴 Perfil Crítico',
-    regular: '🟡 Precisa Melhorar',
+    regular: '🟡 Requer Atenção',
     bom: '🟢 Bom Desempenho',
     otimo: '🔵 Perfil Excelente'
-  }[data.classificacao] || '🟡 Precisa Melhorar';
+  }[data.classificacao] || '🟡 Requer Atenção';
 
   const secoes = [...data.secoes].sort((a, b) => a.score - b.score);
+
+  const breakdownHtml = data.secoes.map(s => `
+    <div class="breakdown-item">
+      <div class="breakdown-item-label">${s.emoji} ${s.nome}</div>
+      <div class="breakdown-bar-wrap">
+        <div class="breakdown-bar-fill fill-${s.classificacao}" data-width="${s.score}" style="width:0%"></div>
+      </div>
+      <div class="breakdown-item-score ${getScoreClass(s.score)}">${s.score}/100</div>
+    </div>`).join('');
+
+  const planoHtml = (data.plano_acao || []).map(item => `
+    <div class="action-item">
+      <span class="action-item-priority ${item.prioridade}">${item.prioridade}</span>
+      <span class="action-item-text">${item.acao}</span>
+      <span class="action-item-section">${item.secao}</span>
+    </div>`).join('');
 
   document.getElementById('report').innerHTML = `
     <button class="nova-btn" onclick="novaAnalise()">← Nova análise</button>
 
-    <div class="score-hero">
-      <div class="score-circle-wrap">
-        <svg class="score-circle-svg" viewBox="0 0 160 160">
-          <circle class="score-circle-bg" cx="80" cy="80" r="70"/>
-          <circle class="score-circle-fill ${circleClass}" cx="80" cy="80" r="70" id="score-fill" style="stroke-dashoffset:${circumference}"/>
-        </svg>
-        <div class="score-number">
-          <div class="score-value ${scoreClass}" id="score-num">0</div>
-          <div class="score-max">de 100</div>
+    <div class="report-header" id="report-header">
+      <div class="report-header-top">
+        <span class="report-header-top-label">Relatório de Diagnóstico &middot; Google Meu Negócio</span>
+        <div class="report-header-top-right">
+          <span class="report-meta">Gerado em <strong>${data.data_analise || new Date().toLocaleDateString('pt-BR')}</strong></span>
+          <span class="report-meta">por <strong>${AGENCIA}</strong></span>
         </div>
       </div>
-      <div class="score-info">
-        <div class="score-badge ${data.classificacao}">${badgeLabel}</div>
-        <h2>${data.nome_negocio}</h2>
-        <p>${data.diagnostico_geral}</p>
-        <div class="pdf-actions">
-          <button class="pdf-btn pdf-btn-full" onclick="alert('PDF completo: em breve')">📄 PDF Interno</button>
-          <button class="pdf-btn pdf-btn-prospect" onclick="alert('PDF para prospecção: em breve')">📤 PDF para Cliente</button>
+      <div class="report-body">
+        <div class="score-circle-wrap">
+          <svg class="score-circle-svg" viewBox="0 0 150 150">
+            <circle class="score-track" cx="75" cy="75" r="65"/>
+            <circle class="score-fill ${circleClass}" cx="75" cy="75" r="65" id="score-fill"
+              style="stroke-dashoffset:${circumference}"/>
+          </svg>
+          <div class="score-number">
+            <div class="score-value ${scoreClass}" id="score-num">0</div>
+            <div class="score-max">de 100</div>
+          </div>
+        </div>
+        <div class="score-info">
+          <div class="score-badge ${data.classificacao}">${badgeLabel}</div>
+          <div class="score-business-name">${data.nome_negocio}</div>
+          <div class="score-segment">${data.segmento}</div>
+          <div class="diagnostico-geral">${data.diagnostico_geral}</div>
+          <div class="pdf-actions">
+            <button class="pdf-btn pdf-btn-full" onclick="gerarPDF(false)">📄 PDF Interno (completo)</button>
+            <button class="pdf-btn pdf-btn-prospect" onclick="gerarPDF(true)">📤 PDF para Prospecção</button>
+          </div>
         </div>
       </div>
     </div>
 
+    <div class="score-breakdown">
+      <div class="breakdown-title">Score por seção</div>
+      <div class="breakdown-grid">${breakdownHtml}</div>
+    </div>
+
+    ${planoHtml ? `
+    <div class="action-plan">
+      <div class="action-plan-title">Plano de Ação Prioritário</div>
+      <div class="action-plan-sub">Ordenado do mais crítico ao menos urgente para maximizar o ranqueamento local.</div>
+      <div class="action-items">${planoHtml}</div>
+    </div>` : ''}
+
+    <div class="sections-label">Diagnóstico detalhado por seção</div>
     <div class="sections-grid">${secoes.map(renderSection).join('')}</div>
 
     ${data.comparativo ? renderComparativo(data.comparativo, data) : ''}
@@ -562,32 +1690,48 @@ function renderReport(data, url) {
     <div class="agency-footer">
       <div class="agency-info">
         <div class="agency-name">${AGENCIA}</div>
-        <div class="agency-tagline">${AGENCIA_TAGLINE}</div>
+        <div class="agency-tagline">${AGENCIA_TAGLINE} &middot; ${AGENCIA_SITE}</div>
       </div>
-      <a href="https://wa.me/${WHATSAPP}?text=Olá! Vi o diagnóstico do meu perfil no Google e quero saber como melhorá-lo." class="agency-cta" target="_blank">💬 Falar no WhatsApp</a>
+      <a href="https://wa.me/${WHATSAPP}?text=Olá! Analisei o meu perfil no Google com o PerfilPro e gostaria de conversar sobre como melhorar o ranqueamento." class="agency-cta" target="_blank">
+        💬 Falar com um especialista
+      </a>
     </div>
   `;
 
   setTimeout(() => {
     document.getElementById('score-fill').style.strokeDashoffset = offset;
-    animateNumber('score-num', 0, data.score_geral, 1500);
-    document.querySelectorAll('.section-score-fill').forEach(el => { el.style.width = el.dataset.width + '%'; });
-  }, 100);
+    animateNumber('score-num', 0, data.score_geral, 1600);
+    document.querySelectorAll('.section-score-fill, .breakdown-bar-fill').forEach(el => {
+      el.style.width = el.dataset.width + '%';
+    });
+  }, 120);
 
   setTimeout(() => {
     const first = document.querySelector('.section-card');
     if (first) first.classList.add('open');
-  }, 600);
+  }, 700);
 }
 
 function renderSection(s) {
   const scoreClass = getScoreClass(s.score);
+
+  const countOk   = s.criterios.filter(c => c.status === 'ok').length;
+  const countWarn = s.criterios.filter(c => c.status === 'warn').length;
+  const countFail = s.criterios.filter(c => c.status === 'fail').length;
+
+  const subtitle = `${countOk} ok &middot; ${countWarn} atenção &middot; ${countFail} crítico`;
+
   const criteriosHtml = s.criterios.map(c => `
     <div class="criteria-item">
-      <div class="criteria-status ${c.status}">${c.status === 'ok' ? '✓' : c.status === 'warn' ? '!' : '✗'}</div>
-      <div>
+      <div class="criteria-status-icon ${c.status}">
+        ${c.status === 'ok' ? '✓' : c.status === 'warn' ? '!' : '✗'}
+      </div>
+      <div class="criteria-text">
         <div class="criteria-name">${c.nome}</div>
-        <div class="criteria-desc">${c.descricao}</div>
+        <div class="criteria-desc">${c.descricao}${c.acao ? `<br><strong style="color:var(--neutral-700)">Ação: </strong>${c.acao}` : ''}</div>
+      </div>
+      <div class="criteria-action ${c.status}">
+        ${c.status === 'ok' ? 'OK' : c.status === 'warn' ? 'Atenção' : 'Crítico'}
       </div>
     </div>`).join('');
 
@@ -600,8 +1744,10 @@ function renderSection(s) {
       <div class="blur-cta">
         <div class="blur-cta-icon">🔒</div>
         <h4>Diagnóstico completo disponível</h4>
-        <p>Veja todos os problemas e receba um plano de ação personalizado para melhorar o ranqueamento deste perfil.</p>
-        <a href="https://wa.me/${WHATSAPP}?text=Olá! Quero ver o diagnóstico completo do meu perfil no Google." class="whatsapp-btn" target="_blank">💬 Ver diagnóstico completo</a>
+        <p>Receba a análise detalhada desta seção com o plano de ação personalizado para melhorar o ranqueamento deste perfil.</p>
+        <a href="https://wa.me/${WHATSAPP}?text=Olá! Quero receber o diagnóstico completo do perfil no Google." class="whatsapp-btn" target="_blank">
+          💬 Quero o diagnóstico completo
+        </a>
       </div>
     </div>` : `
     <div class="section-diagnosis">${s.diagnostico}</div>
@@ -613,7 +1759,7 @@ function renderSection(s) {
         <div class="section-icon icon-${s.classificacao}">${s.emoji}</div>
         <div class="section-title-wrap">
           <div class="section-title">${s.nome}</div>
-          <div class="section-subtitle">${s.criterios.length} critérios avaliados</div>
+          <div class="section-subtitle">${subtitle}</div>
         </div>
         <div class="section-score-wrap">
           <div class="section-score-bar">
@@ -641,20 +1787,21 @@ function renderComparativo(comp, data) {
         <div class="compare-col yours">
           <div class="compare-col-label">Seu perfil</div>
           <div class="compare-col-name">${data.nome_negocio}</div>
-          <div class="compare-col-score">${data.score_geral}</div>
+          <div class="compare-col-score ${getScoreClass(data.score_geral)}">${data.score_geral}</div>
         </div>
         <div class="compare-col theirs">
           <div class="compare-col-label">Concorrente</div>
           <div class="compare-col-name">${comp.nome_concorrente}</div>
-          <div class="compare-col-score">${comp.score_concorrente}</div>
+          <div class="compare-col-score ${getScoreClass(comp.score_concorrente)}">${comp.score_concorrente}</div>
         </div>
       </div>
-      <div style="font-weight:600;font-size:15px;color:#111827;margin-bottom:12px">O que o concorrente faz melhor que você:</div>
+      <div style="font-weight:600;font-size:14px;color:var(--neutral-700);margin-bottom:10px">Onde o concorrente está à frente:</div>
       <div class="gap-list">${gapsHtml}</div>
     </div>`;
 }
 
 function novaAnalise() {
+  dadosRelatorio = null;
   document.getElementById('report').style.display = 'none';
   document.getElementById('report').innerHTML = '';
   document.getElementById('search-card').style.display = 'block';
@@ -664,13 +1811,6 @@ function novaAnalise() {
   document.getElementById('compare-toggle').checked = false;
   document.getElementById('competitor-wrap').classList.remove('show');
   document.getElementById('gmb-url').focus();
-}
-
-function getScoreClass(score) {
-  if (score < 40) return 'score-ruim';
-  if (score < 60) return 'score-regular';
-  if (score < 80) return 'score-bom';
-  return 'score-otimo';
 }
 
 function animateNumber(id, from, to, duration) {
@@ -684,6 +1824,383 @@ function animateNumber(id, from, to, duration) {
     if (p < 1) requestAnimationFrame(update);
   };
   requestAnimationFrame(update);
+}
+
+/* ========== PDF ========== */
+async function gerarPDF(paraCliente) {
+  if (!dadosRelatorio) { alert('Nenhum relatório disponível.'); return; }
+
+  const btn = paraCliente ?
+    document.querySelector('.pdf-btn-prospect') :
+    document.querySelector('.pdf-btn-full');
+
+  const textoOriginal = btn.innerHTML;
+  btn.innerHTML = '⏳ Gerando PDF...';
+  btn.disabled = true;
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const data = dadosRelatorio;
+    const W = 210;
+    const MARGIN = 18;
+    const COL = W - MARGIN * 2;
+    let y = 0;
+
+    const cores = {
+      ruim:    [220, 38,  38],
+      regular: [217, 119,  6],
+      bom:     [ 13, 159, 110],
+      otimo:   [ 26,  86, 219]
+    };
+
+    const corScore = cores[data.classificacao] || [26, 86, 219];
+
+    function newPage() {
+      doc.addPage();
+      y = 14;
+    }
+
+    function checkY(needed) {
+      if (y + needed > 270) newPage();
+    }
+
+    // --- CAPA ---
+    // Fundo escuro no topo
+    doc.setFillColor(17, 24, 39);
+    doc.rect(0, 0, W, 72, 'F');
+
+    // Marca de cor da classificação
+    doc.setFillColor(...corScore);
+    doc.rect(0, 68, W, 4, 'F');
+
+    // Logo / marca
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.text('PerfilPro', MARGIN, 22);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(156, 163, 175);
+    doc.text('Diagnóstico de Google Meu Negócio', MARGIN, 29);
+
+    // Score grande à direita
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(38);
+    doc.setTextColor(...corScore);
+    doc.text(String(data.score_geral), W - MARGIN - 10, 36, { align: 'right' });
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(156, 163, 175);
+    doc.text('/ 100', W - MARGIN - 10, 43, { align: 'right' });
+
+    // Nome do negócio
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(255, 255, 255);
+    doc.text(data.nome_negocio, MARGIN, 48);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(156, 163, 175);
+    doc.text(data.segmento, MARGIN, 55);
+
+    // Badge de classificação
+    const badgeTextos = { ruim: 'Perfil Crítico', regular: 'Requer Atenção', bom: 'Bom Desempenho', otimo: 'Perfil Excelente' };
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.setTextColor(...corScore);
+    doc.text(badgeTextos[data.classificacao] || '', W - MARGIN - 10, 55, { align: 'right' });
+
+    y = 84;
+
+    // Cabeçalho do relatório com nome do negócio
+    doc.setFillColor(248, 249, 252);
+    doc.roundedRect(MARGIN, y, COL, 22, 3, 3, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(30, 35, 53);
+    doc.text('Relatório elaborado por', MARGIN + 8, y + 8);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(74, 81, 104);
+    doc.text(`${AGENCIA} · ${AGENCIA_SITE}`, MARGIN + 8, y + 15);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(74, 81, 104);
+    doc.text('Data da análise:', W - MARGIN - 60, y + 8);
+    doc.setFont('helvetica', 'normal');
+    doc.text(data.data_analise || new Date().toLocaleDateString('pt-BR'), W - MARGIN - 60, y + 15);
+
+    y += 30;
+
+    // --- DIAGNÓSTICO GERAL ---
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.setTextColor(17, 24, 39);
+    doc.text('Diagnóstico Geral', MARGIN, y);
+    y += 6;
+
+    doc.setFillColor(...corScore);
+    doc.rect(MARGIN, y, 30, 1.5, 'F');
+    y += 8;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9.5);
+    doc.setTextColor(74, 81, 104);
+    const diagnosticoLines = doc.splitTextToSize(data.diagnostico_geral, COL - 4);
+    checkY(diagnosticoLines.length * 5 + 8);
+    doc.setFillColor(241, 243, 247);
+    doc.roundedRect(MARGIN, y, COL, diagnosticoLines.length * 5 + 8, 3, 3, 'F');
+    doc.setFillColor(...corScore);
+    doc.rect(MARGIN, y, 3, diagnosticoLines.length * 5 + 8, 'F');
+    doc.text(diagnosticoLines, MARGIN + 8, y + 6);
+    y += diagnosticoLines.length * 5 + 14;
+
+    // --- SCORE POR SEÇÃO ---
+    checkY(14);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.setTextColor(17, 24, 39);
+    doc.text('Score por Seção', MARGIN, y);
+    y += 6;
+    doc.setFillColor(...corScore);
+    doc.rect(MARGIN, y, 30, 1.5, 'F');
+    y += 10;
+
+    data.secoes.forEach(s => {
+      checkY(12);
+      const corS = cores[s.classificacao] || [26, 86, 219];
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(30, 35, 53);
+      doc.text(`${s.emoji}  ${s.nome}`, MARGIN, y);
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.setTextColor(...corS);
+      doc.text(`${s.score}/100`, W - MARGIN - 10, y, { align: 'right' });
+
+      // Barra de progresso
+      doc.setFillColor(226, 229, 237);
+      doc.roundedRect(MARGIN, y + 2, COL - 20, 4, 2, 2, 'F');
+      doc.setFillColor(...corS);
+      const barW = ((COL - 20) * s.score) / 100;
+      if (barW > 0) doc.roundedRect(MARGIN, y + 2, barW, 4, 2, 2, 'F');
+
+      y += 12;
+    });
+
+    y += 6;
+
+    // --- PLANO DE AÇÃO ---
+    if (data.plano_acao && data.plano_acao.length > 0) {
+      checkY(20);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(13);
+      doc.setTextColor(17, 24, 39);
+      doc.text('Plano de Ação Prioritário', MARGIN, y);
+      y += 6;
+      doc.setFillColor(...corScore);
+      doc.rect(MARGIN, y, 30, 1.5, 'F');
+      y += 10;
+
+      const prioridadeCores = {
+        alta:  [220, 38,  38],
+        media: [217, 119,  6],
+        baixa: [ 13, 159, 110]
+      };
+
+      data.plano_acao.forEach((item, idx) => {
+        const corP = prioridadeCores[item.prioridade] || [100, 100, 100];
+        const linhas = doc.splitTextToSize(item.acao, COL - 38);
+        const alturaItem = linhas.length * 4.5 + 10;
+        checkY(alturaItem);
+
+        doc.setFillColor(248, 249, 252);
+        doc.roundedRect(MARGIN, y, COL, alturaItem, 2, 2, 'F');
+
+        // Número
+        doc.setFillColor(226, 229, 237);
+        doc.circle(MARGIN + 6, y + alturaItem / 2, 5, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.setTextColor(74, 81, 104);
+        doc.text(String(idx + 1), MARGIN + 6, y + alturaItem / 2 + 2.5, { align: 'center' });
+
+        // Badge prioridade
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7);
+        doc.setTextColor(...corP);
+        doc.text(item.prioridade.toUpperCase(), MARGIN + 15, y + 7);
+
+        // Seção
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        doc.setTextColor(156, 163, 175);
+        doc.text(item.secao, W - MARGIN - 2, y + 7, { align: 'right' });
+
+        // Texto
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(30, 35, 53);
+        doc.text(linhas, MARGIN + 15, y + 13);
+
+        y += alturaItem + 4;
+      });
+
+      y += 4;
+    }
+
+    // --- SEÇÕES DETALHADAS ---
+    data.secoes.forEach(s => {
+      const corS = cores[s.classificacao] || [26, 86, 219];
+
+      checkY(30);
+      // Cabeçalho da seção
+      doc.setFillColor(17, 24, 39);
+      doc.roundedRect(MARGIN, y, COL, 14, 3, 3, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(255, 255, 255);
+      doc.text(`${s.emoji}  ${s.nome}`, MARGIN + 6, y + 9);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(...corS);
+      doc.text(`${s.score}/100`, W - MARGIN - 4, y + 9, { align: 'right' });
+      y += 18;
+
+      // Diagnóstico da seção
+      const diagLines = doc.splitTextToSize(s.diagnostico, COL - 8);
+      checkY(diagLines.length * 4.5 + 10);
+      doc.setFillColor(241, 243, 247);
+      doc.roundedRect(MARGIN, y, COL, diagLines.length * 4.5 + 8, 2, 2, 'F');
+      doc.setFillColor(...corS);
+      doc.rect(MARGIN, y, 3, diagLines.length * 4.5 + 8, 'F');
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8.5);
+      doc.setTextColor(74, 81, 104);
+      doc.text(diagLines, MARGIN + 7, y + 6);
+      y += diagLines.length * 4.5 + 14;
+
+      const criteriosParaRender = (paraCliente && s.tem_problema)
+        ? s.criterios.filter(c => c.status !== 'fail')
+        : s.criterios;
+
+      criteriosParaRender.forEach(c => {
+        const statusCor = c.status === 'ok' ? [13, 159, 110] : c.status === 'warn' ? [217, 119, 6] : [220, 38, 38];
+        const statusIcon = c.status === 'ok' ? '✓' : c.status === 'warn' ? '!' : '✗';
+
+        const acaoText = (c.acao && c.status !== 'ok') ? `Ação: ${c.acao}` : '';
+        const todasLinhas = doc.splitTextToSize(`${c.nome}  ${c.descricao}`, COL - 22);
+        const acaoLinhas = acaoText ? doc.splitTextToSize(acaoText, COL - 22) : [];
+        const alturaC = (todasLinhas.length + acaoLinhas.length) * 4.2 + 10;
+        checkY(alturaC);
+
+        doc.setFillColor(248, 249, 252);
+        doc.roundedRect(MARGIN, y, COL, alturaC, 2, 2, 'F');
+
+        // Ícone de status
+        doc.setFillColor(...statusCor);
+        doc.circle(MARGIN + 5, y + 6, 4, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7);
+        doc.setTextColor(255, 255, 255);
+        doc.text(statusIcon, MARGIN + 5, y + 8.2, { align: 'center' });
+
+        // Nome
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8.5);
+        doc.setTextColor(30, 35, 53);
+        doc.text(c.nome, MARGIN + 13, y + 6.5);
+
+        // Descrição
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(107, 115, 144);
+        const descLinhas = doc.splitTextToSize(c.descricao, COL - 16);
+        doc.text(descLinhas, MARGIN + 13, y + 11);
+        let yLocal = y + 11 + descLinhas.length * 4;
+
+        // Ação
+        if (acaoLinhas.length > 0) {
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(7.5);
+          doc.setTextColor(...statusCor);
+          doc.text('Ação:', MARGIN + 13, yLocal + 2);
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(30, 35, 53);
+          const acaoSemLabel = doc.splitTextToSize(c.acao, COL - 32);
+          doc.text(acaoSemLabel, MARGIN + 25, yLocal + 2);
+        }
+
+        y += alturaC + 3;
+      });
+
+      if (paraCliente && s.tem_problema) {
+        checkY(20);
+        doc.setFillColor(...corScore, 0.1);
+        doc.setFillColor(232, 240, 254);
+        doc.roundedRect(MARGIN, y, COL, 18, 3, 3, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8.5);
+        doc.setTextColor(26, 86, 219);
+        doc.text('🔒  Diagnóstico completo disponível via Agência Plugue', MARGIN + 8, y + 7);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(74, 81, 104);
+        doc.text('Entre em contato para receber o plano de ação detalhado desta seção.', MARGIN + 8, y + 13);
+        y += 22;
+      }
+
+      y += 6;
+    });
+
+    // --- RODAPÉ FINAL ---
+    checkY(30);
+    doc.setFillColor(17, 24, 39);
+    doc.roundedRect(MARGIN, y, COL, 28, 4, 4, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(255, 255, 255);
+    doc.text(AGENCIA, MARGIN + 10, y + 10);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(156, 163, 175);
+    doc.text(AGENCIA_TAGLINE, MARGIN + 10, y + 17);
+    doc.setTextColor(255, 255, 255);
+    doc.text('wa.me/' + WHATSAPP, W - MARGIN - 10, y + 10, { align: 'right' });
+    doc.setTextColor(156, 163, 175);
+    doc.text(AGENCIA_SITE, W - MARGIN - 10, y + 17, { align: 'right' });
+
+    // Numerar páginas
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(156, 163, 175);
+      doc.text(`Página ${i} de ${totalPages}`, W - MARGIN, 291, { align: 'right' });
+      doc.text(`${AGENCIA} · PerfilPro`, MARGIN, 291);
+    }
+
+    const nomeArquivo = paraCliente
+      ? `PerfilPro_Prospecção_${data.nome_negocio.replace(/\s+/g, '_')}.pdf`
+      : `PerfilPro_Interno_${data.nome_negocio.replace(/\s+/g, '_')}.pdf`;
+
+    doc.save(nomeArquivo);
+
+  } catch (err) {
+    alert('Erro ao gerar o PDF: ' + err.message);
+    console.error(err);
+  } finally {
+    btn.innerHTML = textoOriginal;
+    btn.disabled = false;
+  }
 }
 </script>
 </body>
