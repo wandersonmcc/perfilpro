@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root {
   --brand: #1a56db;
@@ -456,7 +455,6 @@ body{font-family:'Inter',sans-serif;background:#f3f4f6;color:var(--n700);min-hei
   </main>
 </div>
 
-<div id="pdf-template"></div>
 
 <script>
 const SENHA='plugue2024',WHATSAPP='5521990715689',AGENCIA='Agência Plugue';
@@ -551,7 +549,7 @@ ${cmp}
 
 REGRAS CRÍTICAS:
 1. O campo "nome_negocio" deve conter SOMENTE o nome do estabelecimento, sem cidade, bairro ou subtítulo.
-2. O score_geral deve ser calculado com rigor real. Não use valores genéricos como 55 ou 60. Calcule somando: informacoes(peso 25%) + fotos(peso 20%) + avaliacoes(peso 20%) + atividade(peso 15%) + categorias(peso 12%) + engajamento(peso 8%). Perfis reais variam de 15 a 90. Seja honesto.
+2. SCORE CRÍTICO: calcule o score_geral multiplicando o score de cada seção pelo seu peso e somando: informacoes×0.25 + fotos×0.20 + avaliacoes×0.20 + atividade×0.15 + categorias×0.12 + engajamento×0.08. Referência: perfil sem posts e sem fotos = 20 a 35. Perfil básico completo = 45 a 60. Perfil ativo e bem mantido = 70 a 85. NUNCA retorne 55 como padrão, o score deve variar conforme o perfil analisado.
 3. Tom consultivo: conecte cada problema à consequência no negócio. Nunca use traços ou hifens.
 4. Seja específico para o segmento identificado na URL.
 
@@ -782,7 +780,7 @@ function animNum(id,from,to,dur){
   requestAnimationFrame(up);
 }
 
-/* ══════════ PDF ══════════ */
+/* ══════════ PDF JSPDF PURO ══════════ */
 async function gerarPDF(paraCliente){
   if(!dadosRelatorio){alert('Nenhum relatório disponível.');return;}
   const btnId=paraCliente?'btn-prospecto':'btn-interno';
@@ -791,216 +789,291 @@ async function gerarPDF(paraCliente){
   btn.innerHTML='Gerando PDF...';btn.disabled=true;
   try{
     const data=dadosRelatorio;
-    const cor=COR[data.classificacao]||'#1a56db';
-    const corBg=COR_BG[data.classificacao]||'#eff4ff';
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const W=210,H=297,M=14,COL=W-M*2;
+    let y=0,pgNum=1;
+
+    const CRGB={ruim:[220,38,38],regular:[217,119,6],bom:[5,150,105],otimo:[26,86,219]};
+    const SRGB={ok:[5,150,105],warn:[217,119,6],fail:[220,38,38]};
+    const corArr=CRGB[data.classificacao]||[26,86,219];
     const hoje=data.data_analise||new Date().toLocaleDateString('pt-BR');
     const tipoDoc=paraCliente?'Versão para Prospecção':'Versão Interna Completa';
-    const {jsPDF}=window.jspdf;
-    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-    const tmpl=document.getElementById('pdf-template');
 
-    async function renderPage(html){
-      tmpl.innerHTML=html;tmpl.style.display='block';
-      // Garante que as fontes estão carregadas antes de renderizar
-      await document.fonts.ready;
-      await new Promise(r=>setTimeout(r,350));
-      const canvas=await html2canvas(tmpl,{scale:2,useCORS:true,logging:false,backgroundColor:'#ffffff',width:794,windowWidth:794,allowTaint:false,foreignObjectRendering:false});
-      tmpl.style.display='none';return canvas;
+    // ── Helpers ──
+    function sf(style,size,r,g,b){
+      doc.setFont('helvetica',style);
+      doc.setFontSize(size);
+      doc.setTextColor(r!=null?r:30,g!=null?g:30,b!=null?b:30);
+    }
+    function fr(x,yy,w,h,r,g,b){
+      doc.setFillColor(r,g,b);doc.rect(x,yy,w,h,'F');
+    }
+    function rr(x,yy,w,h,rad,r,g,b){
+      doc.setFillColor(r,g,b);doc.roundedRect(x,yy,w,h,rad,rad,'F');
+    }
+    function chk(need){if(y+need>H-16)np();}
+
+    function footer(){
+      fr(0,H-11,W,11,17,24,39);
+      sf('bold',7.5,255,255,255);doc.text(AGENCIA,M,H-5.5);
+      sf('normal',6.5,75,85,99);doc.text(AGENCIA_TAGLINE,M,H-1.8);
+      sf('bold',7.5,255,255,255);doc.text(WA_DISPLAY,W-M,H-5.5,{align:'right'});
+      sf('normal',6.5,75,85,99);doc.text('Pág. '+pgNum+' | '+AGENCIA_SITE,W-M,H-1.8,{align:'right'});
     }
 
-    let isFirst=true;
-    function addPage(canvas){
-      const img=canvas.toDataURL('image/jpeg',0.95);
-      // A4 em mm: 210x297
-      if(!isFirst)pdf.addPage();
-      pdf.addImage(img,'JPEG',0,0,210,297,'','FAST');
-      isFirst=false;
+    function np(){
+      footer();doc.addPage();pgNum++;
+      fr(0,0,W,2,...corArr);
+      y=8;
     }
 
-    function critHtml(criterios){
-      return criterios.map(c=>{
-        const cc=c.status==='ok'?'#059669':c.status==='warn'?'#d97706':'#dc2626';
-        const ccBg=c.status==='ok'?'#ecfdf5':c.status==='warn'?'#fffbeb':'#fef2f2';
-        const ic=c.status==='ok'?'V':c.status==='warn'?'!':'X';
-        const st=c.status==='ok'?'OK':c.status==='warn'?'ATENÇÃO':'CRÍTICO';
-        return `<div class="pdf-crit">
-          <div class="pdf-crit-badge" style="background:${ccBg};color:${cc}">${ic}</div>
-          <div class="pdf-crit-body">
-            <div class="pdf-crit-name">${c.nome}</div>
-            <div class="pdf-crit-desc">${c.descricao}</div>
-            ${c.acao&&c.status!=='ok'?`<div class="pdf-crit-acao"><strong style="color:${cc}">Ação:</strong> ${c.acao}</div>`:''}
-          </div>
-          <div class="pdf-crit-status" style="color:${cc}">${st}</div>
-        </div>`;
-      }).join('');
+    function wt(txt,x,yy,mw,lh,style,size,r,g,b){
+      if(!txt)return yy;
+      sf(style||'normal',size||9,r!=null?r:75,g!=null?g:85,b!=null?b:99);
+      const ls=doc.splitTextToSize(txt,mw);
+      doc.text(ls,x,yy);
+      return yy+ls.length*lh;
     }
 
-    function hdrHtml(){
-      return `
-        <div class="pdf-accent" style="background:${cor}"></div>
-        <div class="pdf-hdr">
-          <div class="pdf-hdr-top">
-            <div>
-              <div class="pdf-hdr-brand">PerfilPro · Diagnóstico de Visibilidade Local</div>
-              <div class="pdf-hdr-biz">${data.nome_negocio}</div>
-              <div class="pdf-hdr-seg">${data.segmento}</div>
-              <div class="pdf-hdr-badge" style="background:${corBg};color:${cor}">${BADGE[data.classificacao]||''}</div>
-            </div>
-            <div class="pdf-hdr-score">
-              <div class="pdf-hdr-score-num" style="color:${cor}">${data.score_geral}<span style="font-size:22px;font-weight:600;opacity:0.45">/100</span></div>
-            </div>
-          </div>
-          <div class="pdf-hdr-meta">
-            <div class="pdf-hdr-meta-item"><div class="pdf-hdr-meta-lbl">Elaborado por</div><div class="pdf-hdr-meta-val">${AGENCIA}</div></div>
-            <div class="pdf-hdr-meta-item"><div class="pdf-hdr-meta-lbl">Data da análise</div><div class="pdf-hdr-meta-val">${hoje}</div></div>
-            <div class="pdf-hdr-meta-item"><div class="pdf-hdr-meta-lbl">Tipo</div><div class="pdf-hdr-meta-val">${tipoDoc}</div></div>
-            <div class="pdf-hdr-meta-item"><div class="pdf-hdr-meta-lbl">Contato</div><div class="pdf-hdr-meta-val">${WA_DISPLAY}</div></div>
-          </div>
-        </div>`;
+    // ── Header ──
+    function drawHeader(){
+      fr(0,0,W,50,17,24,39);
+      fr(0,49,W,2,...corArr);
+      // Brand
+      sf('bold',7,75,85,99);
+      doc.text('PERFILPRO  ·  DIAGNÓSTICO DE VISIBILIDADE LOCAL',M,7);
+      // Score
+      sf('bold',34,...corArr);
+      doc.text(String(data.score_geral),W-M,31,{align:'right'});
+      sf('normal',8,107,114,128);
+      doc.text('/100',W-M-0.5,38.5,{align:'right'});
+      // Nome
+      sf('bold',17,255,255,255);
+      const nl=doc.splitTextToSize(data.nome_negocio,COL-42);
+      doc.text(nl,M,17);
+      const baseY=nl.length>1?28:24;
+      sf('normal',8.5,107,114,128);doc.text(data.segmento,M,baseY);
+      // Badge
+      rr(M,baseY+3,36,5,1,...corArr);
+      sf('bold',6.5,255,255,255);
+      doc.text((BADGE[data.classificacao]||'').toUpperCase(),M+18,baseY+6.8,{align:'center'});
+      // Meta bar
+      fr(0,51,W,14,30,41,59);
+      const meta=[['ELABORADO POR',AGENCIA],['DATA DA ANÁLISE',hoje],['TIPO',tipoDoc],['CONTATO',WA_DISPLAY]];
+      meta.forEach(([l,v],i)=>{
+        const mx=M+i*(COL/4);
+        sf('bold',5.5,71,85,105);doc.text(l,mx,57);
+        sf('normal',8,148,163,184);doc.text(v,mx,63);
+      });
+      y=70;
     }
 
-    function ftrHtml(pg){
-      return `<div class="pdf-ftr">
-        <div><div class="pdf-ftr-brand">${AGENCIA}</div><div class="pdf-ftr-tag">${AGENCIA_TAGLINE}</div></div>
-        <div class="pdf-ftr-right"><div class="pdf-ftr-phone">${WA_DISPLAY}</div><div class="pdf-ftr-site">${AGENCIA_SITE}</div><div class="pdf-ftr-pg">Página ${pg}</div></div>
-      </div>`;
+    function secLabel(t){
+      chk(9);
+      sf('bold',6.5,156,163,175);doc.text(t.toUpperCase(),M,y);
+      doc.setDrawColor(229,231,235);doc.setLineWidth(0.25);
+      doc.line(M,y+1.5,W-M,y+1.5);
+      y+=7;
     }
 
-    // PG 1: header + diagnóstico + score + plano
-    const scoreRowsHtml=data.secoes.map(s=>{
-      const c=COR[s.classificacao]||'#1a56db';
-      return `<div class="pdf-score-row">
-        <div class="pdf-score-row-lbl">${s.nome}</div>
-        <div class="pdf-score-row-track"><div class="pdf-score-row-bar" style="width:${s.score}%;background:${c}"></div></div>
-        <div class="pdf-score-row-num" style="color:${c}">${s.score}</div>
-      </div>`;
-    }).join('');
+    function diagBlock(txt,cr){
+      const ls=doc.splitTextToSize(txt,COL-8);
+      const bh=ls.length*5+8;chk(bh+4);
+      rr(M,y,COL,bh,2,249,250,251);
+      fr(M,y,3,bh,...(cr||corArr));
+      sf('normal',9,75,85,99);doc.text(ls,M+7,y+6);
+      y+=bh+6;
+    }
 
-    const planHtml=(data.plano_acao||[]).map((item,i)=>{
-      const cp=item.prioridade==='alta'?'#dc2626':item.prioridade==='media'?'#d97706':'#059669';
-      const cpBg=item.prioridade==='alta'?'#fef2f2':item.prioridade==='media'?'#fffbeb':'#ecfdf5';
-      return `<div class="pdf-plan-item">
-        <div class="pdf-plan-num" style="background:${cpBg};color:${cp}">${String(i+1).padStart(2,'0')}</div>
-        <div class="pdf-plan-body"><div class="pdf-plan-prio" style="color:${cp}">${item.prioridade.toUpperCase()}</div><div class="pdf-plan-text">${item.acao}</div></div>
-        <div class="pdf-plan-tag">${item.secao}</div>
-      </div>`;
-    }).join('');
+    function scoreBar(nome,score,cls){
+      chk(10);
+      const cr=CRGB[cls]||[26,86,219];
+      const bw=Math.max(0,(COL-22)*score/100);
+      sf('normal',8.5,55,65,81);doc.text(nome,M,y);
+      sf('bold',8.5,...cr);doc.text(score+'/100',W-M,y,{align:'right'});
+      rr(M,y+2,COL-22,4,2,229,231,235);
+      if(bw>0)rr(M,y+2,bw,4,2,...cr);
+      y+=11;
+    }
 
-    const pg1=`<div class="pdf-page">
-      ${hdrHtml()}
-      <div class="pdf-body">
-        <div class="pdf-sec-lbl"><span>Diagnóstico Geral</span>${tipoDoc}</div>
-        <div class="pdf-diag" style="border-color:${cor}"><div class="pdf-diag-text">${data.diagnostico_geral}</div></div>
-        <div class="pdf-sec-lbl"><span>Score por Seção</span></div>
-        <div class="pdf-score-big-wrap">
-          <div class="pdf-score-big"><div class="pdf-score-big-num" style="color:${cor}">${data.score_geral}<span style="font-size:20px;font-weight:600;opacity:0.45">/100</span></div><div class="pdf-score-big-lbl">pontuação geral</div></div>
-          <div class="pdf-score-bars">${scoreRowsHtml}</div>
-        </div>
-        ${planHtml?`<div class="pdf-sec-lbl"><span>Plano de Ação Prioritário</span></div>${planHtml}`:''}
-      </div>
-      ${ftrHtml(1)}
-    </div>`;
-    addPage(await renderPage(pg1));
+    function planoItem(item,i){
+      const pr=item.prioridade==='alta'?[220,38,38]:item.prioridade==='media'?[217,119,6]:[5,150,105];
+      const pb=item.prioridade==='alta'?[254,242,242]:item.prioridade==='media'?[255,251,235]:[236,253,245];
+      const ls=doc.splitTextToSize(item.acao,COL-34);
+      const ih=ls.length*4.5+11;chk(ih+3);
+      rr(M,y,COL,ih,2,249,250,251);
+      doc.setDrawColor(229,231,235);doc.setLineWidth(0.2);
+      doc.roundedRect(M,y,COL,ih,2,2,'S');
+      rr(M+2,y+ih/2-4,8,8,1,...pb);
+      sf('bold',8,...pr);doc.text(String(i+1).padStart(2,'0'),M+6,y+ih/2+1.5,{align:'center'});
+      sf('bold',7,...pr);doc.text(item.prioridade.toUpperCase(),M+13,y+5.5);
+      sf('normal',7,156,163,175);doc.text(item.secao,W-M-2,y+5.5,{align:'right'});
+      sf('normal',8.5,55,65,81);doc.text(ls,M+13,y+10);
+      y+=ih+3;
+    }
 
-    // PGS DE SEÇÕES
+    function secHeader(s){
+      chk(14);
+      const cr=CRGB[s.classificacao]||[26,86,219];
+      fr(M,y,COL,12,30,41,59);
+      fr(M,y,3,12,...cr);
+      sf('bold',9.5,255,255,255);doc.text(s.nome.toUpperCase(),M+7,y+8);
+      sf('bold',10,...cr);doc.text(s.score+'/100',W-M-2,y+8,{align:'right'});
+      y+=14;
+    }
+
+    function criterio(c,showCF){
+      const sr=SRGB[c.status]||[100,100,100];
+      const sb=c.status==='ok'?[236,253,245]:c.status==='warn'?[255,251,235]:[254,242,242];
+      const stl=c.status==='ok'?'OK':c.status==='warn'?'ATENÇÃO':'CRÍTICO';
+      const cfz=(showCF&&c.status!=='ok')?getComoFazer(c.nome):null;
+      const descL=doc.splitTextToSize(c.descricao||'',COL-22);
+      const acaoL=c.acao&&c.status!=='ok'?doc.splitTextToSize('Ação: '+c.acao,COL-22):[];
+      const cfzL=cfz?doc.splitTextToSize(cfz,COL-24):[];
+      const ih=(1+descL.length+acaoL.length)*4.3+(cfzL.length?(cfzL.length*4+9):0)+9;
+      chk(ih+3);
+      rr(M,y,COL,ih,2,249,250,251);
+      // Badge status
+      rr(M+2,y+3,16,5,1,...sb);
+      sf('bold',6,...sr);doc.text(stl,M+10,y+6.8,{align:'center'});
+      // Nome
+      sf('bold',9,30,41,59);doc.text(c.nome,M+21,y+6.8);
+      let yc=y+11;
+      sf('normal',8,107,114,128);doc.text(descL,M+21,yc);yc+=descL.length*4.3;
+      if(acaoL.length){sf('bold',8,...sr);doc.text(acaoL,M+21,yc);yc+=acaoL.length*4.3;}
+      if(cfzL.length){
+        rr(M+21,yc+1,COL-24,cfzL.length*4+5,1,239,246,255);
+        sf('bold',6.5,26,86,219);doc.text('Como fazer:',M+23,yc+5);
+        sf('normal',7.5,55,65,81);doc.text(cfzL,M+23,yc+9);
+        yc+=cfzL.length*4+8;
+      }
+      y+=ih+3;
+    }
+
+    // ── Bloco bloqueado (prospecção) ──
+    // Layout: bloco escuro à esquerda com cadeado + coluna de status à direita
+    function bloqueado(s){
+      const cr=CRGB[s.classificacao]||[26,86,219];
+      const itens=s.criterios;
+      // Altura baseada no número de critérios
+      const colH=Math.max(itens.length*11+18,44);
+      chk(colH+6);
+
+      // ── Coluna direita: status limpo ──
+      const colW=52;const colX=W-M-colW;
+      rr(colX,y,colW,colH,2,248,250,252);
+      doc.setDrawColor(226,232,240);doc.setLineWidth(0.3);
+      doc.roundedRect(colX,y,colW,colH,2,2,'S');
+      // Título da coluna
+      fr(colX,y,colW,8,30,41,59);
+      sf('bold',6,156,163,175);
+      doc.text('PONTOS IDENTIFICADOS',colX+colW/2,y+5.5,{align:'center'});
+      // Lista de itens
+      itens.forEach((c,i)=>{
+        const sr=SRGB[c.status]||[100,100,100];
+        const sb=c.status==='ok'?[236,253,245]:c.status==='warn'?[255,251,235]:[254,242,242];
+        const stl=c.status==='ok'?'OK':c.status==='warn'?'ATENÇÃO':'CRÍTICO';
+        const iy=y+10+i*11;
+        // Badge
+        rr(colX+3,iy,14,5.5,1,...sb);
+        sf('bold',5.5,...sr);doc.text(stl,colX+10,iy+4,{align:'center'});
+        // Nome critério (truncado)
+        const nomeShort=doc.splitTextToSize(c.nome,colW-20);
+        sf('normal',6.5,55,65,81);doc.text(nomeShort[0],colX+19,iy+4);
+      });
+
+      // ── Bloco escuro esquerda ──
+      const bloqW=colX-M-4;
+      rr(M,y,bloqW,colH,2,17,24,39);
+      fr(M,y,3,colH,...cr);
+
+      // Cadeado (texto Unicode)
+      sf('normal',20,255,255,255);
+      doc.text('()',M+bloqW/2,y+colH/2-6,{align:'center'});// placeholder visual
+
+      // Título
+      sf('bold',10,255,255,255);
+      doc.text('Diagnóstico completo disponível',M+bloqW/2,y+colH/2+2,{align:'center'});
+
+      // Descrição
+      sf('normal',8,148,163,184);
+      doc.text('O plano de ação está com a '+AGENCIA,M+bloqW/2,y+colH/2+8.5,{align:'center'});
+
+      // Botão CTA
+      rr(M+bloqW/2-28,y+colH/2+12,56,9,2,22,163,74);
+      sf('bold',8,255,255,255);
+      doc.text(WA_DISPLAY,M+bloqW/2,y+colH/2+17.5,{align:'center'});
+
+      y+=colH+6;
+    }
+
+    // ══════════════
+    // MONTAR DOC
+    // ══════════════
+    fr(0,0,W,2,...corArr);y=8;pgNum=1;
+    drawHeader();
+
+    // Pg 1
+    secLabel('Diagnóstico Geral');
+    diagBlock(data.diagnostico_geral);
+    secLabel('Score por Seção');
+    data.secoes.forEach(s=>scoreBar(s.nome,s.score,s.classificacao));
+    y+=3;
+    if(data.plano_acao&&data.plano_acao.length){
+      secLabel('Plano de Ação Prioritário');
+      data.plano_acao.forEach((item,i)=>planoItem(item,i));
+    }
+
+    // Páginas de seções
     const secoes=[...data.secoes].sort((a,b)=>a.score-b.score);
-    let pgNum=2;
-
     for(const s of secoes){
-      const cs=COR[s.classificacao]||'#1a56db';
-      let corpo='';
+      np();
+      secLabel(s.nome+' — '+s.score+'/100');
+      secHeader(s);
+      y+=2;
+      const diagL=doc.splitTextToSize(s.diagnostico,COL-8);
+      const dh=diagL.length*5+8;chk(dh+4);
+      rr(M,y,COL,dh,2,249,250,251);
+      fr(M,y,3,dh,...(CRGB[s.classificacao]||corArr));
+      sf('normal',9,75,85,99);doc.text(diagL,M+7,y+6);
+      y+=dh+8;
 
       if(paraCliente&&s.tem_problema){
-        // Prospecção: layout dois colunas. Esquerda: blur com cadeado. Direita: lista de status visível
-        const statusListHtml=s.criterios.map(c=>{
-          const cc=c.status==='ok'?'#059669':c.status==='warn'?'#d97706':'#dc2626';
-          const ccBg=c.status==='ok'?'#ecfdf5':c.status==='warn'?'#fffbeb':'#fef2f2';
-          const st=c.status==='ok'?'OK':c.status==='warn'?'ATENÇÃO':'CRÍTICO';
-          return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f3f4f6;">
-            <div style="width:60px;padding:2px 6px;background:${ccBg};color:${cc};font-size:8px;font-weight:800;border-radius:3px;text-align:center;flex-shrink:0;">${st}</div>
-            <div style="font-size:10.5px;color:#374151;font-weight:500;line-height:1.3;">${c.nome}</div>
-          </div>`;
-        }).join('');
-        corpo=`<div style="display:flex;gap:16px;align-items:flex-start;">
-          <div style="flex:1;position:relative;min-height:220px;">
-            <div style="filter:blur(4px);opacity:0.5;user-select:none;pointer-events:none;">
-              ${critHtml(s.criterios)}
-            </div>
-            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:white;border-radius:10px;padding:18px 22px;box-shadow:0 8px 32px rgba(0,0,0,0.15);text-align:center;width:260px;border:1px solid #e5e7eb;">
-              <div style="font-size:22px;margin-bottom:9px;">&#128274;</div>
-              <div style="font-family:'Sora',sans-serif;font-size:12.5px;font-weight:700;color:#111827;margin-bottom:6px;">Diagnóstico completo disponível</div>
-              <div style="font-size:10.5px;color:#6b7280;line-height:1.6;margin-bottom:13px;">O plano de ação detalhado desta seção está disponível com a ${AGENCIA}.</div>
-              <div style="background:#16a34a;color:white;padding:9px 14px;border-radius:7px;font-size:11px;font-weight:700;">${WA_DISPLAY}</div>
-            </div>
-          </div>
-          <div style="width:180px;flex-shrink:0;background:#f9fafb;border-radius:8px;padding:12px;border:1px solid #e5e7eb;">
-            <div style="font-size:8.5px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#9ca3af;margin-bottom:8px;">Pontos identificados</div>
-            ${statusListHtml}
-          </div>
-        </div>`;
-      } else if(!paraCliente&&s.tem_problema){
-        // Interno: mostra critérios + bloco "o que precisa ser feito"
-        const acoes=s.criterios.filter(c=>c.status!=='ok'&&c.acao);
-        const acoesHtml=acoes.map(c=>{
-          const cc=c.status==='warn'?'#d97706':'#dc2626';
-          const ccBg=c.status==='warn'?'#fffbeb':'#fef2f2';
-          const st=c.status==='warn'?'ATENÇÃO':'CRÍTICO';
-          const cfz=getComoFazer(c.nome);const comoFazerHtml=(c.status!=='ok'&&cfz)?`<div style="font-size:10px;color:#4b5563;line-height:1.6;margin-top:5px;padding:6px 10px;background:#eff4ff;border-left:2px solid #1a56db;border-radius:0 4px 4px 0;"><strong style="color:#1240a8">Como fazer:</strong> ${cfz}</div>`:'';
-          return `<div class="pdf-interno-action-item" style="flex-direction:column;gap:6px;">
-            <div style="display:flex;gap:10px;align-items:flex-start;">
-              <div class="pdf-interno-action-prio ${c.status}" style="background:${ccBg};color:${cc}">${st}</div>
-              <div class="pdf-interno-action-text"><strong>${c.nome}:</strong> ${c.acao}</div>
-            </div>
-            ${comoFazerHtml}
-          </div>`;
-        }).join('');
-        corpo=`${critHtml(s.criterios)}
-          ${acoes.length?`<div class="pdf-interno-actions" style="margin-top:12px">
-            <div class="pdf-interno-actions-header">O que precisa ser feito nesta seção</div>
-            ${acoesHtml}
-          </div>`:''}`;
-      } else {
-        corpo=critHtml(s.criterios);
+        bloqueado(s);
+      }else{
+        s.criterios.forEach(c=>criterio(c,!paraCliente));
+        if(!paraCliente&&s.tem_problema){
+          const acoes=s.criterios.filter(c=>c.status!=='ok'&&c.acao);
+          if(acoes.length){
+            chk(12);
+            fr(M,y,COL,8,30,41,59);
+            sf('bold',6.5,156,163,175);
+            doc.text('O QUE PRECISA SER FEITO NESTA SEÇÃO',M+4,y+5.5);
+            y+=10;
+          }
+        }
       }
-
-      const secaoPage=`<div class="pdf-page">
-        <div class="pdf-accent" style="background:${cor}"></div>
-        <div class="pdf-body" style="padding-top:22px">
-          <div class="pdf-sec-lbl"><span>${s.nome}</span>${tipoDoc}</div>
-          <div class="pdf-sec-hdr">
-            <div class="pdf-sec-ac" style="background:${cs}"></div>
-            <div class="pdf-sec-hdr-body">
-              <div class="pdf-sec-nome">${s.nome}</div>
-              <div class="pdf-sec-score" style="color:${cs}">${s.score}/100</div>
-            </div>
-          </div>
-          <div class="pdf-sec-diag" style="border-color:${cs}">${s.diagnostico}</div>
-          ${corpo}
-        </div>
-        ${ftrHtml(pgNum)}
-      </div>`;
-      addPage(await renderPage(secaoPage));
-      pgNum++;
     }
 
-    // PG FINAL CTA (só prospecção)
+    // CTA final (prospecção)
     if(paraCliente){
-      const ctaPage=`<div class="pdf-page">
-        <div class="pdf-accent" style="background:${cor}"></div>
-        <div class="pdf-cta">
-          <div class="pdf-cta-eye">Próximo passo</div>
-          <div class="pdf-cta-hl">Seu perfil tem potencial.<br>Falta estrategia para desbloqueá-lo.</div>
-          <div class="pdf-cta-sub">Este relatorio mapeou os pontos que estao impedindo que mais clientes encontrem este negocio no Google. A ${AGENCIA} tem um metodo estruturado para corrigir cada problema e aumentar a visibilidade local de forma mensuravel.</div>
-          <div class="pdf-cta-phone">${WA_DISPLAY}</div>
-          <div class="pdf-cta-site">${AGENCIA_SITE}</div>
-        </div>
-        ${ftrHtml(pgNum)}
-      </div>`;
-      addPage(await renderPage(ctaPage));
+      np();
+      fr(0,0,W,H,17,24,39);
+      fr(0,0,W,3,...corArr);
+      sf('bold',8,75,85,99);doc.text('PRÓXIMO PASSO',W/2,50,{align:'center'});
+      sf('bold',20,255,255,255);
+      doc.text('Seu perfil tem potencial.',W/2,66,{align:'center'});
+      doc.text('Falta estratégia para desbloqueá-lo.',W/2,78,{align:'center'});
+      const subL=doc.splitTextToSize('Este relatório mapeou os pontos que estão impedindo que mais clientes encontrem este negócio no Google. A '+AGENCIA+' tem um método estruturado para corrigir cada problema e aumentar a visibilidade local de forma mensurável.',COL-20);
+      sf('normal',11,107,114,128);doc.text(subL,W/2,94,{align:'center'});
+      sf('bold',18,255,255,255);doc.text(WA_DISPLAY,W/2,134,{align:'center'});
+      sf('normal',10,75,85,99);doc.text(AGENCIA_SITE,W/2,144,{align:'center'});
+      footer();
     }
 
-    const nomeBase=data.nome_negocio.replace(/[^a-zA-Z0-9]/g,'_').replace(/_+/g,'_');
-    pdf.save(paraCliente?`Diagnostico_Google_${nomeBase}.pdf`:`PerfilPro_Interno_${nomeBase}.pdf`);
+    const nb=data.nome_negocio.replace(/[^a-zA-Z0-9]/g,'_').replace(/_+/g,'_');
+    doc.save(paraCliente?'Diagnostico_Google_'+nb+'.pdf':'PerfilPro_Interno_'+nb+'.pdf');
 
   }catch(err){alert('Erro ao gerar o PDF: '+err.message);console.error(err);}
   finally{btn.innerHTML=orig;btn.disabled=false;}
