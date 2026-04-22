@@ -233,7 +233,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--n50);color:var(--n800);mi
 .icon-ruim{background:var(--danger-light);} .icon-regular{background:var(--warning-light);} .icon-bom{background:var(--success-light);} .icon-otimo{background:var(--brand-light);}
 
 /* ── PDF TEMPLATE ── */
-#pdf-template{position:fixed;left:-9999px;top:0;width:794px;background:white;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;z-index:-1;display:none;}
+#pdf-template{position:fixed;left:-9999px;top:0;width:794px;min-height:1123px;background:white;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;z-index:-1;display:none;overflow:hidden;}
 .pdf-page{width:794px;background:white;position:relative;}
 
 /* PDF COMPONENTES */
@@ -697,7 +697,7 @@ async function gerarPDF(paraCliente){
     const hoje=data.data_analise||new Date().toLocaleDateString('pt-BR');
     const tipoDoc=paraCliente?'Versão para Prospecção':'Versão Interna Completa';
     const {jsPDF}=window.jspdf;
-    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const pdf=new jsPDF({orientation:'portrait',unit:'px',format:[794,1123],hotfixes:['px_scaling']});
     const tmpl=document.getElementById('pdf-template');
 
     async function renderPage(html){
@@ -705,7 +705,7 @@ async function gerarPDF(paraCliente){
       tmpl.style.display='block';
       await document.fonts.ready;
 await new Promise(r=>setTimeout(r,400));
-      const canvas=await html2canvas(tmpl,{scale:1.5,useCORS:true,logging:false,backgroundColor:'#ffffff',width:794,windowWidth:794,letterRendering:true});
+      const canvas=await html2canvas(tmpl,{scale:1,useCORS:true,logging:false,backgroundColor:'#ffffff',width:794,height:1123,windowWidth:794,letterRendering:true});
       tmpl.style.display='none';
       return canvas;
     }
@@ -714,7 +714,7 @@ await new Promise(r=>setTimeout(r,400));
     function addPage(canvas){
       const img=canvas.toDataURL('image/jpeg',0.95);
       if(!isFirst)pdf.addPage();
-      pdf.addImage(img,'JPEG',0,0,210,297,'','FAST');
+      pdf.addImage(img,'JPEG',0,0,794,1123,'','FAST');
       isFirst=false;
     }
 
@@ -845,7 +845,7 @@ await new Promise(r=>setTimeout(r,400));
                 <div style="font-size:26px;margin-bottom:10px;">&#128274;</div>
                 <div style="font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:white;margin-bottom:8px;line-height:1.3;">Diagnóstico completo<br>disponível</div>
                 <div style="font-size:10.5px;color:#9ca3af;margin-bottom:14px;line-height:1.5;">Plano de ação detalhado disponível<br>com a ${AGENCIA}.</div>
-                <div style="background:#16a34a;color:white;padding:9px 18px;border-radius:7px;font-size:11.5px;font-weight:700;">${WA_DISPLAY}</div>
+                <div style="background:#16a34a;color:white;padding:9px 18px;border-radius:7px;font-size:11.5px;font-weight:700;">${WHATSAPP_DISPLAY}</div>
               </div>
             </div>
             <div style="width:175px;flex-shrink:0;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb;overflow:hidden;">
