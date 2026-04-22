@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -243,16 +244,15 @@
   <main class="main">
     <div class="tool-hero">
       <h2>Audite qualquer perfil do<br><em>Google Meu Negócio</em> em segundos</h2>
-      <p>Digite o nome do negócio, a IA analisa todos os critérios de ranqueamento e gera um diagnóstico completo com score e plano de ação.</p>
+      <p>Cole a URL do perfil, a IA analisa todos os critérios de ranqueamento e gera um diagnóstico completo com score e plano de ação.</p>
     </div>
 
     <!-- BUSCA -->
     <div class="search-card" id="search-card">
-      <label class="search-label">Nome do negócio</label>
-      <div class="search-hint">Digite o nome do negócio e a cidade. Exemplo: Pizzaria Da Carmine, Rio de Janeiro</div>
-      <div class="fields-row">
-        <input type="text" id="gmb-nome" class="search-input" placeholder="Ex: Barbearia do João" onkeydown="if(event.key==='Enter') startAnalysis()">
-        <input type="text" id="gmb-cidade" class="search-input" placeholder="Ex: Niterói, RJ" onkeydown="if(event.key==='Enter') startAnalysis()">
+      <label class="search-label">URL do perfil no Google</label>
+      <div class="search-hint">Como pegar a URL: pesquise o negócio no Google, clique no nome dele, e copie o endereço da barra do navegador. Começa com https://www.google.com/maps/place/...</div>
+      <div class="fields-row" style="grid-template-columns:1fr;">
+        <input type="text" id="gmb-url" class="search-input" placeholder="Cole aqui a URL do Google Maps..." onkeydown="if(event.key==='Enter') startAnalysis()">
       </div>
       <button class="analyze-btn" onclick="startAnalysis()">
         🔍 Analisar Perfil
@@ -265,8 +265,8 @@
           Comparar com concorrente (análise competitiva)
         </label>
         <div class="competitor-wrap" id="competitor-wrap">
-          <input type="text" id="competitor-nome" class="search-input" placeholder="Nome do concorrente">
-          <input type="text" id="competitor-cidade" class="search-input" placeholder="Cidade do concorrente">
+          <label class="search-label" style="margin-top:16px">URL do perfil do concorrente</label>
+          <input type="text" id="competitor-url" class="search-input" style="width:100%;margin-top:8px" placeholder="Cole aqui a URL do concorrente...">
         </div>
       </div>
     </div>
@@ -299,7 +299,7 @@ function checkPassword() {
   if (val === SENHA) {
     document.getElementById('lock-screen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
-    document.getElementById('gmb-nome').focus();
+    document.getElementById('gmb-url').focus();
   } else {
     document.getElementById('lock-error').style.display = 'block';
     document.getElementById('password-input').value = '';
@@ -313,14 +313,11 @@ function toggleCompare() {
 }
 
 async function startAnalysis() {
-  const nome = document.getElementById('gmb-nome').value.trim();
-  const cidade = document.getElementById('gmb-cidade').value.trim();
+  const url = document.getElementById('gmb-url').value.trim();
   const hasCompare = document.getElementById('compare-toggle').checked;
-  const competitorNome = document.getElementById('competitor-nome').value.trim();
-  const competitorCidade = document.getElementById('competitor-cidade').value.trim();
+  const competitorUrl = document.getElementById('competitor-url') ? document.getElementById('competitor-url').value.trim() : '';
 
-  if (!nome) { alert('Por favor, digite o nome do negócio.'); return; }
-  if (!cidade) { alert('Por favor, digite a cidade.'); return; }
+  if (!url) { alert('Por favor, cole a URL do perfil do Google Meu Negócio.'); return; }
 
   document.getElementById('loading').style.display = 'block';
   document.getElementById('report').style.display = 'none';
@@ -343,9 +340,9 @@ async function startAnalysis() {
   });
 
   try {
-    const prompt = buildPrompt(nome, cidade, hasCompare ? competitorNome : null, hasCompare ? competitorCidade : null);
+    const prompt = buildPrompt(url, hasCompare ? competitorUrl : null);
     const data = await callAPI(prompt);
-    renderReport(data, nome, cidade);
+    renderReport(data, url);
   } catch (err) {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('search-card').style.display = 'block';
@@ -361,20 +358,19 @@ async function startAnalysis() {
   }
 }
 
-function buildPrompt(nome, cidade, competitorNome, competitorCidade) {
-  const compareSection = competitorNome ? `
-CONCORRENTE PARA ANÁLISE COMPARATIVA: "${competitorNome}" em "${competitorCidade || cidade}"
+function buildPrompt(url, competitorUrl) {
+  const compareSection = competitorUrl ? `
+CONCORRENTE PARA ANÁLISE COMPARATIVA: "${competitorUrl}"
 Inclua no JSON uma seção "comparativo" com: score_concorrente (número de 0 a 100), nome_concorrente (string), gaps (array de objetos com prioridade "alta"/"media"/"baixa" e descricao string detalhada).
 ` : `No campo "comparativo" retorne null.`;
 
   return `Você é um especialista sênior em SEO local e otimização de perfis no Google Meu Negócio (Google Business Profile).
 
-Faça uma análise completa e realista do perfil do Google Meu Negócio do seguinte negócio:
-NEGÓCIO: "${nome}"
-CIDADE: "${cidade}"
+Faça uma análise completa e realista do perfil do Google Meu Negócio:
+URL/NEGÓCIO: "${url}"
 ${compareSection}
 
-Simule uma análise detalhada e realista baseada no tipo de negócio, segmento e localização. Seja específico e direto. Use linguagem acessível para o dono do negócio, não técnica.
+Analise com base na URL fornecida. Se for URL do Google Maps, identifique o negócio. Se for apenas um nome, simule análise realista. Seja específico e direto. Use linguagem acessível para o dono do negócio, não técnica.
 
 Retorne EXCLUSIVAMENTE um JSON válido sem markdown, sem texto antes ou depois:
 
@@ -488,7 +484,7 @@ Retorne EXCLUSIVAMENTE um JSON válido sem markdown, sem texto antes ou depois:
   "comparativo": null
 }
 
-IMPORTANTE: Adapte TODOS os scores, diagnósticos e critérios para refletir uma análise realista e específica para "${nome}" em "${cidade}". Cada texto deve ser único e personalizado para este negócio. Retorne SOMENTE o JSON.`;
+IMPORTANTE: Adapte TODOS os scores, diagnósticos e critérios para refletir uma análise realista e específica para o negócio analisado. Cada texto deve ser único e personalizado para este negócio. Retorne SOMENTE o JSON.`;
 }
 
 async function callAPI(prompt) {
@@ -499,12 +495,24 @@ async function callAPI(prompt) {
   });
   if (!response.ok) throw new Error('Erro na API: ' + response.status);
   const data = await response.json();
-  const text = data.content.map(b => b.text || '').join('');
+
+  // Tratamento robusto da resposta
+  let text = '';
+  if (data.content && Array.isArray(data.content)) {
+    text = data.content.map(b => b.text || '').join('');
+  } else if (data.content && typeof data.content === 'string') {
+    text = data.content;
+  } else if (typeof data === 'string') {
+    text = data;
+  } else {
+    throw new Error('Formato de resposta inesperado: ' + JSON.stringify(data).substring(0, 200));
+  }
+
   const clean = text.replace(/```json|```/g, '').trim();
   return JSON.parse(clean);
 }
 
-function renderReport(data, nome, cidade) {
+function renderReport(data, url) {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('report').style.display = 'block';
 
@@ -650,13 +658,12 @@ function novaAnalise() {
   document.getElementById('report').style.display = 'none';
   document.getElementById('report').innerHTML = '';
   document.getElementById('search-card').style.display = 'block';
-  document.getElementById('gmb-nome').value = '';
-  document.getElementById('gmb-cidade').value = '';
-  document.getElementById('competitor-nome').value = '';
-  document.getElementById('competitor-cidade').value = '';
+  document.getElementById('gmb-url').value = '';
+  const compUrl = document.getElementById('competitor-url');
+  if (compUrl) compUrl.value = '';
   document.getElementById('compare-toggle').checked = false;
   document.getElementById('competitor-wrap').classList.remove('show');
-  document.getElementById('gmb-nome').focus();
+  document.getElementById('gmb-url').focus();
 }
 
 function getScoreClass(score) {
